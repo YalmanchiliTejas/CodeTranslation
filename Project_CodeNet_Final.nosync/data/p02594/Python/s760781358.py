@@ -1,0 +1,1 @@
+print( 'Yes' if int(input().strip()) >=30 else 'No')

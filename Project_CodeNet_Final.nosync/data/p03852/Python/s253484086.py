@@ -1,0 +1,1 @@
+print("vowel" if input().strip() in "aiueo" else "consonant")

@@ -1,0 +1,11 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+#define dunk(n) cout << n << endl
+int main() {
+  char c;
+  cin >> c;
+  if(c == 'a'||c == 'i'||c == 'u'||c == 'e'||c == 'o')
+    dunk ("vowel");
+  else dunk ("consonant");
+}

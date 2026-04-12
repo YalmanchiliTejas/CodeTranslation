@@ -1,0 +1,14 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main(void){
+
+int n;
+cin>>n;
+
+cout<<800*n-((int)(n/15)*200)<<endl;
+
+return 0;
+}

@@ -1,0 +1,11 @@
+#include <iostream>
+using namespace std;
+#define ll long long
+int main()
+{
+	int x;
+	cin >> x;
+	if(x>=30) cout << "Yes" << endl;
+	else cout << "No" << endl;
+	return 0; 
+}

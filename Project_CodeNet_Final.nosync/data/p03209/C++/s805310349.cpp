@@ -1,0 +1,2 @@
+#include<iostream>
+main(){long long n,x,i,l[51],p[51],A=0,th;std::cin>>n>>x;for(i=-1;++i<51;)l[i]=(p[i]=(2ll<<i)-1)*2-1;while(n){th=l[n]/2;if(++x>l[n])A+=p[n];else if(--x<2);else if(x<th){n--;x--;continue;}else if(x==th)A+=p[n-1];else{A+=p[--n]+1;x-=th+1;continue;}break;}std::cout<<A+(!n&&x);}

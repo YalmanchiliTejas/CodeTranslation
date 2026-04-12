@@ -1,0 +1,1 @@
+c=input();v=['a','i','u','e','o'];print('consonant' if v.count(c)==0 else 'vowel')

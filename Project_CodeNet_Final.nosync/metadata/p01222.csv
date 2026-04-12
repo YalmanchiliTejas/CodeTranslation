@@ -1,0 +1,6 @@
+submission_id,problem_id,user_id,date,language,original_language,filename_ext,status,cpu_time,memory,code_size,accuracy
+s791847084,p01222,u116766943,1499094305,C++,C++11,cpp,Accepted,290,3652,13823,1/1
+s987774281,p01222,u116766943,1499094877,C++,C++11,cpp,Accepted,290,3636,13633,1/1
+s459096007,p01222,u505648358,1369461725,C++,C++,cpp,Accepted,670,1356,12275,1/1
+s613752771,p01222,u505990483,1538476983,C++,C++11,cpp,Accepted,130,3872,7132,1/1
+s163245891,p01222,u534407079,1363771088,C++,C++,cpp,Accepted,240,1388,8065,1/1

@@ -1,0 +1,74 @@
+class segtree:
+    ## define what you want to do ,(min, max)
+    sta = -1
+    func = max
+
+    def __init__(self,n):
+        self.n = n
+        self.size = 1 << n.bit_length()
+        self.tree = [self.sta]*(2*self.size)
+
+    def build(self, list):
+        for i,x in enumerate(list,self.size):
+            self.tree[i] = x
+
+        for i in range(self.size-1,0,-1):
+            self.tree[i] = self.func(self.tree[i<<1],self.tree[i<<1 | 1])
+
+    def set(self,i,x):
+        i += self.size
+        self.tree[i] = x
+        while i > 1:
+            i >>= 1
+            self.tree[i] = self.func(self.tree[i<<1],self.tree[i<<1 | 1])
+
+    ## take the value of [l,r) 
+    def get(self,l,r):
+        l += self.size
+        r += self.size
+        res = self.sta
+
+        while l < r:
+            if l & 1:
+                res = self.func(self.tree[l],res)
+                l += 1
+            if r & 1:
+                res = self.func(self.tree[r-1],res)
+            l >>= 1
+            r >>= 1
+        return res
+
+    def max_right(self, l, x):
+        if l == self.n:
+            return l
+        l += self.size
+        res = self.sta
+        check = True
+        while check or (l & -l) != l:
+            check = False
+            while l%2 == 0:
+                l >>= 1
+            if not self.func(res,self.tree[l]) < x:
+                while l < self.size:
+                    l <<= 1
+                    if self.func(res,self.tree[l]) < x:
+                        res = self.func(res,self.tree[l])
+                        l += 1
+                return l - self.size
+            res = self.func(res,self.tree[l])
+            l += 1
+        return self.n
+
+n,q = map(int,input().split())
+a = list(map(int,input().split()))
+
+seg = segtree(n)
+seg.build(a)
+for _ in range(q):
+    t,x,v = map(int,input().split())
+    if t == 1:
+        seg.set(x-1,v)
+    elif t == 2:
+        print(seg.get(x-1,v))
+    else:
+        print(seg.max_right(x-1,v)+1)

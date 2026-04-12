@@ -1,0 +1,14 @@
+n = int(input())
+h = list(map(int, input().split()))
+
+count = 0
+for i in range(n):
+    flag = True
+    for j in range(i):
+        if h[i] < h[j]:
+            flag = False
+
+    if flag:
+        count += 1
+
+print(count)

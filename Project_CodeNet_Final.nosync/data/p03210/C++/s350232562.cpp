@@ -1,0 +1,16 @@
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+long long a;
+cin>>a;
+if (a==3 || a==5 || a==7)
+    {
+            cout<<"YES";
+}
+else{
+    cout<<"NO";
+}
+}

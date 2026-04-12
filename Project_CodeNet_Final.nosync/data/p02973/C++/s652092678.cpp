@@ -1,0 +1,25 @@
+#include <bits/stdc++.h>
+#define REP(i, n) for (int i = 0; i < n; i++)
+#define REPR(i, n) for (int i = n; i >= 0; i--)
+#define FOR(i, m, n) for (int i = m; i < n; i++)
+#define ALL(v) v.begin(), v.end()
+using namespace std;
+typedef long long ll;
+typedef long double ld;
+int main()
+{
+  ios::sync_with_stdio(false);
+  cin.tie(nullptr);
+  int n;
+  cin >> n;
+  vector<int> a(n);
+  REP(i,n) cin >> a[i];
+  multiset<int> ms;
+  REP(i,n){
+    auto itr = ms.lower_bound(a[i]);
+    if(itr!=ms.begin()) ms.erase(--itr);
+    ms.insert(a[i]);
+  }
+  cout << ms.size() << endl;
+  return 0;
+}

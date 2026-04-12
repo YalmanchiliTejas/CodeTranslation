@@ -1,0 +1,31 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+using ll = long long;
+const ll mod = 998244353;
+
+const int maxn = 3030;
+ll dp[maxn][maxn][3];
+
+int a[maxn];
+
+int main() {
+    int n, k;
+    cin >> n >> k;
+    for (int i = 0; i < n; ++i) cin >> a[i];
+    dp[0][0][0] = 1;
+    for (int i = 0; i < n; ++i) {
+        for (int j = 0; j <= k; ++j) {
+            (dp[i + 1][j][0] += dp[i][j][0]) %= mod;
+            (dp[i + 1][j][1] += dp[i][j][0] + dp[i][j][1]) %= mod;
+            (dp[i + 1][j][2] += dp[i][j][0] + dp[i][j][1] + dp[i][j][2]) %= mod;
+
+            if (j + a[i] <= k) {
+                (dp[i + 1][j + a[i]][1] += dp[i][j][0] + dp[i][j][1]) %= mod;
+                (dp[i + 1][j + a[i]][2] += dp[i][j][0] + dp[i][j][1]) %= mod;
+            }
+        }
+    }
+    cout << dp[n][k][2] << endl;
+    return 0;
+}

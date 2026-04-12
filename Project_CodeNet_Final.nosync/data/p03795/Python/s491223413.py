@@ -1,0 +1,5 @@
+N = int(input())
+
+ans = 800 * N - 200 * (N // 15)
+
+print(ans)

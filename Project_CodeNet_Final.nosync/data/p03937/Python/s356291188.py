@@ -1,0 +1,1 @@
+h,w=map(int,input().split());print(("Imp"if sum(input().count("#")for i in[0]*h)!=h+w-1 else"P")+"ossible")

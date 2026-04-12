@@ -1,0 +1,123 @@
+#include<cstdio>
+#include<algorithm>
+#include<vector>
+#include<queue>
+#include<string>
+#include<iostream>
+#include<cmath>
+#include<map>
+#include<set>
+using namespace std;
+typedef vector<string>vs;
+typedef vector<int>vi;
+typedef vector<vi>vvi;
+typedef vector<double>vd;
+typedef pair<int,int>pii;
+typedef long long ll;
+typedef pair<ll,ll>pll;
+typedef vector<ll>vl;
+#define rrep(i,x,n) for(int i=(x);i<(n);++i)
+#define rep(i,x) rrep(i,0,(x))
+#define fi first
+#define se second
+#define each(i,c) for(__typeof((c).begin()) i=(c).begin();i!=(c).end();++i)
+#define all(c) (c).begin(),(c).end()
+#define rall(c) (c).rbegin(),(c).rend()
+#define pb push_back
+#define maxs(a,b) (a)=max(a,b)
+#define mins(a,b) (a)=min(a,b)
+
+map<char,string>a;
+map<string,char>b;
+
+void init(){
+    a['A']="00000";
+    a['B']="00001";
+    a['C']="00010";
+    a['D']="00011";
+    a['E']="00100";
+    a['F']="00101";
+    a['G']="00110";
+    a['H']="00111";
+    a['I']="01000";
+    a['J']="01001";
+    a['K']="01010";
+    a['L']="01011";
+    a['M']="01100";
+    a['N']="01101";
+    a['O']="01110";
+    a['P']="01111";
+    a['Q']="10000";
+    a['R']="10001";
+    a['S']="10010";
+    a['T']="10011";
+    a['U']="10100";
+    a['V']="10101";
+    a['W']="10110";
+    a['X']="10111";
+    a['Y']="11000";
+    a['Z']="11001";
+    a[' ']="11010";
+    a['.']="11011";
+    a[',']="11100";
+    a['-']="11101";
+    a['\'']="11110";
+    a['?']="11111";
+
+    b["101"]=' ';
+    b["000000"]='\'';
+    b["000011"]=',';
+    b["10010001"]='-';
+    b["010001"]='.';
+    b["000001"]='?';
+    b["100101"]='A';
+    b["10011010"]='B';
+    b["0101"]='C';
+    b["0001"]='D';
+    b["110"]='E';
+    b["01001"]='F';
+    b["10011011"]='G';
+    b["010000"]='H';
+    b["0111"]='I';
+    b["10011000"]='J';
+    b["0110"]='K';
+    b["00100"]='L';
+    b["10011001"]='M';
+    b["10011110"]='N';
+    b["00101"]='O';
+    b["111"]='P';
+    b["10011111"]='Q';
+    b["1000"]='R';
+    b["00110"]='S';
+    b["00111"]='T';
+    b["10011100"]='U';
+    b["10011101"]='V';
+    b["000010"]='W';
+    b["10010010"]='X';
+    b["10010011"]='Y';
+    b["10010000"]='Z';
+}
+
+
+int main(){
+    init();
+    string str;
+    while(getline(cin,str)){
+        string s;
+        rep(i,str.size())s+=a[str[i]];
+        int cur=0;
+        while(true){
+            bool used=false;
+            for(int i=1;cur+i<=s.size();i++){
+
+                if(b.find(s.substr(cur,i))==b.end())continue;
+                used=true;
+                cout<<b[s.substr(cur,i)];
+                cur+=i;
+                break;
+            }
+            if(cur==s.size()||used==false)break;
+        }
+        cout<<endl;
+    }
+}

@@ -1,0 +1,1 @@
+print(["No","Yes","Yes","No"][sum([s=="A" for s in input()])])

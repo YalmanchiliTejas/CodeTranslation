@@ -1,0 +1,154 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include <climits>
+#include <set>
+using namespace std;
+#define repn(i,s,n) for (int i=int(s); i < int(n); i++)
+#define rep(i,n) repn(i,0,n)
+#define repd(i,n) for (int i=int(n)-1; i >= 0; i--)
+
+
+struct Node {
+  int val;  // この区間に足される値
+  int min;  // この区間の最小値（valを含む）
+  Node() : min(0), val(0) {}
+};
+
+#define LC(k) (k*2 + 1)  // 左の子
+#define RC(k) (k*2 + 2)  // 右の子
+
+const int INF = INT_MAX;
+
+struct RMQRangeAddSegTree {
+  vector<Node> tree;
+  int n;
+  RMQRangeAddSegTree(int n) : n(n), tree(n*2 - 1) {}  // nは2のべき乗でなければならない
+
+  // 区間[l,r)内の要素にvalを足す
+  void addRange(int l, int r, int val) {
+    addRange(l, r, 0, 0, n, val);
+  }
+
+  // a,b: クエリ対象の範囲[a,b)
+  // k: 現在のノードの番号
+  // l,r: 現在のノードkの範囲[l,r)
+  // val: [a,b)に追加する値
+  void addRange(int a, int b, int k, int l, int r, int val) {
+    if (r <= a || b <= l) return;  // 対象区間とノードの区間が交わらないなら処理をしない
+    process_lazy(k, r-l);
+    if (a <= l && r <= b) {
+      tree[k].val += val;
+    }
+    else {
+      addRange(a, b, LC(k), l, (l + r) / 2, val);
+      addRange(a, b, RC(k), (l + r) / 2, r, val);
+    }
+    update_node(k, r-l);
+  }
+
+  // 遅延評価の実行。根ノード側の更新分を下へ伝搬していく
+  void process_lazy(int k, int size) {
+    if (size > 1 && tree[k].val != 0) {
+      tree[LC(k)].val += tree[k].val;
+      tree[RC(k)].val += tree[k].val;
+      tree[LC(k)].min += tree[k].val;
+      tree[RC(k)].min += tree[k].val;
+      tree[k].val = 0;
+    }
+  }
+
+  // 頂点情報の更新。葉ノード側の更新を上へ伝搬していく
+  void update_node(int k, int size) {
+    if (size == 1) {  // kは葉
+      tree[k].min = tree[k].val;
+    }
+    else {  // kは葉でない
+      tree[k].min = tree[k].val + min(tree[LC(k)].min, tree[RC(k)].min);
+    }
+  }
+
+  // 区間[l,r)内の要素の最小値を返す
+  int minRange(int l, int r) {
+    return minRange(l, r, 0, 0, n);
+  }
+
+  int minRange(int a, int b, int k, int l, int r) {
+    if (r <= a || b <= l) return INF;
+    process_lazy(k, r-l);
+    if (a <= l && r <= b) return tree[k].min;
+    return min(
+      minRange(a, b, LC(k), l, (l + r) / 2),
+      minRange(a, b, RC(k), (l + r) / 2, r)
+    );
+  }
+};
+
+
+int main() {
+  ios::sync_with_stdio(false);
+  int n, q;
+  cin >> n >> q;
+  int nPow2 = n-1;
+  nPow2 |= nPow2 >> 1;
+  nPow2 |= nPow2 >> 2;
+  nPow2 |= nPow2 >> 4;
+  nPow2 |= nPow2 >> 8;
+  nPow2 |= nPow2 >> 16;
+  nPow2++;
+
+  RMQRangeAddSegTree tree(nPow2);
+  string s;
+  cin >> s;
+  set<int> kets;
+  rep(i, n) {
+    if (s[i] == '(') {
+      tree.addRange(i, n, 1);
+    }
+    else {
+      tree.addRange(i, n, -1);
+      kets.insert(i);
+    }
+  }
+  // cout << tree.minRange(0, n) << endl;
+  rep(qi, q) {
+    int qq;
+    cin >> qq;
+    qq--;
+    if (s[qq] == '(') {
+      s[qq] = ')';
+      kets.insert(qq);
+      int best = *kets.begin();
+      s[best] = '(';
+      kets.erase(best);
+      cout << best+1 << endl;
+      if (best != qq) {
+        tree.addRange(qq, n, -2);
+        tree.addRange(best, n, 2);
+      }
+    }
+    else {
+      s[qq] = '(';
+      kets.erase(qq);
+      tree.addRange(qq, n, 2);
+      int lb = 1;
+      int ub = qq;
+      while (lb < ub) {
+        int m = (lb + ub) / 2;
+        if (tree.minRange(m, n) >= 2) {
+          ub = m;
+        }
+        else {
+          lb = m + 1;
+        }
+      }
+      int best = lb;
+      if (s[best] == ')') throw "BUG";
+      s[best] = ')';
+      kets.insert(best);
+      cout << best+1 << endl;
+      tree.addRange(best, n, -2);
+    }
+  }
+  return 0;
+}

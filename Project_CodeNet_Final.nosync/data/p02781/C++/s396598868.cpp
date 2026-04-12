@@ -1,0 +1,161 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+//conversion
+//------------------------------------------
+inline int toInt(string s) {int v; istringstream sin(s);sin>>v;return v;}
+template<class T> inline string toString(T x) {ostringstream sout;sout<<x;return sout.str();}
+
+//math
+//-------------------------------------------
+template<class T> inline T sqr(T x) {return x*x;}
+
+//typedef
+//------------------------------------------
+typedef long long LL;
+typedef pair<int, int> PII;
+typedef pair<LL,LL> PLL;
+typedef vector<int> VI;
+typedef vector<VI> VVI;
+typedef vector<LL> VLL;
+typedef vector<VLL> VVLL;
+typedef vector<bool> VB;
+typedef vector<VB> VVB;
+typedef vector<double> VD;
+typedef vector<VD> VVD;
+typedef vector<string> VS;
+typedef vector<VS> VVS;
+typedef vector<char> VC;
+typedef vector<VC> VVC;
+typedef vector<PII> VPII;
+typedef vector<PLL> VPLL;
+typedef priority_queue<int> PQGI; //大きい順
+typedef priority_queue<int, VI, greater<int>> PQLI;
+typedef priority_queue<PII> PQGP;
+typedef priority_queue<PII, VPII, greater<int>> PQLP;
+
+//container util
+//------------------------------------------
+#define ALL(a)  (a).begin(),(a).end()
+#define RALL(a) (a).rbegin(),(a).rend()
+#define EB emplace_back
+#define PB push_back
+#define PF push_front
+#define POB pop_back
+#define POF pop_front
+#define MP make_pair
+#define SZ(a) int((a).size())
+#define SQ(a) ((a)*(a))
+#define EACH(i,c) for(typeof((c).begin()) i=(c).begin(); i!=(c).end(); ++i)
+#define EXIST(s,e) ((s).find(e)!=(s).end())
+#define SORT(c) sort((c).begin(),(c).end())
+#define SORTR(c) sort((c).rbegin(), (c).rend())
+#define LB lower_bound
+#define UB upper_bound
+#define NEXP next_permutation
+#define FI first
+#define SE second
+#define Vmin(a) *min_element((a).begin(),(a).end())
+#define Vmax(a) *max_element((a).begin(),(a).end())
+
+//repetition
+//------------------------------------------
+#define FOR(i,a,b) for(int i=(a);i<(b);++i)
+#define REP(i,n)  FOR(i,0,n)
+#define FORR(i,a,b) for(int i = (b-1);i>=a;i--)
+#define REPR(i,n) FORR(i,0,n)
+#define BFOR(bit,a,b) for(int bit = (a); bit < (1<<(b)); ++bit)
+#define BREP(bit,n) BFOR(bit,0,n)
+
+//constant
+//--------------------------------------------
+const double EPS = 1e-10;
+const double PI  = acos(-1.0);
+const int INF = INT_MAX/2;
+const LL LINF = LLONG_MAX/3;
+const int RINF = INT_MIN/2;
+const LL RLINF = LLONG_MIN/3;
+const LL MOD = 1e9+7;
+const LL MODD = 998244353;
+const int MAX = 510000;
+
+inline bool Eq(double a, double b) { return fabs(b - a) < EPS; }
+
+//other
+//-------------------------------------------
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+
+#define COUT(x) cout << (x) << endl
+#define COUT2(x,y) cout << (x) << " " << (y) << endl
+#define COUT3(x,y,z) cout << (x) << " " << (y) << " " << (z) << endl
+#define PR(x) cout << (x)
+#define ENDL cout << endl
+#define SPACE cout << " "
+#define BC(x) __builtin_popcountll(x)
+
+
+VI dx = {1,0,-1,0,1,1,-1,-1};
+VI dy = {0,1,0,-1,1,-1,1,-1};
+VC dc = {'R','D','L','U'};
+VS ds = {"R","D","L","U","RD","RU","LD","LU"};
+
+LL Gcd(LL a, LL b) {return __gcd(a,b);}
+LL Lcm(LL a, LL b) {return a/Gcd(a,b)*b;}
+
+LL ModPow(LL A, LL N, LL M){
+  LL res = 1;
+  while(N>0){
+    if(N&1) res = res * A % M;
+    A = A * A % M;
+    N >>= 1;
+  }
+  return res;
+}
+
+
+template<class T> void VCout(vector<T> &v){
+  int N = SZ(v);
+  REP(i,N){
+    cout << v.at(i);
+    if(i == N-1) cout << endl;
+    else cout << " ";
+  }
+  return;
+}
+
+
+
+int main() {
+
+  // cin.tie(0);
+  // ios::sync_with_stdio(false);
+  cout << fixed << setprecision(12);
+
+  string n; cin >> n;
+  int m = SZ(n);
+  int k; cin >> k;
+
+  VVLL dp0(m+1,VLL(k+2,0)),dp1(m+1,VLL(k+2,0));
+
+  dp0.at(0).at(0) = 1;
+
+  REP(i,m){
+    int t = n.at(i) - '0';
+    REP(j,k+1){
+      if(t>0)dp0.at(i+1).at(j+1) += dp0.at(i).at(j);
+      else dp0.at(i+1).at(j) += dp0.at(i).at(j);
+
+      if(t>0){
+        dp1.at(i+1).at(j+1) += dp0.at(i).at(j)*(t-1);
+        dp1.at(i+1).at(j) += dp0.at(i).at(j);
+      }
+
+      dp1.at(i+1).at(j+1) += dp1.at(i).at(j)*9;
+      dp1.at(i+1).at(j) += dp1.at(i).at(j);
+    }
+  }
+  COUT(dp0.at(m).at(k)+dp1.at(m).at(k));
+
+  return 0;
+}

@@ -1,0 +1,1 @@
+print((lambda n,a:[all([a[j]<=a[i] for j in range(i)]) for i in range(n)].count(True))(int(input()),list(map(int,input().split()))))

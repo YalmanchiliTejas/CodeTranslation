@@ -1,0 +1,11 @@
+n, k = [int(i) for i in input().split()]
+ans = 0
+if k == 0:
+    ans = n*n
+else:
+    for b in range(k+1, n+1):
+        # number of perfect cycle
+        ans += n // b * (b-k)
+        r = n % b
+        ans += max(r - k+1, 0)
+print(ans)

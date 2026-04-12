@@ -1,0 +1,10 @@
+a,b,ab,a_c,b_c=map(int,input().split())
+ans=[]
+#そのまま
+ans.append(a*a_c+b*b_c)
+#合体（余りは捨てる）
+ans.append(max(a_c,b_c)*ab*2)
+#合体（足らない分は買う）
+c=min(a_c,b_c)
+ans.append(c*ab*2+(a_c-c)*a+(b_c-c)*b)
+print(min(ans))

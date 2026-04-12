@@ -1,0 +1,9 @@
+s=input()
+a=0
+if(s[0]==s[1]):
+    if(s[1]==s[2]):
+        a=1
+if(a==1):
+    print('No')
+else:
+    print('Yes')

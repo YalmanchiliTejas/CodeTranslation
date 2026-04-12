@@ -1,0 +1,9 @@
+c={'N':"152304",'E':"310542",'W':"215043",'S':"402351",'R':"024135",'L':"031425"}
+while 1:
+ n=int(input())
+ if n==0:break
+ a=1;s='123456'
+ for _ in[0]*n:
+  s=[s[int(e)]for e in c[input()[0]]]
+  a+=int(s[0])
+ print(a)

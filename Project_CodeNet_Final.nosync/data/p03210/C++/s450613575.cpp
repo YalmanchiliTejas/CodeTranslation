@@ -1,0 +1,13 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+	// your code goes here
+	int n;
+	cin>>n;
+	if(n==5 || n==7 || n==3)
+	 cout<<"YES"<<endl;
+	 else 
+	 cout<<"NO"<<endl;
+	return 0;
+}

@@ -1,0 +1,14 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+
+using namespace std;
+
+int main()
+{
+	int a;
+	cin >> a;
+	if (a < 30) cout << "No";
+	else cout << "Yes";
+	return 0;
+}

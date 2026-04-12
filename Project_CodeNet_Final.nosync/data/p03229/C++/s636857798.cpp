@@ -1,0 +1,142 @@
+#include"bits/stdc++.h"
+
+using namespace std; 
+
+typedef vector<int> VI;
+typedef vector<VI> VVI;
+typedef vector<string> VS;
+typedef pair<int, int> PII;
+typedef vector<PII> VPII;
+typedef long long LL;
+typedef vector<LL> VL;
+typedef vector<VL> VVL;
+typedef pair<LL, LL> PLL;
+typedef vector<PLL> VPLL;
+typedef priority_queue<int> PQ_DESC;
+typedef priority_queue<int, vector<int>, greater<int>> PQ_ASC;
+typedef priority_queue<PII> PQ_DESC_PII;
+typedef priority_queue<PII, vector<PII>, greater<PII>> PQ_ASC_PII;
+
+#define ALL(c) (c).begin(),(c).end()
+#define PB push_back
+#define MP make_pair
+#define SORT_ASC(c) sort(ALL(c))
+//#define SORT_DESC(c) sort(ALL(c), greater<typeof(*((c).begin()))>())
+#define SORT_DESC(c) sort((c).rbegin(),(c).rend())
+#define REV(c) reverse((c).begin(), (c).end())
+#define SIZE(a) int((a).size())
+
+#define FOR(i,a,b) for(int i=(a);i<(b);++i)
+#define ROF(i,a,b) for(int i=(b-1);i>=(a);--i)
+#define REP(i,n) FOR(i,0,n)
+#define PER(i,n) ROF(i,0,n)
+
+const double EPS = 1e-10;
+const double PI  = acos(-1.0);
+const int LARGE_INT = 1e9+100;
+const int INF = 2e9+100;
+const LL INF_LL = (LL)INF*(LL)INF;
+const int MOD = 1e9+7;
+
+//debug
+#define dump(x)  cerr << #x << " = " << (x) << endl;
+#define debug(x) cerr << #x << " = " << (x) << " (L" << __LINE__ << ")" << " " << __FILE__ << endl;
+
+LL modpow(LL a, LL n) {
+    LL res = 1;
+    while (n > 0) {
+        if (n & 1) res = res * a % MOD;
+        a = a * a % MOD;
+        n >>= 1;
+    }
+    return res;
+}
+
+void Main()
+{
+    int n;cin>>n;
+    VL a(n);
+    REP(i,n){
+        cin>>a[i];
+    }
+    SORT_ASC(a);
+
+    LL result = 0;
+
+    if(n%2==0){
+        //if(abs(a[0]-a[n/2]) > abs(a[n-1]-a[n/2-1])){
+        {
+            LL t=0;
+            LL now = a[n/2];
+            //dump(now)
+            REP(i,n/2-1){
+                t += abs(now-a[i]);
+                now=a[i];
+                //dump(now)
+                t += abs(now-a[n-1-i]);
+                now=a[n-1-i];
+                //dump(now)
+            }
+            t += abs(now-a[n/2-1]);
+            result = max(result,t);
+        }
+        //else{
+        {
+            LL t=0;
+            LL now = a[n/2-1];
+            //dump(now)
+            REP(i,n/2-1){
+                t += abs(now-a[n-1-i]);
+                now=a[n-1-i];
+                //dump(now)
+                t += abs(now-a[i]);
+                now=a[i];
+                //dump(now)
+            }
+            t += abs(now-a[n/2]);
+            result = max(result,t);
+        }
+    }
+    else{
+        //if(abs(a[0]-a[n/2]) > abs(a[n-1]-a[n/2])){
+        {
+            LL t=0;
+            LL now = a[n/2];
+            REP(i,n/2){
+                t += abs(now-a[i]);
+                now=a[i];
+                t += abs(now-a[n-1-i]);
+                now=a[n-1-i];
+            }
+            result = max(result,t);
+        }
+        //else{
+        {
+            LL t=0;
+            LL now = a[n/2];
+            //dump(now)
+            REP(i,n/2){
+                t += abs(now-a[n-1-i]);
+                now=a[n-1-i];
+                //dump(now)
+                t += abs(now-a[i]);
+                now=a[i];
+                //dump(now)
+            }
+            result = max(result,t);
+        }
+
+    }
+    cout<<result<<endl;
+
+	return;
+}
+
+int main()
+{
+	cin.tie(nullptr);
+	ios_base::sync_with_stdio(false);
+	cout << fixed << setprecision(15);
+	Main();
+    return 0;
+}

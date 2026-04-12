@@ -1,0 +1,16 @@
+#include<iostream>
+
+using namespace std;
+
+int main(void)
+{
+  int a,b,c;
+  cin>>a>>b>>c;
+  
+  int sum=a*100+b*10+c;
+  
+  if(sum%4==0){puts("YES");}
+  else{puts("NO");}
+  
+  return 0;
+}

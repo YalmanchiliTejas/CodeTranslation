@@ -1,0 +1,27 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+string s;
+
+int dp[10009][100][2],p,d;
+
+
+int dfs(int idx,int z,bool tight=true){
+  if(idx==s.size())return !z;
+  int &res=dp[idx][z][tight];
+  if(~res)return res;
+  res=0;
+  int x=s[idx]-'0';
+  int r=(tight?x:9);
+  for(int i=0;i<=r;i++){
+    res+=dfs(idx+1,(z+i)%d,tight&&i==r);
+    res%=1000000007;
+  }
+  return res;
+}
+
+int main(){
+  memset(dp,-1,sizeof(dp));
+  cin>>s>>d;
+  cout<<(dfs(0,0)-1+1000000007)%1000000007<<endl;
+}

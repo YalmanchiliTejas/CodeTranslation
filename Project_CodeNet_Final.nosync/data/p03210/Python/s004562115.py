@@ -1,0 +1,1 @@
+print(['NO','YES'][int(input())in[3,5,7]])

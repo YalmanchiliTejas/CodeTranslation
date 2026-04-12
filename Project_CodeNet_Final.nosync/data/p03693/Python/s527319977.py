@@ -1,0 +1,1 @@
+_,a,b=map(int,input().split());print(['NO','YES'][(a*10+b)%4==0])

@@ -1,0 +1,2 @@
+x,y,z = map(int,input().strip().split(" "))                                                                                                                                                                    
+print(int((x-z)/(y+z)))

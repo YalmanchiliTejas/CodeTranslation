@@ -1,0 +1,1 @@
+print('YES'*(int(input()[::2])%4==0)or'NO')

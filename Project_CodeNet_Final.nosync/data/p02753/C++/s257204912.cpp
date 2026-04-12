@@ -1,0 +1,15 @@
+#include<stdio.h>
+#include<iostream>
+using namespace std;
+
+int main(){
+  char A[3];
+  cin >> A[0] >> A[1] >> A[2] ;
+  if (A[0] == A[1] && A[1] == A[2]){
+    cout << "No" << endl;
+  }
+ else{
+   cout << "Yes" << endl;
+ }
+  
+}

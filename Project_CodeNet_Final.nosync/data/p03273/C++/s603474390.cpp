@@ -1,0 +1,39 @@
+#include <bits/stdc++.h>
+using namespace std;
+ 
+int main() {
+  int H,W;
+  cin >> H >> W;
+  
+  int i,j;
+  vector<vector<char>> a(H, vector<char>(W));
+
+  for(i=0;i<H;i++){
+    for(j=0;j<W;j++){
+      cin >> a.at(i).at(j);
+    }
+  }
+  
+  vector<bool> row(H,false);
+  vector<bool> col(W,false);
+
+  for(i=0;i<H;i++){
+    for(j=0;j<W;j++){
+      if(a.at(i).at(j) == '#'){
+        row.at(i) = true;
+        col.at(j) = true;
+      }
+    }
+  }
+
+  for(i=0;i<H;i++){
+    if(row.at(i)){
+        for(j=0;j<W;j++){
+          if(col.at(j)){
+              cout << a.at(i).at(j);
+          }
+        }
+        cout << endl;
+    }
+  }
+}

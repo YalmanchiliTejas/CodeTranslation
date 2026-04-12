@@ -1,0 +1,187 @@
+// header {{{
+// header {{{
+using namespace std;
+#include <bits/stdc++.h>
+
+#define CPP_STR(x) CPP_STR_I(x)
+#define CPP_CAT(x, y) CPP_CAT_I(x, y)
+#define CPP_STR_I(args...) #args
+#define CPP_CAT_I(x, y) x##y
+
+#define ASSERT(expr...) assert((expr))
+
+using i8 = int8_t;
+using u8 = uint8_t;
+using i16 = int16_t;
+using u16 = uint16_t;
+using i32 = int32_t;
+using u32 = uint32_t;
+using i64 = int64_t;
+using u64 = uint64_t;
+
+using f32 = float;
+using f64 = double;
+// }}}
+
+constexpr i64 INF = 1'010'000'000'000'000'017LL;
+
+constexpr i64 MOD = 1'000'000'007LL;
+
+constexpr f64 EPS = 1e-12;
+
+constexpr f64 PI = 3.14159265358979323846;
+
+#define M5 100007
+#define M9 1000000000
+
+// util {{{
+#define FOR(i, start, end) for (i64 i = (start), CPP_CAT(i, xxxx_end) = (end); i < CPP_CAT(i, xxxx_end); ++i)
+#define REP(i, n) FOR(i, 0, n)
+
+#define ALL(f, c, ...) (([&](decltype((c)) cccc) { return (f)(std::begin(cccc), std::end(cccc), ##__VA_ARGS__); })(c))
+#define ll long long int
+#define VI vector<int>
+template <typename C>
+i64 SIZE(const C &c)
+{
+    return static_cast<i64>(c.size());
+}
+
+template <typename T, size_t N>
+i64 SIZE(const T (&)[N]) { return static_cast<i64>(N); }
+
+template <typename T, typename U, typename Comp = less<>>
+bool chmax(T &xmax, const U &x, Comp comp = {})
+{
+    if (comp(xmax, x))
+    {
+        xmax = x;
+        return true;
+    }
+    return false;
+}
+
+template <typename T, typename U, typename Comp = less<>>
+bool chmin(T &xmin, const U &x, Comp comp = {})
+{
+    if (comp(x, xmin))
+    {
+        xmin = x;
+        return true;
+    }
+    return false;
+}
+// }}}
+
+// init {{{
+struct ProconInit
+{
+    static constexpr int IOS_PREC = 15;
+    static constexpr bool AUTOFLUSH = false;
+
+    ProconInit()
+    {
+        cin.tie(nullptr);
+        ios::sync_with_stdio(false);
+        cout << fixed << setprecision(IOS_PREC);
+        if (AUTOFLUSH)
+            cout << unitbuf;
+    }
+} PROCON_INIT;
+// }}}
+
+//--------------------------------------------------------------------
+
+bool isOK(int mid, double key)
+{
+}
+
+int binary_search(double key)
+{
+    int left = -1; //「index = 0」が条件を満たすこともあるので、初期値は -1
+    int right = 2000000000;
+    /* どんな二分探索でもここの書き方を変えずにできる！ */
+    while (right - left > 1)
+    {
+        int mid = left + (right - left) / 2;
+
+        if (isOK(mid, key))
+            right = mid;
+        else
+            left = mid;
+    }
+
+    /* left は条件を満たさない最大の値、right は条件を満たす最小の値になっている */
+    return right;
+}
+
+bool isKaibun(string st)
+{
+    bool ans = true;
+    int n = st.length();
+    REP(i, n / 2)
+    {
+        if (st[i] != st[n - i - 1])
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+int toInt(char a)
+{
+    return a - '0';
+}
+
+int gcd(int a, int b)
+{
+    if (a % b == 0)
+    {
+        return (b);
+    }
+    else
+    {
+        return (gcd(b, a % b));
+    }
+}
+
+int lcm(int a, int b)
+{
+    return a * b / gcd(a, b);
+}
+
+void solve()
+{
+    int N;
+    cin >> N;
+    vector<ll> A(N);
+    REP(i, N)
+    cin >> A[i];
+    vector<ll> B(N);
+    ll sum = 0;
+    REP(i, N)
+    {
+        sum = (sum + A[N - i - 1]) % (M9 + 7);
+        B[N - i - 1] = sum;
+    }
+    REP(i, N)
+    {
+        //        cout << B[i] << endl;
+    }
+    ll ans = 0;
+    REP(i, N - 1)
+    {
+        ans += (A[i] * B[i + 1]) % (M9 + 7);
+        ans = ans % (M9 + 7);
+    }
+    cout << ans;
+}
+
+signed main()
+{
+
+    solve();
+
+    return 0;
+}

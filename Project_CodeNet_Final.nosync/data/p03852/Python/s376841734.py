@@ -1,0 +1,1 @@
+print "vowel" if raw_input() in ['a', 'i', 'u', 'e', 'o'] else "consonant"

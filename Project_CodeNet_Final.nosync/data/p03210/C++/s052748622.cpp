@@ -1,0 +1,20 @@
+#include <iostream>
+using namespace std;
+
+int main() {
+	int a;
+	cin>>a;
+	if(a==3){
+	    cout<<"YES"<<'\n';
+    }
+    else if(a==5){
+        cout<<"YES"<<'\n';
+    }
+    else if(a==7){
+        cout<<"YES"<<'\n';
+    }
+    else{
+        cout<<"NO"<<'\n';
+    }
+	return 0;
+}

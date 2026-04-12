@@ -1,0 +1,14 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main() {
+    int N, ans = 0, it;
+    cin >> N;
+    vector<int> A(N), B(N, -1);
+    for (auto& a:A) cin >> a;
+    for (int i = 0; i<N; i++) {
+        it = lower_bound(B.begin(), B.end(), A[i])-B.begin();
+        B[it-1] = A[i];
+    }
+    for (auto b:B) if (b != -1) ans++;
+    printf("%d\n", ans);
+}

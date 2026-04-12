@@ -1,0 +1,3 @@
+submission_id,problem_id,user_id,date,language,original_language,filename_ext,status,cpu_time,memory,code_size,accuracy
+s450852357,p01611,u213247212,1363265840,C++,C++,cpp,Accepted,50,31284,3461,48/48
+s902224329,p01611,u827448139,1363509246,C++,C++,cpp,Accepted,110,31164,3427,48/48

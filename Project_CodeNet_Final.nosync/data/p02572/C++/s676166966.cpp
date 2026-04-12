@@ -1,0 +1,98 @@
+#include<bits/stdc++.h>
+using namespace std;
+#define pb push_back
+#define N 200005
+#define ll long long
+#define pi pair<int , int>
+#define pip pair<pi ,int>
+#define mp make_pair 
+#define f first
+#define s second
+#define mod 1000000007
+#define int ll
+ll Mod(ll x, ll y, int p) 
+{ll res = 1; x = x % p;
+while (y > 0) 
+{if(y & 1) res = (res*x) % p; 
+y = y>>1;x = (x*x) % p; 
+}return res; 
+}
+// this is triplet class , which will help us .
+class Triplet{
+ public:
+ int x ;
+ int y ;
+ int gcd;
+};
+Triplet extendedEuclid(int a , int b){
+ if(b == 0){Triplet ans; ans.gcd = a;ans.x = 1;ans.y = 0;return ans;}
+ Triplet smallAns = extendedEuclid(b , a%b);
+ Triplet ans;
+ ans.gcd = smallAns.gcd;
+ ans.x = smallAns.y;
+ ans.y = smallAns.x - (a/b)*smallAns.y;
+ return ans;
+}
+// this is for finding inversing multiplicative module of a number.
+int mmInverse(int a , int m){
+ Triplet ans = extendedEuclid(a , m);
+ return (ans.x+m)%m;
+}
+int getlps(string pattern){
+ int len = pattern.length();
+ int * lps = new int[len];
+ lps[0] = 0;
+ int i = 1 , j = 0;
+ while(i < len){
+  if(pattern[i] == pattern[j]){
+    lps[i] = j+1;
+   i++;
+   j++;
+  }
+  else{
+    if(j != 0){
+     j = lps[j-1];
+    }
+    else{
+     lps[i] = 0;
+     i++;
+    }
+  }
+ }
+ return lps[len-1];
+}
+
+
+
+
+vector<int> edges[N];
+set<pi> st;
+bool visited[N];
+void dfs(vector<int>&comp , int S , int p){
+       comp.pb(S);
+       visited[S] = true;
+      for(auto it:edges[S]){
+           if(!visited[it]){
+              dfs(comp , it , S);
+           }
+      }
+}
+int32_t main(){
+   ios_base::sync_with_stdio(false);
+      cin.tie(NULL);
+    cout.tie(NULL);
+     int n;
+     cin>>n; 
+    int arr[n];
+    int sum = 0;
+    for(int i = 0 ; i <  n; i++){
+       cin>>arr[i];
+        sum += arr[i];
+    }
+    int ans = 0;
+    for(int i = 0 ; i < n ; i++){
+             ans = (ans%mod + ((arr[i]%mod)*((sum - arr[i])%mod) + mod)%mod + mod)%mod;
+    }
+    cout<<(ans*mmInverse(2 , mod)+mod)%mod<<endl;
+
+}

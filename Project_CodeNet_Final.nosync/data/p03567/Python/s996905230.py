@@ -1,0 +1,1 @@
+print(['No','Yes'][min(input().find('AC'),0)+1])

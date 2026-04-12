@@ -1,0 +1,13 @@
+#include<iostream>
+using namespace std;
+int main() {
+	string sta;
+	cin >> sta;
+	if (sta[0] == sta[1] && sta[1] == sta[2]) {
+		cout << "No" << endl;
+	}
+	else {
+		cout << "Yes" << endl;
+	}
+	return 0;
+}

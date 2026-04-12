@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+const int mn=4e5+6;
+long long d[mn],f[mn][2];
+
+int main()
+{
+	int n;
+	scanf("%d",&n);
+	for(int i=1;i<=n;++i) scanf("%lld",&d[i]);
+	f[1][1]=-1e18;
+	for(int i=2;i<=n;++i) {
+		f[i][1]=max(f[i-2][1],f[i-2][0])+d[i];
+		f[i][0]=f[i-2][0]+d[i-1];
+		if(i&1) f[i][1]=max(f[i][1],max(f[i-3][1],f[i-3][0])+d[i]);
+	}
+	printf("%lld",max(f[n][0],f[n][1]));
+}

@@ -1,0 +1,36 @@
+#include <algorithm>
+#include <cmath>
+#include <cstdint>
+#include <cstdio>
+#include <iomanip>
+#include <iostream>
+#include <map>
+#include <queue>
+#include <set>
+#include <stack>
+#include <string>
+#include <vector>
+using namespace std;
+#define rep(i, n) for(int(i) = 0; (i) < (n); (i)++)
+#define FOR(i, m, n) for(int(i) = (m); (i) < (n); (i)++)
+#define All(v) (v).begin(), (v).end()
+#define pb push_back
+#define MP(a, b) make_pair((a), (b))
+using ll = long long;
+using pii = pair<int, int>;
+using pll = pair<ll, ll>;
+const int INF = 1 << 30;
+const ll LINF = 1LL << 60;
+const int MOD = 1e9 + 7;
+
+int main() {
+    ll A, B, C, X, Y;
+    cin >> A >> B >> C >> X >> Y;
+    ll res = LINF;
+    for(ll i = 0; i <= 2 * max(X, Y); i += 2) {
+        ll restX = max(0LL, X - i / 2), restY = max(0LL, Y - i / 2);
+        res = min(res, A * restX + B * restY + C * i);
+    }
+    cout << res << endl;
+    return 0;
+}

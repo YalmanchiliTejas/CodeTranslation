@@ -1,0 +1,4 @@
+r,g,b = map(str,input().split())
+
+rgb = int( r + g + b )
+print( 'YES' if rgb % 4 == 0 else 'NO' )

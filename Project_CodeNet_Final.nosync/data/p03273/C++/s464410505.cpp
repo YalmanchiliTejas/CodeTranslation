@@ -1,0 +1,54 @@
+#include<iostream> 
+#include<iomanip> 
+#include<vector> 
+#include<map> 
+#include<set> 
+#include<algorithm> 
+#include<numeric> 
+#include<limits> 
+#include<bitset> 
+#include<functional> 
+#include<type_traits> 
+#include<queue> 
+#include<stack> 
+#include<array> 
+#include<random> 
+#include<utility> 
+#include<cstdlib> 
+#include<ctime>
+
+using namespace std;
+
+
+int main() {
+    int h,w;
+    cin >> h >> w;
+    vector<vector<char>> a(h,vector<char>(w));
+
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+            cin >> a[i][j];
+        }
+    }
+
+    vector<bool> row(h, false);
+    vector<bool> col(w,false);
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+            if (a[i][j] == '#') {
+                row[i] = true;
+                col[j] = true;  
+            }
+        }
+    }
+    for (int i = 0; i < h; i++) {
+        if (row[i]) {
+            for (int j = 0; j < w; j++) {
+                if (col[j]) {
+                    cout << a[i][j];
+                }
+            }
+            cout << endl;
+        }
+    }
+}

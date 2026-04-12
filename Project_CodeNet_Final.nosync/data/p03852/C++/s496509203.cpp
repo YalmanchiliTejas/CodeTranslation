@@ -1,0 +1,11 @@
+#include<iostream>
+#include<algorithm>
+#include<stdio.h>
+#include<stdlib.h>
+using namespace std;
+int main(){
+	char c;
+	cin>>c;
+	if(c=='a'||c=='e'||c=='i'||c=='o'||c=='u')cout<<"vowel"<<endl;
+	else cout<<"consonant"<<endl;
+}

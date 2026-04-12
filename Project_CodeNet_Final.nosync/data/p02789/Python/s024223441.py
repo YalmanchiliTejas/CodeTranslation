@@ -1,0 +1,1 @@
+print "Yes" if len(set(raw_input().split()))==1 else "No"

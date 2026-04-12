@@ -1,0 +1,10 @@
+from sys import exit, stdin
+N, K = [int(_) for _ in stdin.readline().rstrip().split()]
+ans = 0
+if K == 0:
+    print(N*N)
+    exit()
+for b in range(K + 1, N + 1):
+    ans += N // b * (b - K) + max(0, (N % b) - K + 1)
+
+print(ans)

@@ -1,0 +1,79 @@
+#include <bits/stdc++.h>
+#define ALL(v) std::begin(v), std::end(v)
+#define ALLR(v) std::rbegin(v), std::rend(v)
+using ll = std::int64_t;
+using ull = std::uint64_t;
+using pii = std::pair<int, int>;
+using tii = std::tuple<int, int, int>;
+using pll = std::pair<ll, ll>;
+using tll = std::tuple<ll, ll, ll>;
+template <typename T> using vec = std::vector<T>;
+template <typename T> using vvec = vec<vec<T>>;
+template <typename T> const T& var_min(const T &t) { return t; }
+template <typename T> const T& var_max(const T &t) { return t; }
+template <typename T, typename... Tail> const T& var_min(const T &t, const Tail&... tail) { return std::min(t, var_min(tail...)); }
+template <typename T, typename... Tail> const T& var_max(const T &t, const Tail&... tail) { return std::max(t, var_max(tail...)); }
+template <typename T, typename... Tail> void chmin(T &t, const Tail&... tail) { t = var_min(t, tail...); }
+template <typename T, typename... Tail> void chmax(T &t, const Tail&... tail) { t = var_max(t, tail...); }
+template <typename T> const T& clamp(const T &t, const T &low, const T &high) { return std::max(low, std::min(high, t)); }
+template <typename T> void chclamp(T &t, const T &low, const T &high) { return t = clamp(t, low, high); }
+template <typename T> T make_v(T init) { return init; }
+template <typename T, typename... Tail> auto make_v(T init, std::size_t s, Tail... tail) { auto v = std::move(make_v(init, tail...)); return vec<decltype(v)>(s, v); }
+template <typename T, std::size_t Head, std::size_t ...Tail> struct multi_dem_array { using type = std::array<typename multi_dem_array<T, Tail...>::type, Head>; };
+template <typename T, std::size_t Head> struct multi_dem_array<T, Head> { using type = std::array<T, Head>; };
+template <typename T, std::size_t ...Args> using mdarray = typename multi_dem_array<T, Args...>::type;
+namespace init__ { struct InitIO { InitIO() { std::cin.tie(nullptr); std::ios_base::sync_with_stdio(false); std::cout << std::fixed << std::setprecision(30); } } init_io; }
+
+const std::size_t SIZE1 = 18;
+const std::size_t SIZE2 = 1ll << SIZE1;
+ll dp[SIZE2][SIZE1 + 1];
+bool used[SIZE2][SIZE1 + 1];
+
+struct Solver {
+    ll n, len;
+    std::string s;
+    vec<ll> p, p2, ridx;
+
+    Solver() {
+        std::cin >> n >> s;
+        len = 1ll << n;
+        p.resize(len);
+        ridx.resize(len);
+        for (ll &e : p) {
+            std::cin >> e;
+            e--;
+        }
+        for (ll i = 0; i < len; i++) ridx[p[i]] = i;
+        p2 = p;
+        for (ll e : p) p2.push_back(e);
+    }
+
+    ll win(ll fst, ll snd) {
+        if (fst > snd) std::swap(fst, snd);
+        ll diff = snd - fst;
+        return (s[diff - 1] == '0' ? fst : snd);
+    }
+
+    // i is person, not index
+    ll calc(ll i, ll l) {
+        if (used[i][l]) return dp[i][l];
+        used[i][l] = true;
+        ll idx = ridx[i];
+        if (l == 0) return dp[i][l] = i;
+        ll hlen = 1ll << (l - 1);
+        ll fst = calc(i, l - 1);
+        ll snd = calc(p2[idx + hlen], l - 1);
+        return dp[i][l] = win(fst, snd);
+    }
+
+    void solve() {
+        for (ll i = 0; i < len; i++) std::cout << calc(p[i], n) + 1 << '\n';
+    }
+};
+
+int main() {
+    Solver solver;
+    solver.solve();
+    return 0;
+}
+

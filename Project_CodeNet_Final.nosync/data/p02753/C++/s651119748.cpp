@@ -1,0 +1,26 @@
+#include <bits/stdc++.h>
+
+#define fst(t) std::get<0>(t)
+#define snd(t) std::get<1>(t)
+#define thd(t) std::get<2>(t)
+#define unless(p) if(!(p))
+#define until(p) while(!(p))
+
+using ll = std::int64_t;
+using P = std::tuple<int,int>;
+
+std::string S;
+
+int main(){
+  std::cin.tie(nullptr);
+  std::ios::sync_with_stdio(false);
+
+  std::cin >> S;
+
+  bool flag = S[0] == S[1] && S[1] == S[2];
+  if(!flag){
+      std::cout << "Yes" << std::endl;
+  }else{
+      std::cout << "No" << std::endl;
+  }
+}

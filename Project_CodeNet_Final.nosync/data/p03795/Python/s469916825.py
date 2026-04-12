@@ -1,0 +1,1 @@
+x=int(input());print((8*x-x//15*2)*100)

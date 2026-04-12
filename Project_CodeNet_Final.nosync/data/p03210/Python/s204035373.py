@@ -1,0 +1,3 @@
+#!/usr/bin/env python3
+x = int(input())
+print("YES") if x == 7 or x == 5 or x == 3 else print("NO")

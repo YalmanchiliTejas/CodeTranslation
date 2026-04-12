@@ -1,0 +1,1 @@
+input();m=10**9+7;s=sum(A:=[*map(int,input().split())]);print(((s*s-sum(a**2for a in A))//2)%m)

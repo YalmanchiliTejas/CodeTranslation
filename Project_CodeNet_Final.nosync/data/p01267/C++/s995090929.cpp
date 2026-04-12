@@ -1,0 +1,2 @@
+#include<iostream>
+main(){int N,A,B,C,X,Y,y,f;for(;std::cin>>N>>A>>B>>C>>X,N||A||B||C||X;f>10000?puts("-1"):printf("%d\n",f))for(f=0,y=-1;N-->0;y=Y){std::cin>>Y;if(Y==y){X=(A*X+B)%C;f++;}for(;X!=Y&f<10001;f++)X=(A*X+B)%C;}}

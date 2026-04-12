@@ -1,0 +1,57 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+#define REP(i,n) for(int i=0,_n=(int)(n);i<_n;++i)
+#define ALL(v) (v).begin(),(v).end()
+#define CLR(t,v) memset(t,(v),sizeof(t))
+template<class T1,class T2>ostream& operator<<(ostream& os,const pair<T1,T2>&a){return os<<"("<<a.first<<","<<a.second<< ")";}
+template<class T>void pv(T a,T b){for(T i=a;i!=b;++i)cout<<(*i)<<" ";cout<<endl;}
+template<class T>void chmin(T&a,const T&b){if(a>b)a=b;}
+template<class T>void chmax(T&a,const T&b){if(a<b)a=b;}
+
+
+int nextInt() { int x; scanf("%d", &x); return x;}
+ll nextLong() { ll x; scanf("%lld", &x); return x;}
+
+const int MAX_N = 8;
+int g[MAX_N][MAX_N];
+
+int main2() {
+  CLR(g, 0);
+
+  int N = nextInt();
+  int M = nextInt();
+
+  REP(i, M) {
+    int a = nextInt() - 1;
+    int b = nextInt() - 1;
+    g[a][b] = 1;
+    g[b][a] = 1;
+  }
+  int ans = 0;
+  vector<int> order;
+  REP(i, N) order.push_back(i);
+  do {
+    if (order[0] == 0) {
+      bool ok = true;
+      REP(i, N-1) {
+        if (!g[order[i]][order[i+1]]) ok = false;
+      }
+      if (ok) {
+        ans++;
+      }
+    }
+  } while (next_permutation(ALL(order)));
+  cout << ans << endl;
+  return 0;
+}
+
+int main() {
+
+#ifdef LOCAL
+  for (;!cin.eof();cin>>ws)
+#endif
+    main2();
+  return 0;
+}

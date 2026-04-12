@@ -1,0 +1,1 @@
+print("Yes" if input().count('AC') else "No")

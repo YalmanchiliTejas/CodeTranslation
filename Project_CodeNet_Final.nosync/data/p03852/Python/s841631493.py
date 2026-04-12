@@ -1,0 +1,1 @@
+print(["consonant","vowel"][["a","i","u","e","o"].count(input())])

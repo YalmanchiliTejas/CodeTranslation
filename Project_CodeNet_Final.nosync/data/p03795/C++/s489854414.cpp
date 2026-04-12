@@ -1,0 +1,13 @@
+#include <iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+
+int main() {
+	int N;
+	cin >> N;
+	cout << N * 800-N/15*200;
+	return 0;
+}

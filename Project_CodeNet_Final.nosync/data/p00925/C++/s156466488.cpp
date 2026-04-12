@@ -1,0 +1,83 @@
+#include <cstdio>
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <stack>
+#include <algorithm>
+#include <cmath>
+#include <queue>
+#include <map>
+#include <set>
+#include <cstdlib>
+#include <bitset>
+#include <tuple>
+#include <assert.h>
+#include <deque>
+#include <bitset>
+#include <iomanip>
+#include <limits>
+#include <chrono>
+#include <random>
+#include <array>
+#include <unordered_map>
+#include <functional>
+#include <complex>
+#include <numeric>
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+
+constexpr long long MAX = 5100000;
+constexpr long long INF = 1LL << 60;
+constexpr int inf = 1 << 28;
+//constexpr long long mod = 1000000007LL;
+//constexpr long long mod = 998244353LL;
+
+using namespace std;
+typedef unsigned long long ull;
+typedef long long ll;
+
+int main()
+{
+	/*
+	cin.tie(nullptr);
+	ios::sync_with_stdio(false);
+	*/
+	string s; cin >> s;
+	ll kkt; cin >> kkt;
+	ll left = s[0] - '0';
+	ll ac = 0;
+	for (int i = 2; i < s.size(); i += 2) {
+		if (s[i - 1] == '+') {
+			left += s[i] - '0';
+		}
+		else {
+			left *= s[i] - '0';
+		}
+	}
+	stack<ll> st;
+	st.push(s[0] - '0');
+	for (int i = 2; i < s.size(); i += 2) {
+		if (s[i - 1] == '+') st.push(s[i] - '0');
+		else {
+			st.top() *= s[i] - '0';
+		}
+	}
+	while (!st.empty()) {
+		ac += st.top();
+		st.pop();
+	}
+	if (left == kkt && ac == kkt) {
+		puts("U");
+	}
+	else if (left == kkt) {
+		puts("L");
+	}
+	else if (ac == kkt) {
+		puts("M");
+	}else{
+		puts("I");
+	}
+	return 0;
+
+}
+

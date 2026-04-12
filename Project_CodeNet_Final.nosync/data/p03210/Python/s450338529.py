@@ -1,0 +1,1 @@
+print("YES" if int(input())%7%5%3==0 else "NO")

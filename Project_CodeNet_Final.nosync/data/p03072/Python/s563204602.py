@@ -1,0 +1,9 @@
+N = int(input())
+H = list(map(int, input().split()))
+max = 0
+times = 0
+for i in range(N):
+    if(max <= H[i]):
+        max = H[i]
+        times += 1
+print(times)

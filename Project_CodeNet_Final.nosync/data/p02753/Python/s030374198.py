@@ -1,0 +1,1 @@
+print('No') if input().count('A') in [0, 3] else print('Yes')

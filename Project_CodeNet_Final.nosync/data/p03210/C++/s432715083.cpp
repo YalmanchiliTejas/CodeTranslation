@@ -1,0 +1,9 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  int X;
+  cin >> X;
+  if( (X - 7) * (X - 5) * (X - 3) == 0) cout << "YES" << endl;
+  else cout << "NO" << endl;
+}

@@ -1,0 +1,46 @@
+#include <iostream>
+#include <iomanip>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
+#include <cassert>
+#include <algorithm>
+#include <numeric>
+#include <random>
+#include <vector>
+#include <array>
+#include <bitset>
+#include <queue>
+#include <set>
+#include <unordered_set>
+#include <map>
+#include <unordered_map>
+
+using namespace std;
+using uint = unsigned int;
+using ll = long long;
+using ull = unsigned long long;
+constexpr ll TEN(int n) { return (n==0) ? 1 : 10*TEN(n-1); }
+template<class T> using V = vector<T>;
+template<class T> using VV = V<V<T>>;
+
+ll gcd(ll a, ll b) {
+    if (b == 0) return a;
+    return gcd(b, a%b);
+}
+
+int main() {
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    cout << setprecision(20);
+    ll x, y, z;
+    cin >> x >> y >> z;
+    ll c = 0;
+    x -= z;
+    while (x >= y+z) {
+        c++;
+        x -= (y+z);
+    }
+    cout << c << endl;
+    return 0;
+}

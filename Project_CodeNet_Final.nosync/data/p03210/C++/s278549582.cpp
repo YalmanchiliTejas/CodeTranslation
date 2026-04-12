@@ -1,0 +1,11 @@
+#include<bits/stdc++.h>
+using namespace std;
+signed main(){
+  int a;
+  cin>>a;
+  if(a==3 || a==5 || a==7){
+    cout<<"YES\n";
+  }else{
+    cout<<"NO\n";
+  }
+}

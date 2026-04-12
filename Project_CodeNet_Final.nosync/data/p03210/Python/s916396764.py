@@ -1,0 +1,1 @@
+print 'YES' if raw_input() in '753' else 'NO'

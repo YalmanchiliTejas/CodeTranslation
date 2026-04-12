@@ -1,0 +1,1 @@
+print('No' if input().find('AC') < 0 else 'Yes')

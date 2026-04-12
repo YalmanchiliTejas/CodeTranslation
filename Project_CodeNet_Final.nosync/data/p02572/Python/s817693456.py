@@ -1,0 +1,5 @@
+N = int(input())
+A = list(map(int, input().split()))
+a = (sum(A)**2)
+b =  sum([(a**2) for a in A])
+print(((a-b))//2%(10**9+7))

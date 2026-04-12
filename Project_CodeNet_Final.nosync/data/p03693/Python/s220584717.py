@@ -1,0 +1,7 @@
+r,g,b = map(int,input().split())
+val = 100*r + 10*g + b
+
+if val % 4 == 0:
+    print("YES")
+else:
+    print("NO")

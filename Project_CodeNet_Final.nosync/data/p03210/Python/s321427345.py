@@ -1,0 +1,1 @@
+print(["YES", "NO"][not(input() in "753")])

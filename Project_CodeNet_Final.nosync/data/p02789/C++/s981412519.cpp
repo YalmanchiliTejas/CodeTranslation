@@ -1,0 +1,18 @@
+#include <stdio.h>
+#include <math.h>
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main(void)
+{
+    int N, M;
+    cin >> N >> M;
+    if(N == M){
+        cout << "Yes";
+    }else
+    {
+        cout << "No";
+    }
+    return 0;
+}

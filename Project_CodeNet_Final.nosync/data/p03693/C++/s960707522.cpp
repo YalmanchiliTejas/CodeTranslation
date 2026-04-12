@@ -1,0 +1,48 @@
+#include <iostream>
+#include<cstdio>
+#include<cstring>
+#include<cmath>
+#include<algorithm>
+#include<queue>
+#define N 1000
+using namespace std;
+int main()
+{
+    int a,b,c;
+    cin>>a>>b>>c;
+    if((10*b+c)%4==0)cout<<"YES"<<endl;
+    else cout<<"NO"<<endl;
+}
+/*
+ 5
+ 1 1 1
+ 111
+ 3 1 8
+ 1
+ 2
+ 4
+ 1 2
+ 2 3
+ 3 2 10
+ 4 7
+ 8 9
+ 2 3
+ 1 2
+ 2 3
+ 4 2 99
+ 0 1
+ 0 1
+ 0 1
+ 0 0
+ 4 1
+ 2 4
+ 4 3
+ 4 3 99
+ 0 1 0
+ 0 1 0
+ 0 1 0
+ 0 0 0
+ 4 1
+ 2 4
+ 4 3
+ */

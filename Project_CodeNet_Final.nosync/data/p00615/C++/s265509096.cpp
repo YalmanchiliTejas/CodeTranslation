@@ -1,0 +1,17 @@
+#include <stdio.h>
+#include <algorithm>
+#pragma warning(disable : 4996)
+using namespace std;
+int n, m, a[20001];
+int main() {
+	while (~scanf("%d%d", &n, &m)) {
+		if (n == 0 && m == 0) break;
+		for (int i = 1; i <= n + m; i++) scanf("%d", &a[i]);
+		sort(a, a + n + m + 1); int ret = 0;
+		for (int i = 1; i <= n + m; i++) {
+			ret = max(ret, a[i] - a[i - 1]);
+		}
+		printf("%d\n", ret);
+	}
+	return 0;
+}

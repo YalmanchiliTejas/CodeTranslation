@@ -1,0 +1,1 @@
+a,b,c,x,y=map(int,input().split());print(min(k*c*2+a*max(x-k,0)+b*max(y-k,0)for k in range(max(x,y)*3)))

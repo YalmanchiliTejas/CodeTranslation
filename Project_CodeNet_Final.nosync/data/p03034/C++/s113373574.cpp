@@ -1,0 +1,65 @@
+#include <bits/stdc++.h>
+
+#define rep(i,n) for(int i=0; i<(n); i++)
+#define reps(i,x,n) for(int i=x; i<(n); i++)
+#define rrep(i,n) for(int i=(n)-1; i>=0; i--)
+#define all(X) (X).begin(),(X).end()
+#define X first
+#define Y second
+#define pb push_back
+#define eb emplace_back
+
+using namespace std;
+typedef long long int ll;
+typedef pair<int,int> pii;
+typedef pair<ll,ll> pll;
+
+template<class T> bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T> bool chmin(T &a, const T &b) { if (a>b) { a=b; return 1; } return 0; }
+
+template<class A, size_t N, class T> void Fill(A (&a)[N], const T &v){ fill( (T*)a, (T*)(a+N), v ); }
+
+const ll INF = 1e9+7;
+
+
+int main(){
+	ios_base::sync_with_stdio(false);
+
+//	int p[1000006]={};
+//	reps(i,2,1000006) if(!p[i]) for(int j=i; j<1000006; j+=i) p[j] = i;
+//
+//	auto ps = [&](int value){
+//		vector<int> v;
+//		v.push_back(1);
+//		v.push_back(value);
+//		while(p[value]){
+//			v.push_back(p[value]);
+//			value /= p[value];
+//		}
+//		return v;
+//	};
+
+
+	ll N, ans=0;
+	ll s[100005];
+
+	cin >> N;
+	rep(i, N) cin >> s[i];
+
+	reps(k,1,N){
+		ll sum = 0;
+		int l=0, r=N-1;
+		while(l<r || (l-r)%k != 0){
+			sum += s[l] + s[r];
+			chmax(ans, sum);
+			//cout << l << ":" << r << " " << sum << endl;
+			l += k;
+			r -= k;
+			if( l >= N-1-k || r <= k ) break;
+		}
+	}
+
+	cout << ans << endl;
+
+	return 0;
+}

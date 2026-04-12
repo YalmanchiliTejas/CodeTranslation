@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+
+using namespace std;
+ 
+int main() {
+  int n;
+  cin >> n;
+  
+  vector<int> v(n);
+  for (int i=0;i<n;i++){
+    cin >> v[i];
+  }
+  
+  bool flag = true;
+  int count = 1;
+  for(int i=1;i<n;i++){
+    flag = true;
+    for(int j=0;j<i;j++){
+      if(v[j]>v[i]){
+        flag = false;
+      }
+    }
+    if(flag!=false){
+      count+=1;
+    }
+  }
+
+  std::cout << count << std::endl;
+
+  return 0;
+}

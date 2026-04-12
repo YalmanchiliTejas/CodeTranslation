@@ -1,0 +1,170 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define BIT(n) (1LL << (n))
+#define BITF(n, i) (((n) >> (i)) & 1)
+#define REP(i, n) for (int i = 0; i < n; i++)
+#define FOR(i, m, n) for (int i = m; i < n; i++)
+#define REPI(i, x) for (int i = 1; i <= x; i++)
+#define FORI(i, m, n) for (int i = m; i <= n; i++)
+#define REPR(i, n) for (int i = n; i >= 0; i--)
+#define REPZ(i, x) for (int i = 0; i <= x; i++)
+#define FORA(i, n) for (auto &&i : n)
+#define POW(a, b) ((int)(pow(a, b) + .5))
+#define DUMPOUT cerr
+// vector
+template <typename T> istream &operator>>(istream &is, vector<T> &vec) {
+  for (T &x : vec) is >> x;
+  return is;
+}
+// pair
+template <typename T, typename U> ostream &operator<<(ostream &os, pair<T, U> &pair_var) {
+  os << "(" << pair_var.first << ", " << pair_var.second << ")";
+  return os;
+}
+// vector
+template <typename T> ostream &operator<<(ostream &os, const vector<T> &vec) {
+  os << "{";
+  REP(i, (int)vec.size())
+  os << vec[i] << (i + 1 == (int)vec.size() ? "" : ", ");
+  os << "}";
+  return os;
+}
+// map
+template <typename T, typename U> ostream &operator<<(ostream &os, map<T, U> &map_var) {
+  os << "{";
+  FORA(itr, map_var) {
+    os << *itr;
+    itr++;
+    if (itr != map_var.end()) os << ", ";
+    itr--;
+  }
+  os << "}";
+  return os;
+}
+// set
+template <typename T> ostream &operator<<(ostream &os, set<T> &set_var) {
+  os << "{";
+  FORA(itr, set_var) {
+    os << *itr;
+    itr++;
+    if (itr != set_var.end()) os << ", ";
+    itr--;
+  }
+  os << "}";
+  return os;
+}
+void dump_func() { DUMPOUT << endl; }
+template <class Head, class... Tail> void dump_func(Head &&head, Tail &&... tail) {
+  DUMPOUT << head;
+  if (sizeof...(Tail) > 0) DUMPOUT << ", ";
+  dump_func(std::move(tail)...);
+}
+#ifdef DEBUG_
+#define DEB
+#define DUMP(...)                                                             \
+  DUMPOUT << "  " << string(#__VA_ARGS__) << ": "                             \
+          << "[" << to_string(__LINE__) << ":" << __FUNCTION__ << "]" << endl \
+          << "    ",                                                          \
+      dump_func(__VA_ARGS__)
+#define PRINTARR(x, y)                                     \
+  cerr << #x << "=\n";                                     \
+  for (auto itr = x; itr != y; itr++) cerr << *itr << " "; \
+  cerr << endl;
+#define PRINTARR2(x, i0, i1)                                       \
+  cerr << #x << "=\n";                                             \
+  for (int ii0 = 0; ii0 < i0; ii0++) {                             \
+    for (int ii1 = 0; ii1 < i1; ii1++) cerr << x[ii0][ii1] << " "; \
+    cerr << endl;                                                  \
+  }
+#else
+#define DEB if (false)
+#define DUMP(...)
+#define PRINTARR(x, y)
+#define PRINTARR2(x, i0, i1)
+#endif
+#define ALL(v) v.begin(), v.end()
+#define fst first
+#define snd second
+#define mp make_pair
+#define pb push_back
+#define epb emplace_back
+#define int long long
+#define pint pair<int, int>
+#define ld long double
+using namespace std;
+template <class T> bool chmax(T &a, const T &b) {
+  if (a < b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+template <class T> bool chmin(T &a, const T &b) {
+  if (a > b) {
+    a = b;
+    return 1;
+  }
+  return 0;
+}
+template <class T> using vec = std::vector<T>;
+template <class T> void print(const T &x) { cout << x << "\n"; }
+const int MOD = 1000000007, INF0 = 1061109567, INF = INF0 * INF0;
+const double EPS = 1e-10, PI = acos(-1.0);
+const int dx[4] = {1, 0, -1, 0}, dy[4] = {0, 1, 0, -1};
+/*
+[&] { return; }();下のスラッシュを2つ追加しただけ.上のスラッシュを2つにすれば外れる.
+//*/
+#define MAXN 200100
+int dp[101][2][3];
+int pos[3];
+int K;
+string N;
+int globalV;
+bool hantei(int v, int pos[4], int K) {
+  if (v <= -1) return true;
+  if (v >= POW(9, K)) return false;
+  string tmpS(101, '0');
+  REPI(i, K) {
+    int val = v % 9;
+    tmpS[pos[i]] = '1' + val;
+    v /= 9;
+  }
+  // DUMP(v, tmpS, N);
+  return tmpS <= N;
+}
+void dfs(int step, int pos[4]) {
+  if (step == K) {
+    int left = -10, right = POW(9, K);
+    reverse(pos + 1, pos + K + 1);
+    // PRINTARR(pos + 1, pos + K + 1);
+    while (right - left > 1) {
+      int mid = (left + right) / 2;
+      bool p = hantei(mid, pos, K);
+      if (p) {
+        left = mid;
+      } else {
+        right = mid;
+      }
+    }
+    globalV += right;
+  } else {
+    FOR(i, pos[step] + 1, 101) {
+      int tmp[4];
+      REP(j, step + 1) tmp[j] = pos[j];
+      tmp[step + 1] = i;
+      dfs(step + 1, tmp);
+    }
+  }
+}
+signed main() {
+  cin.tie(0), ios::sync_with_stdio(false);
+  cout << fixed << setprecision(12);
+  cin >> N >> K;
+  int sizeN = 101 - N.size();
+  N = string(sizeN, '0') + N;
+  DUMP(N, sizeN);
+  int pos[4];
+  pos[0] = -1;
+  dfs(0, pos);
+  print(globalV);
+}

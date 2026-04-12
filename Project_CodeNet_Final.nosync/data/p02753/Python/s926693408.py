@@ -1,0 +1,7 @@
+if __name__ == '__main__':
+    s = input()
+
+    if s == 'AAA' or s == 'BBB':
+        print("No")
+    else:
+        print("Yes")

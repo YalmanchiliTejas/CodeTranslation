@@ -1,0 +1,19 @@
+#include<bits/stdc++.h>
+using namespace std;
+long long a,b,c,k;
+int main()
+{
+    cin>>a>>b>>c;
+    if(b>=a){
+        cout<<1<<endl;
+        return 0;
+    }
+    if(c>=b){
+        cout<<-1<<endl;
+        return 0;
+    }
+    if((a-b)%(b-c)>=1)
+        k=1;
+    cout<<((a-b)/(b-c)+k)*2+1<<endl;
+    return 0;
+}

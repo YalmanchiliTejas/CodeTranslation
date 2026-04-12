@@ -1,0 +1,70 @@
+#define _USE_MATH_DEFINES
+#define _CRT_SECURE_NO_WARNINGS
+
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <iomanip>
+#include <cmath>
+#include <cstring>
+#include <cstdlib>
+#include <algorithm>
+#include <stack>
+#include <queue>
+#include <vector>
+#include <list>
+#include <set>
+#include <map>
+#include <bitset>
+#include <utility>
+#include <numeric>
+#include <iterator>
+
+using namespace std;
+
+using ll = long long;
+using ull = unsigned long long;
+
+const ll inf = 1ll << 60;
+const ll mod = (ll)1e9 + 7;
+
+#define all(v) v.begin(), v.end()
+#define rall(v) v.rbegin(), v.rend()
+
+#define print(s) cout << s;
+#define println(s) cout << s << endl;
+#define printd(s, f) cout << fixed << setprecision(f) << s << endl;
+
+
+int main()
+{
+	ll h, w;
+	cin >> h >> w;
+
+	vector<vector<string>> a(h, vector<string>(w));
+	for (ll i = 0; i < h; i++)
+	{
+		string s;
+		cin >> s;
+		for (ll j = 0; j < w; j++)
+		{
+			a[i][j] = s[j];
+		}
+	}
+
+	bool b = true;
+	for (ll i = 1; i < h; i++)
+	{
+		for (ll j = 1; j < w; j++)
+		{
+			ll x = j - 1;
+			ll y = i - 1;
+			if ((x >= 0 && a[i][x] == "#") && (y >= 0 && a[y][j] == "#"))
+			{
+				b = false;
+			}
+		}
+	}
+
+	println((b ? "Possible" : "Impossible"));
+}

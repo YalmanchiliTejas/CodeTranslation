@@ -1,0 +1,49 @@
+def countInRangeUtil(pos, cnt, tight, num): 
+
+	if pos == len(num): 
+
+		if cnt == K: 
+			return 1
+		return 0
+
+	if dp[pos][cnt][tight] != -1: 
+		return dp[pos][cnt][tight] 
+
+	ans = 0
+
+	limit = 9 if tight else num[pos] 
+
+	for dig in range(limit + 1): 
+		currCnt = cnt 
+
+		if dig != 0: 
+			currCnt += 1
+
+		currTight = tight 
+
+		if dig < num[pos]: 
+			currTight = 1
+
+		ans += countInRangeUtil(pos + 1, currCnt, currTight, num) 
+
+	dp[pos][cnt][tight] = ans 
+	return dp[pos][cnt][tight] 
+
+def countInRange(x): 
+	global dp, K, M 
+
+	num = [] 
+	while x: 
+		num.append(x % 10) 
+		x //= 10
+
+	num.reverse() 
+
+	dp = [[[-1, -1] for i in range(M)] for j in range(M)] 
+	return countInRangeUtil(0, 0, 0, num) 
+
+n = int(input())
+K = int(input())
+dp = []
+M = 100
+print(countInRange(n) - countInRange(0)) 

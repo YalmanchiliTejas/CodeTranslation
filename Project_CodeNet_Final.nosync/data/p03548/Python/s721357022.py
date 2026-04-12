@@ -1,0 +1,5 @@
+t=input().split(" ")
+X=int(t[0])
+Y = int(t[1])
+Z = int(t[2])
+print((X-Z)//(Y+Z))

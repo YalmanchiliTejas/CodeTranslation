@@ -1,0 +1,20 @@
+#include <iostream>
+#include <algorithm>
+#include <cmath>
+#include <string>
+
+#define rep(i,n) for(int (i)=0;(i)<(n); ++(i))
+using namespace std;
+
+int main() {
+    int x;
+    cin >> x;
+
+    if(x >= 30) {
+        cout << "Yes" << endl;
+    } else {
+        cout << "No" << endl;
+    }
+
+    return 0;
+}

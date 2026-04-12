@@ -1,0 +1,23 @@
+#include <bits/stdc++.h>
+using namespace std;
+int n, m, ans;
+bool used[9], d[9][9];
+
+void dfs(int p,int c){
+    if(c == n) ans++;
+    used[p] = true;
+    for(int i = 1; i <= n; i++)
+        if(!used[i] && d[p][i]) dfs(i,c + 1);
+    used[p] = false;
+}
+
+int main(){
+    cin >> n >> m;
+    for(int i = 0, a, b; i < m;i++){
+        cin >> a >> b;
+        d[a][b] = d[b][a] = true;
+    }
+    dfs(1,1);
+    cout << ans << endl;
+    return 0;
+}

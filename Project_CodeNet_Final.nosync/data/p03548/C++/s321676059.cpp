@@ -1,0 +1,12 @@
+#include <iostream>
+#include <algorithm>
+using namespace std;
+
+int main()
+{
+	int cnt=0;
+	int x, y, z;
+	cin >> x >> y >> z;
+	cout << (x-z) / (y + z) << endl;
+	return 0;
+}

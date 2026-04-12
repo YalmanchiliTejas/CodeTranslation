@@ -1,0 +1,1 @@
+import re;print('YNeos'[not bool(re.fullmatch(r'.*AC.*',input()))::2])

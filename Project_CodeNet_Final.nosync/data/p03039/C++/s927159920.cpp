@@ -1,0 +1,88 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i, n) for (int i = 0; i < (int)n; i++)
+#define rep2(i, s, n) for (int i = s; i < (int)n; i++)
+#define all(obj) obj.begin(), obj.end()
+#define debug(x) cerr << #x << ":" << x << "\n"
+#define vdebug(vec) cerr << #vec << ":"; for (auto e : vec) cerr << e << " "; cout << "\n"
+#define YN(f) cout << (f ? "YES" : "NO") << endl
+#define Yn(f) cout << (f ? "Yes" : "No") << endl
+#define yn(f) cout << (f ? "yes" : "no") << endl
+using ll = long long;
+using vi = vector<int>;
+using vvi = vector<vi>;
+using pii = pair<int, int>;
+
+static int MOD;
+
+ll modmul(ll x, ll y) {
+	return x * y % MOD;
+}
+
+// power(mod) x^n
+ll modpow(ll x, ll n) {
+	ll res = 1;
+	while (n > 0) {
+		if (n & 1) res = modmul(res, x);
+		x = modmul(x, x);
+		n >>= 1;
+	}
+	return res;
+}
+
+// inverse(mod) x^(-1)
+ll inv(ll x) {
+	return modpow(x, MOD - 2);
+}
+
+ll moddiv(ll x, ll y) {
+	return modmul(x, inv(y));
+}
+
+// factorial(mod) n!
+ll fact(ll n) {
+	ll res = 1;
+	while (n > 1) {
+		res = modmul(res, n);
+		n--;
+	}
+	return res;
+}
+
+// permutation(mod) nPr
+ll permu(ll n, ll r) {
+	if (r < 0 || n < r) return 0;
+	else {
+		ll res = fact(n);
+		res = moddiv(res, fact(n - r));
+		return res;
+	}
+}
+
+// combination(mod) nCr
+ll combi(ll n, ll r) {
+	ll res = permu(n, r);
+	res = moddiv(res, fact(r));
+	return res;	
+}
+
+int main () {
+	MOD = 1000000007;
+	int N, M, K; cin >> N >> M >> K;
+	ll x = (N - 1);
+	x = modmul(x, N);
+	x = modmul(x, N + 1);
+	x = modmul(x, inv(6));
+	x = modmul(x, M);
+	x = modmul(x, M);
+	ll y = (M - 1);
+	y = modmul(y, M);
+	y = modmul(y, M + 1);
+	y = modmul(y, inv(6));
+	y = modmul(y, N);
+	y = modmul(y, N);
+	ll z = combi(M * N - 2, K - 2);
+	ll ans = (x + y) * z % MOD;
+	// debug(x); debug(y); debug(z);
+	cout << ans << endl;
+}

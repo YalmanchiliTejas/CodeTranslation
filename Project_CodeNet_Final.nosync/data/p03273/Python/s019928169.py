@@ -1,0 +1,1 @@
+import sys;from numpy import*;h,w=input().split();a=array([list(input())for _ in range(int(h))]);savetxt(sys.stdout.buffer,a[any(a=="#",axis=1)][:,any(a=="#",axis=0)],fmt="%s",delimiter="")

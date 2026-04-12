@@ -1,0 +1,1 @@
+S=[input()for _ in range(int(input()))];print("".join(c*min(s.count(c)for s in S)for c in sorted(set(S[0]))))

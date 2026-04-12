@@ -1,0 +1,8 @@
+// A - Station and Bus
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+	string S; cin>>S;
+	puts(S=="AAA" || S=="BBB"? "No": "Yes");
+}

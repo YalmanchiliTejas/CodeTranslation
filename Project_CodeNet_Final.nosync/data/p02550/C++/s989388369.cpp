@@ -1,0 +1,48 @@
+#include <iostream>
+#include <numeric>
+#include <vector>
+
+using namespace std;
+using lint = long long;
+
+#define rep(i, n) for (lint i = 0; i < (n); ++i)
+
+lint n, x, m, w, cnt1, cnt2;
+vector<lint>vec;
+bool used[100010];
+int main() {
+	cin >> n >> x >> m;
+
+	lint a1 = x;
+	while (true) {
+		used[a1] = true;
+		vec.push_back(a1);
+		a1 = a1 * a1 % m;
+		if (used[a1]) {
+			w = a1;
+			break;
+		}
+	}
+
+	rep(i, vec.size()) {
+		if (w == vec[i]) {
+			cnt1 = i;
+			break;
+		}
+	}
+
+	cnt2 = vec.size() - cnt1;
+
+	if (n <= cnt1 + 1) {
+		cout << accumulate(vec.begin(), vec.begin() + n, 0LL) << endl;
+	}
+	else {
+		lint res = accumulate(vec.begin(), vec.begin() + cnt1, 0LL);
+		n -= cnt1;
+		lint sum1 = accumulate(vec.begin() + cnt1, vec.end(), 0LL);
+		res += n / cnt2 * sum1;
+		n %= cnt2;
+		res += accumulate(vec.begin() + cnt1, vec.begin() + cnt1 + n, 0LL);
+		cout << res << endl;
+	}
+}

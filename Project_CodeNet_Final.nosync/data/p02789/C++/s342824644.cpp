@@ -1,0 +1,12 @@
+#include "bits/stdc++.h"
+
+typedef long long ll;
+using namespace std;
+
+int main() {
+    int n, m;
+    cin >> n >> m;
+    if (n <= m) cout << "Yes";
+    else cout << "No";
+    return 0;
+}

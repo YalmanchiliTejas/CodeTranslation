@@ -1,0 +1,1 @@
+r,g,b=map(int,input().split());print('NYOE S'[(g*10+b)%4==0::2])

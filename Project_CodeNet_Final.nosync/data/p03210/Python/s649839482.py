@@ -1,0 +1,1 @@
+print(["NO", "YES"][[7, 5, 3].count(int(input()))])

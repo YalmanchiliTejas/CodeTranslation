@@ -1,0 +1,1 @@
+print(sum([800-200 if i%15==0 else 800 for i in range(1,int(input())+1)]))

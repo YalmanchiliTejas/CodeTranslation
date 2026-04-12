@@ -1,0 +1,17 @@
+#include<iostream>
+using namespace std;
+
+int main(void)
+{
+  int a,b,c;
+  cin>>a>>b>>c;
+  int d=100*a+10*b+c;
+  if(d%4==0)
+  {
+    cout<<"YES"<<endl;
+  }
+  else
+  {
+    cout<<"NO"<<endl;
+  }
+}

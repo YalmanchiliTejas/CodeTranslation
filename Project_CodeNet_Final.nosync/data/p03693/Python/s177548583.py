@@ -1,0 +1,1 @@
+a,b,c=map(int,input().split());print("YES")if (10*int(b)+int(c))%4==0 else print("NO")

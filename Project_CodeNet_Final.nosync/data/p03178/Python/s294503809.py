@@ -1,0 +1,99 @@
+#!/usr/bin/env python
+"""<https://github.com/cheran-senthil/PyRival>"""
+from __future__ import division, print_function
+
+import os
+import sys
+from io import BytesIO, IOBase
+from collections import Counter
+
+if sys.version_info[0] < 3:
+    from __builtin__ import xrange as range
+    from future_builtins import ascii, filter, hex, map, oct, zip
+else:
+    _str = str
+    str = lambda x=b"": x if type(x) is bytes else _str(x).encode()
+
+MOD = 10**9 + 7
+
+
+def main():
+    K, d = list(map(int, input())), int(input())
+    n = len(K)
+
+    dp = [[0] * d for _ in range(n)]
+
+    dp0 = dp[0]
+    for k in range(10):
+        dp0[k % d] += 1
+
+    for i in range(n - 1):
+        dpi, dpii = dp[i], dp[i + 1]
+        for j in range(d):
+            dpii[j] = sum(dpi[(j - k) % d] for k in range(10)) % MOD
+
+    res, k = 0, 0
+    for i in range(n - 1):
+        dpi = dp[-i - 2]
+        res = (res + sum(dpi[(-j - k) % d] for j in range(K[i]))) % MOD
+        k += K[i]
+    res += sum((k + j) % d == 0 for j in range(K[-1] + 1))
+
+    print((res - 1) % MOD)
+
+
+# region template
+
+BUFSIZE = 8192
+
+
+class FastIO(IOBase):
+    newlines = 0
+
+    def __init__(self, file):
+        self._buffer = BytesIO()
+        self._fd = file.fileno()
+        self._writable = "x" in file.mode or "r" not in file.mode
+        self.write = self._buffer.write if self._writable else None
+
+    def read(self):
+        if self._buffer.tell():
+            return self._buffer.read()
+        return os.read(self._fd, os.fstat(self._fd).st_size)
+
+    def readline(self):
+        while self.newlines == 0:
+            b = os.read(self._fd, max(os.fstat(self._fd).st_size, BUFSIZE))
+            self.newlines = b.count(b"\n") + (not b)
+            ptr = self._buffer.tell()
+            self._buffer.seek(0, 2), self._buffer.write(b), self._buffer.seek(ptr)
+        self.newlines -= 1
+        return self._buffer.readline()
+
+    def flush(self):
+        if self._writable:
+            os.write(self._fd, self._buffer.getvalue())
+            self._buffer.truncate(0), self._buffer.seek(0)
+
+
+def print(*args, **kwargs):
+    """Prints the values to a stream, or to sys.stdout by default."""
+    sep, file = kwargs.pop("sep", b" "), kwargs.pop("file", sys.stdout)
+    at_start = True
+    for x in args:
+        if not at_start:
+            file.write(sep)
+        file.write(str(x))
+        at_start = False
+    file.write(kwargs.pop("end", b"\n"))
+    if kwargs.pop("flush", False):
+        file.flush()
+
+
+sys.stdin, sys.stdout = FastIO(sys.stdin), FastIO(sys.stdout)
+input = lambda: sys.stdin.readline().rstrip(b"\r\n")
+
+# endregion
+
+if __name__ == "__main__":
+    main()

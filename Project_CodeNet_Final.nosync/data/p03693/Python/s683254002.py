@@ -1,0 +1,9 @@
+s=input().split()
+x=int(s[0])
+y=int(s[1])
+z=int(s[2])
+c=100*x+10*y+z
+if(c%4==0):
+    print("YES")
+else:
+    print("NO")

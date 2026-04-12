@@ -1,0 +1,36 @@
+#include <bits/stdc++.h> //Andrei Alexandru a.k.a Sho10
+#define ll long long int
+#pragma GCC optimize("O3")
+#pragma GCC optimize("Ofast")
+#define all(a) (a).begin(), (a).end()
+#pragma GCC target("sse,sse2,sse3,ssse3,sse4,popcnt,abm,mmx,avx,tune=native")
+#define sz size
+#define f first
+#define s second
+#define pb push_back
+#define er erase
+#define in insert
+#define mp make_pair
+#define pi pair
+#define rc(s) return cout<<s,0
+#define endl '\n'
+#define mod 1000000007
+#define PI 3.14159265359
+#define CODE_START  ios_base::sync_with_stdio();cin.tie();cout.tie();
+using namespace std;
+ll n;
+string s;
+int32_t main(){
+CODE_START;
+cin>>s;
+if(s[0]=='A'&&s[1]=='A'&&s[2]=='A'){
+    cout<<"No"<<endl;
+}else if(s[0]=='B'&&s[1]=='B'&&s[2]=='B'){
+cout<<"No"<<endl;
+}else cout<<"Yes"<<endl;
+}
+
+
+
+
+

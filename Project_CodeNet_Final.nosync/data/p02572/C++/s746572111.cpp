@@ -1,0 +1,40 @@
+#include <algorithm>
+#include <bitset>
+#include <cmath>
+#include <iomanip>
+#include <iostream>
+#include <sstream>
+#include <queue>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+#define rep(i, n) for (int i = 0; i < n; ++i)
+#define debug(s, param) std::cerr << s << param << std::endl;
+
+using namespace std;
+using ll = long long;
+
+const ll MOD = 1000000007;
+
+int main() {
+  int n;
+  cin >> n;
+  vector<ll> a(n);
+  ll sum = 0;
+  rep (i, n) {
+    cin >> a[i];
+    sum += a[i];
+    sum %= MOD;
+  }
+
+  ll ans = 0;
+  for (int i = 0; i < n - 1; ++i) {
+    sum -= a[i];
+    if (sum < 0) sum += MOD;
+    ans += (a[i] * sum);
+    ans %= MOD;
+  }
+  cout << ans << endl;
+  return 0;
+}

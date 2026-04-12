@@ -1,0 +1,2 @@
+x = int(input())
+print('YES' if [7,5,3].count(x) else 'NO')

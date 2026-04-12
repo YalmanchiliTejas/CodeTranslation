@@ -1,0 +1,31 @@
+#!python3
+
+import numpy as np
+
+# input
+N, S = list(map(int, input().split()))
+A = list(map(int, input().split()))
+
+MOD = 998244353
+
+
+def add_elements(w, i):
+    a = A[i]
+    w[a:] += w[:-a].copy()
+    if a <= S:
+        w[a] += i + 1
+    w %= MOD
+
+
+def main():
+    w = np.zeros(S + 1, dtype=int)
+    ans = 0
+    for i in range(N):
+        add_elements(w, i)
+        ans = (ans + w[S]) % MOD
+    
+    print(ans)
+
+
+if __name__ == "__main__":
+    main()

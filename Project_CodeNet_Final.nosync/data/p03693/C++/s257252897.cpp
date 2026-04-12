@@ -1,0 +1,16 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+#include <cstdlib>
+
+using namespace std;
+
+int main()
+{
+	int a, b, c;
+	cin >> a >> b >> c;
+	int x = 100 * a + 10 * b + c;
+	if (x % 4 == 0) cout << "YES"<<endl;
+	else cout << "NO" << endl;
+    return 0;
+}

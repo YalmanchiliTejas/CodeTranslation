@@ -1,0 +1,3 @@
+# ABC 158: A – Station and Bus
+s = input()
+print('Yes' if 'AB' in s or 'BA' in s else 'No')

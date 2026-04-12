@@ -1,0 +1,10 @@
+#include<iostream>
+using namespace std;
+
+int main() {
+  int a,b,c;
+  cin >> a >> b >> c;
+  if((10*b+c)%4==0) cout << "YES";
+  else cout << "NO";
+  return 0;
+}

@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <bits/stdc++.h>
+     
+#define uint unsigned int
+#define ll long long
+#define ull unsigned long long
+#define ld long double
+#define rep(i, l, r) for (int i = l; i < r; i++)
+#define repb(i, r, l) for (int i = r; i > l; i--)
+#define sz(a) (int)a.size()
+#define fi first
+#define se second
+#define mp(a, b) make_pair(a, b)
+     
+using namespace std;
+
+const int N = 100000;
+const int inf = (int)1e9 + 1;
+const ll big = (ll)1e18 + 1;
+const int P = 31;
+const int MOD = (int)1e9 + 7;
+const int MOD1 = (int)1e9 + 9;
+const double eps = 1e-9;
+const double pi = atan2(0, -1);
+const int ABC = 2;
+
+int main()
+{
+    //freopen("a.in", "r", stdin);
+    //freopen("a.out", "w", stdout);
+    ios_base::sync_with_stdio(0);
+    cin.tie(0);
+    cout.precision(20);
+    //ll TL = 0.95 * CLOCKS_PER_SEC;
+    //clock_t time = clock();
+    int n;
+    cin >> n;
+    deque<int> a;
+    rep(i, 0, n)
+    {
+        int x;
+        cin >> x;
+        if (i % 2 == 0)
+            a.push_back(x);
+        else
+            a.push_front(x);
+    }
+    if (n % 2 == 1)
+        reverse(a.begin(), a.end());
+    for (int i : a)
+        cout << i << " ";
+    cout << "\n";
+    return 0;
+}

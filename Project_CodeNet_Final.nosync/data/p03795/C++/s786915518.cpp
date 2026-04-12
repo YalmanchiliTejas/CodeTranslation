@@ -1,0 +1,11 @@
+#include <iostream>
+using namespace std;
+int main(void){
+    // Here your code !
+    int n;
+    cin >> n;
+    
+    cout << n*800 - n/15 * 200 << endl;
+    
+    
+}

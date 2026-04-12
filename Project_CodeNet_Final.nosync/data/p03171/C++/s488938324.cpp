@@ -1,0 +1,46 @@
+#include <bits/stdc++.h>
+#define REP(i, n) for (int i = 0, max_i = (n); i < max_i; i++)
+#define REPI(i, a, b) for (int i = (a), max_i = (b); i < max_i; i++)
+#define ALL(obj) (obj).begin(), (obj).end()
+#define RALL(obj) (obj).rbegin(), (obj).rend()
+#define fi first
+#define se second
+#define int long long
+using namespace std;
+using ll = long long;
+using II = pair<int, int>; using VII = vector<II>; using VVII = vector<VII>;
+using VI = vector<int>; using VVI = vector<VI>; using VVVI = vector<VVI>;
+template <class T = int> inline bool chmax(T &a, const T &b) { if (a < b) { a = b; return true; } return false; }
+template <class T = int> inline bool chmin(T &a, const T &b) { if (a > b) { a = b; return true; } return false; }
+template <class T> ostream& operator<<(ostream &s, const vector<T>& d) { REP (i, d.size()) s << d[i] << (i == d.size() - 1 ? "" : " "); return s; }
+template <class T> ostream& operator<<(ostream &s, const vector<vector<T>>& d) { REP (i, d.size()) s << d[i] << (i == d.size() - 1 ? "" : "\n"); return s; }
+template <class T, class S> ostream& operator<<(ostream &s, const pair<T, S>& p) { s << "{" << p.first << ", " << p.second << "}"; return s; }
+template <class T, class S> ostream& operator<<(ostream& s, const map<T, S> m) { for (auto it = m.begin(); it != m.end(); it++) { s << *it << (next(it) == m.end() ? "" : "\n"); } return s; }
+#ifdef _MY_DEBUG
+  #define dump(...) cerr << "/* " << #__VA_ARGS__ << " :[" << __LINE__ << ":" << __FUNCTION__ << "]" << endl, dump_func(__VA_ARGS__), cerr << "*/\n\n";
+#else
+  #define dump(...)
+#endif
+void dump_func() { cerr << endl; }
+template <class Head, class... Tail> void dump_func(Head&& h, Tail&&... t) { cerr << h << (sizeof...(Tail) == 0 ? "" : ", "), dump_func(forward<Tail>(t)...); }
+struct Fast { Fast() { cin.tie(0); ios::sync_with_stdio(false); } } fast;
+constexpr int MOD = 1e9 + 7;
+
+signed main() {
+  int n; cin >> n;
+  VI a(n);
+  REP (i, n) cin >> a[i];
+  VVI dp(n, VI(n));
+  REP (i, n) {
+    dp[i][i] = a[i];
+  }
+  REPI (k, 1, n) {
+    REP (i, n) {
+      int j = i + k;
+      if (j >= n) continue;
+      dp[i][j] = max(a[i] - dp[i + 1][j], a[j] - dp[i][j - 1]);
+      dump(i, j, dp[i][j]);
+    }
+  }
+  cout << dp[0][n - 1] << endl;
+}

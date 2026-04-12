@@ -1,0 +1,1 @@
+H,W=map(int,input().split());print(["Imp","P"][H+W-1==sum(input().count("#")for _ in range(H))]+"ossible")

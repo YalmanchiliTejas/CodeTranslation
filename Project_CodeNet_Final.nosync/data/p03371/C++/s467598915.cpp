@@ -1,0 +1,95 @@
+#include <bits/stdc++.h>
+
+using namespace std;
+
+#define sim template <class c
+#define ris return *this
+#define dor > debug &operator<<
+#define eni(x)                                                                        \
+	sim > typename enable_if<sizeof dud<c>(0) x 1, debug &>::type operator<<(c i) \
+	{
+sim > struct rge
+{
+	c b, e;
+};
+sim > rge<c> range(c i, c j) { return rge<c>{i, j}; }
+sim > auto dud(c *x) -> decltype(cerr << *x, 0);
+sim > char dud(...);
+struct debug
+{
+#ifdef LOCAL
+	~debug()
+	{
+		cerr << endl;
+	}
+	eni(!=) cerr << boolalpha << i;
+	ris;
+} eni(==) ris << range(begin(i), end(i));
+}
+sim, class b dor(pair<b, c> d)
+{
+	ris << "(" << d.first << ", " << d.second << ")";
+}
+sim dor(rge<c> d)
+{
+	*this << "[";
+	for (auto it = d.b; it != d.e; ++it)
+		*this << ", " + 2 * (it == d.b) << *it;
+	ris << "]";
+}
+#else
+	sim dor(const c &)
+	{
+		ris;
+	}
+#endif
+}
+;
+#define imie(...) " [" << #__VA_ARGS__ ": " << (__VA_ARGS__) << "] "
+
+#define forn(i, n) for (ll i = 0; i < int(n); i++)
+#define rfor(n, i) for (ll i = (n - 1); i >= 0; --i)
+#define all(V) V.begin(), V.end()
+#define rall(V) V.rbegin(), V.rend()
+#define len(V) (int)V.size()
+#define ll long long
+#define ld long double
+#define ff first
+#define ss second
+#define pb push_back
+#define mp make_pair
+#define endl '\n'
+#define M_PI 3.14159265358979323846
+#define EPS 1e-7
+
+int cnt = 0;
+
+
+void solve()
+{
+	ll a, b, c, x, y; cin >> a >> b >> c >> x >> y;
+	if (2 * c <= a + b)
+	{
+		if (x > y)
+		{
+			cout << min(y * 2 * c + (x - y) * a, x * 2 * c);
+		}
+		else
+		{
+			cout << min(x * 2 * c + (y - x) * b, y * 2 * c);
+		}
+	}
+	else
+	{
+		cout << x * a + y * b;
+	}
+	
+}
+
+int main()
+{
+	ios_base::sync_with_stdio(0);
+	cin.tie(0);
+	cout.tie(0);
+	solve();
+}

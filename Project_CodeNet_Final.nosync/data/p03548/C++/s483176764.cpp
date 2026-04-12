@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i,n) for (int i = 0; i < (n); i++) 
+#define all(v) begin(v),end(v)
+using ll = long long;
+
+int main() {
+  int x,y,z;cin>>x>>y>>z;
+  int ans=x/(y+z);
+  int a=x%(y+z);
+  if(a==z)cout<<ans<<endl;
+  else cout<<ans-1<<endl;
+}

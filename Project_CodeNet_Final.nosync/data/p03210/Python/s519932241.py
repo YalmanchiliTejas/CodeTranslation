@@ -1,0 +1,1 @@
+print("YES" if "357".find(input()) >= 0 else "NO")

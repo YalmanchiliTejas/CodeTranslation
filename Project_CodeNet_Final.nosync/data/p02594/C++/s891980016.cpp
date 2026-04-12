@@ -1,0 +1,18 @@
+#include <bits/stdc++.h>
+  
+using namespace std;
+
+
+/*_______________________________________________*/
+ 
+
+ 
+int main()
+{
+	int x;
+	cin>>x;
+	if(x>=30)
+	cout<<"Yes";
+	else
+	cout<<"No";
+}

@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+
+#define pb push_back
+#define PQ priority_queue
+#define make_unique(x) sort((x).begin(), (x).end()); (x).erase(unique((x).begin(), (x).end()), (x).end())
+
+typedef long long ll;
+typedef long double ld;
+
+//__builtin_popcount(x)
+
+using namespace std;
+
+const int mod = 1e9 + 7;
+
+ll add(ll a, ll b) {
+    ll res = a + b;
+    if (res >= mod) res -= mod;
+    return res;
+}
+
+ll sub(ll a, ll b) {
+    ll res = a - b + mod;
+    if (res >= mod) res -= mod;
+    return res;
+}
+
+ll mul(ll a, ll b) {
+    return (((a % mod) * (b % mod)) % mod);
+}
+
+/*vector<int> find_dividers(int x) {
+    vector<int> dividers;
+
+    for (int i = 1; i <= sqrt(x); i++) {
+        if (x % i == 0) {
+           dividers.push_back(i);
+            if (i * i != x) {
+                dividers.push_back(x / i);
+            }
+        }
+    }
+
+    return dividers;
+}*/
+
+/*int nok(int a, int b) {
+    return a / __gcd(a, b) * b;
+}*/
+
+void solve() {
+    int n;
+    cin >> n;
+    ll pref[n + 1];
+    vector<int> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+        pref[i] = a[i];
+        if (i) {
+            pref[i] = 1ll*a[i] + pref[i-1];
+        }
+    }
+
+    int ans = 0;
+    for (int i = 0; i < n; i++) {
+        ans = add(ans, mul(sub(pref[n-1], pref[i]), a[i]));
+    }
+
+    cout << ans << endl;
+
+}
+
+int main(){
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int t = 1;
+    //cin >> t;
+    while (t--) {
+        solve();
+    }
+
+    return 0;
+}

@@ -1,0 +1,55 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<vector>
+#include<iomanip>
+#include<math.h>
+#include<complex>
+#include<queue>
+#include<deque>
+#include<stack>
+#include<map>
+#include<set>
+#include<bitset>
+#include<bits/stdc++.h>
+using namespace std;
+#define REP(i,m,n) for(int i=(int)m ; i < (int) n ; ++i )
+#define rep(i,n) REP(i,0,n)
+typedef long long ll;
+typedef pair<int,int> pint;
+typedef pair<ll,int> pli;
+const int inf=1e9+7;
+const ll longinf=1LL<<60 ;
+const ll mod=1e9+7 ;
+
+ll dp[11111][2][100];
+string s;
+int d;
+
+
+ll rec(int idx,int f,int x){
+    if(dp[idx][f][x]!=-1)return dp[idx][f][x];
+    if(idx==s.size())return x==0;
+    ll ret=0;
+    if(f){
+        rep(i,10){
+            ret+=rec(idx+1,f,(x-i+d)%d);
+        }
+    }
+    else {
+        int m=s[idx]-'0';
+        rep(i,m){
+            ret+=rec(idx+1,1,(x-i+d)%d);
+        }
+        ret+=rec(idx+1,0,(x-m+d)%d);
+    }
+    return dp[idx][f][x]=ret%mod;
+}
+
+int main(){
+    cin>>s;
+    cin>>d;
+    memset(dp,-1,sizeof(dp));
+    cout<<(rec(0,0,0)+mod-1)%mod<<endl;
+    return 0;
+}

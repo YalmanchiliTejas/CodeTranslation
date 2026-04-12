@@ -1,0 +1,284 @@
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<vector>
+#include<queue>
+#include<map>
+#include<math.h>
+#include<iomanip>
+#include<set>
+#include<numeric>
+#include<cstring>
+#include<cstdio>
+#include<functional>
+
+#define REP(i, n) for(int i = 0;i < n;i++)
+#define REPR(i, n) for(int i = n;i >= 0;i--)
+#define FOR(i, m, n) for(int i = m;i < n;i++)
+#define FORR(i, m, n) for(int i = m;i >= n;i--)
+#define SORT(v, n) sort(v, v+n);
+#define VSORT(v) sort(v.begin(), v.end());
+#define REVERSE(v,n) reverse(v,v+n);
+#define VREVERSE(v) reverse(v.begin(), v.end());
+#define ll long long
+#define pb(a) push_back(a)
+#define INF 9999999999
+#define m0(x) memset(x,0,sizeof(x))
+//#define fill(x,y) memset(x,y,sizeof(x))
+#define print(x) cout<<x<<endl;
+#define pe(x) cout<<x<<" ";
+#define lb(v,n) lower_bound(v.begin(), v.end(), n);
+#define ub(v,n) upper_bound(v.begin(), v.end(), n);
+#define int long long
+
+
+using namespace std;
+
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return true; } return false; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return true; } return false; }
+
+
+int dy[4] = { 0,0,1,-1 };
+int dx[4] = { 1,-1,0,0 };
+int dxx[9] = { 0, 0,0,1,1,1,-1,-1,-1 };
+int dyy[9] = { 0, 1,-1,0,1,-1,0,1,-1 };
+
+
+
+
+ll gcd(ll x, ll y) {
+	ll m = max(x, y), n = min(x, y);
+	if (m%n == 0)return n;
+	else return gcd(m%n, n);
+}
+ll lcm(ll x, ll y) {
+	return x / gcd(x, y)*y;
+}
+
+long long power_mod(long long x, long long n, long long m) {
+	if (n == 0)
+		return 1;
+	if (n % 2 == 0)
+		return power_mod(x * x % m, n / 2, m);
+	else
+		return x * power_mod(x, n - 1, m) % m;
+}
+
+long long power(long long a, long long n) {//aのn乗を計算します。
+	long long x = 1;
+	while (n > 0) {//全てのbitが捨てられるまで。
+		if (n & 1) {//1番右のbitが1のとき。
+			x = x * a;
+		}
+		a = a * a;
+		n >>= 1;//bit全体を右に1つシフトして一番右を捨てる。
+	}
+	return x;
+}
+
+
+
+long long nCr(long long n, long long r) {
+	if (r > n / 2) r = n - r; // because C(n, r) == C(n, n - r)
+	long long ans = 1;
+	long long i;
+
+	for (i = 1; i <= r; i++) {
+		ans *= n - r + i;
+		ans /= i;
+	}
+
+	return ans;
+}
+
+
+
+const int MAX = 510000;
+const int MOD = 1000000007;
+
+long long fac[MAX], finv[MAX], inv[MAX];
+
+// テーブルを作る前処理
+void COMinit() {
+	fac[0] = fac[1] = 1;
+	finv[0] = finv[1] = 1;
+	inv[1] = 1;
+	for (int i = 2; i < MAX; i++) {
+		fac[i] = fac[i - 1] * i % MOD;
+		inv[i] = MOD - inv[MOD%i] * (MOD / i) % MOD;
+		finv[i] = finv[i - 1] * inv[i] % MOD;
+	}
+}
+
+// 二項係数計算
+long long COM(int n, int k) {
+	if (n < k) return 0;
+	if (n < 0 || k < 0) return 0;
+	return fac[n] * (finv[k] * finv[n - k] % MOD) % MOD;
+}
+
+bool arr[100000100];
+vector<ll>sosuu;
+void Eratosthenes() {
+	ll N = 10000010;
+	int c = 0;
+	for (int i = 0; i < N; i++) {
+		arr[i] = 1;
+	}
+	for (ll i = 2; i < sqrt(N); i++) {
+		if (arr[i]) {
+			for (ll j = 0; i * (j + 2) < N; j++) {
+				arr[i *(j + 2)] = 0;
+			}
+		}
+	}
+
+	for (ll i = 2; i < N; i++) {
+		if (arr[i]) {
+			sosuu.pb(i);
+			//cout << sosuu[c] << " ";
+			c++;
+		}
+	}
+	//cout << endl;
+	//cout << c << endl;
+}
+
+ll stoL(string s) {
+	ll n = s.length();
+	ll ans = 0;
+	for (int i = 0; i < n; i++) {
+		ans += power(10, n - i - 1)*(ll)(s[i] - '0');
+	}
+	return ans;
+}
+
+typedef pair<int, int> P;
+
+
+void getbit(ll x, int bits[]) {
+	int cnt = 0;
+	while (x > 0) {
+		if (x % 2 == 0)bits[cnt] = 0;
+		else bits[cnt] = 1;
+		x /= 2;
+		cnt++;
+	}
+}
+void addbit(ll x, int bits[]) {
+	int cnt = 0;
+	while (x > 0) {
+		if (x % 2 == 0)bits[cnt] += 0;
+		else bits[cnt] += 1;
+		x /= 2;
+		cnt++;
+	}
+}
+
+struct edge { int to, cost; };
+int V;
+vector<edge>G1[100010], G2[100010];
+int d1[100010], d2[100010];
+void dijkstra1(int s) {
+	priority_queue<P, vector<P>, greater<P>>que;
+	fill(d1, d1 + V, 9999999999999999);
+	d1[s] = 0;
+	que.push(P(0, s));
+	while (!que.empty()) {
+		P p = que.top(); que.pop();
+		int v = p.second;
+		if (d1[v] < p.first)continue;
+		for (int i = 0; i < G1[v].size(); i++) {
+			edge e = G1[v][i];
+			if (d1[e.to] > d1[v] + e.cost) {
+				d1[e.to] = d1[v] + e.cost;
+				que.push(P(d1[e.to], e.to));
+			}
+		}
+	}
+}
+void dijkstra2(int s) {
+	priority_queue<P, vector<P>, greater<P>>que;
+	fill(d2, d2 + V, 9999999999999999);
+	d2[s] = 0;
+	que.push(P(0, s));
+	while (!que.empty()) {
+		P p = que.top(); que.pop();
+		int v = p.second;
+		if (d2[v] < p.first)continue;
+		for (int i = 0; i < G2[v].size(); i++) {
+			edge e = G2[v][i];
+			if (d2[e.to] > d2[v] + e.cost) {
+				d2[e.to] = d2[v] + e.cost;
+				que.push(P(d2[e.to], e.to));
+			}
+		}
+	}
+}
+
+char maze[10][10];
+bool visited[10][10];
+signed main() {
+	REP(i, 10)REP(j, 10)visited[i][j] = 0;
+	int H, W; cin >> H >> W;
+	REP(i, H) {
+		REP(j, W) {
+			cin >> maze[i][j];
+		}
+	}
+	int x = 0, y = 0;
+	visited[0][0] = 1;
+	while (true) {
+		
+		int nx = x + 1;
+		int ny = y + 1;
+		if (x > 0) {
+			if (maze[x - 1][y] == '#') {
+				if (!visited[x - 1][y]) {
+					print("Impossible");
+					return 0;
+				}
+			}
+		}
+		if (y > 0) {
+			if (maze[x][y-1] == '#') {
+				if (!visited[x][y-1]) {
+					print("Impossible");
+					return 0;
+				}
+			}
+		}
+		if (x == H - 1 && y == W - 1) {
+			print("Possible");
+			return 0;
+		}
+		visited[x][y] = true;
+		if (nx >= 0 && nx < H&&maze[nx][y] == '#') {
+			if (ny >= 0 && ny < W&&maze[x][ny] == '#') {
+				print("Impossible");
+				return 0;
+			}
+			else {
+				x = nx;
+				continue;
+			}
+		}
+		else if (ny >= 0 && ny < W&&maze[x][ny] == '#') {
+			if (nx >= 0 && nx < H&&maze[nx][y] == '#') {
+				print("Impossible");
+				return 0;
+			}
+			else {
+				y = ny;
+				continue;
+			}
+		}
+		else {
+			print("Impossible");
+			return 0;
+		}
+	}
+	print("Possible");
+}
+
+

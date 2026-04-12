@@ -1,0 +1,683 @@
+#include <bits/stdc++.h>
+// created [2020/01/26] 20:35:33
+#pragma GCC diagnostic ignored "-Wsign-compare"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
+
+using i32   = int32_t;
+using i64   = int64_t;
+using u32   = uint32_t;
+using u64   = uint64_t;
+using uint  = unsigned int;
+using usize = std::size_t;
+using ll    = long long;
+using ull   = unsigned long long;
+using ld    = long double;
+template<typename T, usize n>
+using arr = T (&)[n];
+template<typename T, usize n>
+using c_arr = const T (&)[n];
+template<typename T>
+using max_heap = std::priority_queue<T>;
+template<typename T>
+using min_heap = std::priority_queue<T, std::vector<T>, std::greater<T>>;
+template<typename T> constexpr T popcount(const T u) { return u ? static_cast<T>(__builtin_popcountll(static_cast<u64>(u))) : static_cast<T>(0); }
+template<typename T> constexpr T log2p1(const T u) { return u ? static_cast<T>(64 - __builtin_clzll(static_cast<u64>(u))) : static_cast<T>(0); }
+template<typename T> constexpr T msbp1(const T u) { return log2p1(u); }
+template<typename T> constexpr T lsbp1(const T u) { return __builtin_ffsll(u); }
+template<typename T> constexpr T clog(const T u) { return u ? log2p1(u - 1) : static_cast<T>(u); }
+template<typename T> constexpr bool ispow2(const T u) { return u and (static_cast<u64>(u) & static_cast<u64>(u - 1)) == 0; }
+template<typename T> constexpr T ceil2(const T u) { return static_cast<T>(1) << clog(u); }
+template<typename T> constexpr T floor2(const T u) { return u == 0 ? static_cast<T>(0) : static_cast<T>(1) << (log2p1(u) - 1); }
+template<typename T> constexpr bool btest(const T mask, const usize ind) { return static_cast<bool>((static_cast<u64>(mask) >> ind) & static_cast<u64>(1)); }
+template<typename T> void bset(T& mask, const usize ind) { mask |= (static_cast<T>(1) << ind); }
+template<typename T> void breset(T& mask, const usize ind) { mask &= ~(static_cast<T>(1) << ind); }
+template<typename T> void bflip(T& mask, const usize ind) { mask ^= (static_cast<T>(1) << ind); }
+template<typename T> void bset(T& mask, const usize ind, const bool b) { (b ? bset(mask, ind) : breset(mask, ind)); }
+template<typename T> constexpr T bcut(const T mask, const usize ind) { return ind == 0 ? static_cast<T>(0) : static_cast<T>((static_cast<u64>(mask) << (64 - ind)) >> (64 - ind)); }
+template<typename T> bool chmin(T& a, const T& b) { return (a > b ? a = b, true : false); }
+template<typename T> bool chmax(T& a, const T& b) { return (a < b ? a = b, true : false); }
+constexpr unsigned int mod                  = 1000000007;
+template<typename T> constexpr T inf_v      = std::numeric_limits<T>::max() / 4;
+template<typename Real> constexpr Real pi_v = Real{3.141592653589793238462643383279502884};
+auto mfp = [](auto&& f) { return [=](auto&&... args) { return f(f, std::forward<decltype(args)>(args)...); }; };
+
+template<typename T>
+T in()
+{
+    T v;
+    return std::cin >> v, v;
+}
+template<typename T, typename Uint, usize n, usize i>
+T in_v(typename std::enable_if<(i == n), c_arr<Uint, n>>::type) { return in<T>(); }
+template<typename T, typename Uint, usize n, usize i>
+auto in_v(typename std::enable_if<(i < n), c_arr<Uint, n>>::type& szs)
+{
+    const usize s = (usize)szs[i];
+    std::vector<decltype(in_v<T, Uint, n, i + 1>(szs))> ans(s);
+    for (usize j = 0; j < s; j++) { ans[j] = in_v<T, Uint, n, i + 1>(szs); }
+    return ans;
+}
+template<typename T, typename Uint, usize n>
+auto in_v(c_arr<Uint, n> szs) { return in_v<T, Uint, n, 0>(szs); }
+template<typename... Types>
+auto in_t() { return std::tuple<std::decay_t<Types>...>{in<Types>()...}; }
+struct io_init
+{
+    io_init()
+    {
+        std::cin.tie(nullptr), std::ios::sync_with_stdio(false);
+        std::cout << std::fixed << std::setprecision(20);
+    }
+    void clear()
+    {
+        std::cin.tie(), std::ios::sync_with_stdio(true);
+    }
+} io_setting;
+
+int out() { return 0; }
+template<typename T>
+int out(const T& v) { return std::cout << v, 0; }
+template<typename T>
+int out(const std::vector<T>& v)
+{
+    for (usize i = 0; i < v.size(); i++) {
+        if (i > 0) { std::cout << ' '; }
+        out(v[i]);
+    }
+    return 0;
+}
+template<typename T1, typename T2>
+int out(const std::pair<T1, T2>& v) { return out(v.first), std::cout << ' ', out(v.second), 0; }
+template<typename T, typename... Args>
+int out(const T& v, const Args... args) { return out(v), std::cout << ' ', out(args...), 0; }
+template<typename... Args>
+int outln(const Args... args) { return out(args...), std::cout << '\n', 0; }
+template<typename... Args>
+void outel(const Args... args) { return out(args...), std::cout << std::endl, 0; }
+#    define SHOW(...) static_cast<void>(0)
+constexpr ull TEN(const usize n) { return n == 0 ? 1ULL : TEN(n - 1) * 10ULL; }
+
+template<typename T, typename Uint, usize n, usize i>
+auto make_v(typename std::enable_if<(i == n), c_arr<Uint, n>>::type, const T& v = T{}) { return v; }
+template<typename T, typename Uint, usize n, usize i>
+auto make_v(typename std::enable_if<(i < n), c_arr<Uint, n>>::type szs, const T& v = T{})
+{
+    const usize s = (usize)szs[i];
+    return std::vector<decltype(make_v<T, Uint, n, i + 1>(szs, v))>(s, make_v<T, Uint, n, i + 1>(szs, v));
+}
+template<typename T, typename Uint, usize n>
+auto make_v(c_arr<Uint, n> szs, const T& t = T{}) { return make_v<T, Uint, n, 0>(szs, t); }
+
+
+
+template<typename T> T gcd(const T& a, const T& b) { return a < 0 ? gcd(-a, b) : b < 0 ? gcd(a, -b) : (a > b ? gcd(b, a) : a == 0 ? b : gcd(b % a, a)); }
+template<typename T> T lcm(const T& a, const T& b) { return a / gcd(a, b) * b; }
+template<typename T>
+constexpr std::pair<T, T> extgcd(const T a, const T b)
+{
+    if (b == 0) { return std::pair<T, T>{1, 0}; }
+    const auto g = gcd(a, b), da = std::abs(b) / g;
+    const auto p = extgcd(b, a % b);
+    const auto x = (da + p.second % da) % da, y = (g - a * x) / b;
+    return {x, y};
+}
+template<typename T>
+constexpr T inverse(const T a, const T mod) { return extgcd(a, mod).first; }
+template<uint mod_value, bool dynamic = false>
+class modint_base
+{
+public:
+    template<typename UInt = uint>
+    static std::enable_if_t<dynamic, const UInt> mod() { return mod_ref(); }
+    template<typename UInt = uint>
+    static constexpr std::enable_if_t<not dynamic, const UInt> mod() { return mod_value; }
+    template<typename UInt = uint>
+    static void set_mod(const std::enable_if_t<dynamic, const UInt> mod) { mod_ref() = mod, inv_ref() = {1, 1}; }
+    modint_base() : v{0} {}
+    modint_base(const ll val) : v{norm(static_cast<uint>(val % static_cast<ll>(mod()) + static_cast<ll>(mod())))} {}
+    modint_base(const modint_base& n) : v{n()} {}
+    explicit operator bool() const { return v != 0; }
+    bool operator!() const { return not static_cast<bool>(*this); }
+    modint_base& operator=(const modint_base& m) { return v = m(), (*this); }
+    modint_base& operator=(const ll val) { return v = norm(uint(val % static_cast<ll>(mod()) + static_cast<ll>(mod()))), (*this); }
+    friend modint_base operator+(const modint_base& m) { return m; }
+    friend modint_base operator-(const modint_base& m) { return make(norm(mod() - m.v)); }
+    friend modint_base operator+(const modint_base& m1, const modint_base& m2) { return make(norm(m1.v + m2.v)); }
+    friend modint_base operator-(const modint_base& m1, const modint_base& m2) { return make(norm(m1.v + mod() - m2.v)); }
+    friend modint_base operator*(const modint_base& m1, const modint_base& m2) { return make(static_cast<uint>(static_cast<ll>(m1.v) * static_cast<ll>(m2.v) % static_cast<ll>(mod()))); }
+    friend modint_base operator/(const modint_base& m1, const modint_base& m2) { return m1 * inv(m2.v); }
+    friend modint_base operator+(const modint_base& m, const ll val) { return modint_base{static_cast<ll>(m.v) + val}; }
+    friend modint_base operator-(const modint_base& m, const ll val) { return modint_base{static_cast<ll>(m.v) - val}; }
+    friend modint_base operator*(const modint_base& m, const ll val) { return modint_base{static_cast<ll>(m.v) * (val % static_cast<ll>(mod()))}; }
+    friend modint_base operator/(const modint_base& m, const ll val) { return modint_base{static_cast<ll>(m.v) * inv(val)}; }
+    friend modint_base operator+(const ll val, const modint_base& m) { return modint_base{static_cast<ll>(m.v) + val}; }
+    friend modint_base operator-(const ll val, const modint_base& m) { return modint_base{-static_cast<ll>(m.v) + val}; }
+    friend modint_base operator*(const ll val, const modint_base& m) { return modint_base{static_cast<ll>(m.v) * (val % static_cast<ll>(mod()))}; }
+    friend modint_base operator/(const ll val, const modint_base& m) { return modint_base{val * inv(static_cast<ll>(m.v))}; }
+    friend modint_base& operator+=(modint_base& m1, const modint_base& m2) { return m1 = m1 + m2; }
+    friend modint_base& operator-=(modint_base& m1, const modint_base& m2) { return m1 = m1 - m2; }
+    friend modint_base& operator*=(modint_base& m1, const modint_base& m2) { return m1 = m1 * m2; }
+    friend modint_base& operator/=(modint_base& m1, const modint_base& m2) { return m1 = m1 / m2; }
+    friend modint_base& operator+=(modint_base& m, const ll val) { return m = m + val; }
+    friend modint_base& operator-=(modint_base& m, const ll val) { return m = m - val; }
+    friend modint_base& operator*=(modint_base& m, const ll val) { return m = m * val; }
+    friend modint_base& operator/=(modint_base& m, const ll val) { return m = m / val; }
+    friend modint_base operator^(const modint_base& m, const ll n) { return power(m.v, n); }
+    friend modint_base& operator^=(modint_base& m, const ll n) { return m = m ^ n; }
+    friend bool operator==(const modint_base& m1, const modint_base& m2) { return m1.v == m2.v; }
+    friend bool operator!=(const modint_base& m1, const modint_base& m2) { return not(m1 == m2); }
+    friend bool operator==(const modint_base& m, const ll val) { return m.v == norm(static_cast<uint>(static_cast<ll>(mod()) + val % static_cast<ll>(mod()))); }
+    friend bool operator!=(const modint_base& m, const ll val) { return not(m == val); }
+    friend bool operator==(const ll val, const modint_base& m) { return m.v == norm(static_cast<uint>(static_cast<ll>(mod()) + val % static_cast<ll>(mod()))); }
+    friend bool operator!=(const ll val, const modint_base& m) { return not(m == val); }
+    friend std::istream& operator>>(std::istream& is, modint_base& m)
+    {
+        ll v;
+        return is >> v, m = v, is;
+    }
+    friend std::ostream& operator<<(std::ostream& os, const modint_base& m) { return os << m(); }
+    uint operator()() const { return v; }
+    static modint_base small_inv(const usize n)
+    {
+        auto& in = inv_ref();
+        if (n < in.size()) { return in[n]; }
+        for (usize i = in.size(); i <= n; i++) { in.push_back(-in[modint_base::mod() % i] * (modint_base::mod() / i)); }
+        return in.back();
+    }
+    std::pair<ll, ll> quad() const
+    {
+        const auto ans = quad_r(v, mod());
+        ll x = std::get<0>(ans), y = std::get<1>(ans);
+        if (y < 0) { x = -x, y = -y; }
+        return {x, y};
+    }
+
+private:
+    static std::tuple<ll, ll, ll> quad_r(const ll r, const ll p)  // r = x/y (mod p), (x,y,z) s.t. x=yr+pz
+    {
+        if (std::abs(r) <= 1000) { return {r, 1, 0}; }
+        ll nr = p % r, q = p / r;
+        if (nr * 2LL >= r) { nr -= r, q++; }
+        if (nr * 2LL <= -r) { nr += r, q--; }
+        const auto sub = quad_r(nr, r);
+        const ll x = std::get<0>(sub), z = std::get<1>(sub), y = std::get<2>(sub);
+        return {x, y - q * z, z};
+    }
+
+    template<typename UInt = uint>
+    static std::enable_if_t<dynamic, UInt&> mod_ref()
+    {
+        static UInt mod = 0;
+        return mod;
+    }
+    static uint norm(const uint x) { return x < mod() ? x : x - mod(); }
+    static modint_base make(const uint x)
+    {
+        modint_base m;
+        return m.v = x, m;
+    }
+    static modint_base power(modint_base x, ull n)
+    {
+        modint_base ans = 1;
+        for (; n; n >>= 1, x *= x) {
+            if (n & 1) { ans *= x; }
+        }
+        return ans;
+    }
+    static modint_base inv(const ll v) { return v < 1000000 ? small_inv(static_cast<usize>(v)) : modint_base{inverse(v, static_cast<ll>(mod()))}; }
+    static std::vector<modint_base>& inv_ref()
+    {
+        static std::vector<modint_base> in{1, 1};
+        return in;
+    }
+    uint v;
+};
+template<uint mod>
+using modint = modint_base<mod, false>;
+template<uint id>
+using dynamic_modint = modint_base<id, true>;
+template<uint mod_value, bool dynamic = false>
+class modcomb_base
+{
+public:
+    using value_type = modint_base<mod_value, dynamic>;
+    modcomb_base()   = delete;
+    static void set_mod(const uint mod) { value_type::set_mod(mod), fact_ref() = {1, 1}, inv_fact_ref() = {1, 1}; }
+    static value_type fact(const usize n)
+    {
+        auto& f = fact_ref();
+        if (n < f.size()) { return f[n]; }
+        for (usize i = f.size(); i <= n; i++) { f.push_back(f.back() * i); }
+        return f.back();
+    }
+    static value_type inv_fact(const usize n)
+    {
+        auto& invf = inv_fact_ref();
+        if (n < invf.size()) { return invf[n]; }
+        for (usize i = invf.size(); i <= n; i++) { invf.push_back(invf.back() * value_type::small_inv(i)); }
+        return invf.back();
+    }
+    static value_type perm(const usize n, const usize k) { return k > n ? value_type{0} : fact(n) * inv_fact(n - k); }
+    static value_type comb(const usize n, const usize k) { return k > n ? value_type{0} : fact(n) * inv_fact(n - k) * inv_fact(k); }
+
+private:
+    static std::vector<value_type>& fact_ref()
+    {
+        static std::vector<value_type> f{1, 1};
+        return f;
+    }
+    static std::vector<value_type>& inv_fact_ref()
+    {
+        static std::vector<value_type> invf{1, 1};
+        return invf;
+    }
+};
+template<uint mod>
+using modcomb = modcomb_base<mod, false>;
+template<uint id>
+using dynamic_modcomb = modcomb_base<id, true>;
+
+
+template<typename Real>
+struct complex
+{
+    using value_type = Real;
+    complex() : real{Real{0}}, imag{Real{0}} {}
+    complex(const complex&) = default;
+    complex(const Real& theta) : real(std::cos(theta)), imag(std::sin(theta)) {}
+    complex(const Real& r, const Real& i) : real{r}, imag{i} {}
+    ~complex() = default;
+    friend complex operator+(const complex& c) { return c; }
+    friend complex operator-(const complex& c) { return complex{-c.real, -c.imag}; }
+    friend complex operator+(const complex& c1, const complex& c2) { return complex{c1.real + c2.real, c1.imag + c2.imag}; }
+    friend complex operator-(const complex& c1, const complex& c2) { return complex{c1.real - c2.real, c1.imag - c2.imag}; }
+    friend complex operator*(const complex& c1, const complex& c2) { return complex{c1.real * c2.real - c1.imag * c2.imag, c1.real * c2.imag + c1.imag * c2.real}; }
+    friend complex operator*(const complex& c, const Real& r) { return complex{c.real * r, c.imag * r}; }
+    friend complex operator/(complex& c1, complex& c2) { c1* c2.conj() / c2.norm(); }
+    friend bool operator==(const complex& c1, const complex& c2) { return c1.real == c2.real and c1.imag == c2.imag; }
+    friend bool operator!=(const complex& c1, const complex& c2) { return not(c1 == c2); }
+    friend complex& operator+=(complex& c1, const complex& c2) { return c1.real += c2.real, c1.imag += c2.imag, c1; }
+    friend complex& operator-=(complex& c1, const complex& c2) { return c1.real += c2.real, c1.imag += c2.imag, c1; }
+    friend complex& operator*=(complex& c1, const complex& c2) { return c1 = c1 * c2; }
+    friend complex& operator*=(complex& c, const Real& r) { return c = c * r; }
+    friend complex& operator/=(complex& c1, const complex& c2) { return c1 = c1 / c2; }
+    complex conj() const { return complex{real, -imag}; }
+    Real norm() const { return real * real + imag * imag; }
+    Real abs() const { return std::sqrt(norm()); }
+    Real arg() const { return std::atan2(imag, real); }
+    friend std::ostream& operator<<(std::ostream& os, const complex& c) { return os << c.real << "+" << c.imag << "i"; }
+    Real real, imag;
+};
+template<typename Real = double>
+class fft
+{
+private:
+    static constexpr usize depth = 30;
+    static constexpr Real pi     = pi_v<Real>;
+    static void transform(std::vector<complex<Real>>& a, const usize lg, const bool rev)
+    {
+        static std::vector<complex<Real>> root[depth];
+        const usize sz = a.size();
+        assert((1UL << lg) == sz);
+        if (root[lg].empty()) {
+            root[lg].reserve(sz), root[lg].resize(sz);
+            for (usize i = 0; i < sz; i++) { root[lg][i] = complex<Real>(pi * Real(2 * i) / Real(sz)); }
+        }
+        std::vector<complex<Real>> tmp(sz);
+        for (usize w = (sz >> 1); w > 0; w >>= 1) {
+            for (usize y = 0; y < (sz >> 1); y += w) {
+                const complex<Real> r = rev ? root[lg][y].conj() : root[lg][y];
+                for (usize x = 0; x < w; x++) {
+                    const auto u = a[y << 1 | x], v = a[y << 1 | x | w] * r;
+                    tmp[y | x] = u + v, tmp[y | x | (sz >> 1)] = u - v;
+                }
+            }
+            std::swap(tmp, a);
+        }
+    }
+
+public:
+    using value_type = Real;
+    fft()            = delete;
+    template<typename T = ll, typename I = int>
+    static std::vector<T> simple_convolute(const std::vector<I>& a, const std::vector<I>& b)
+    {
+        const usize need = a.size() + b.size() - 1, lg = clog(need), sz = 1UL << lg;
+        std::vector<complex<Real>> x(sz), y(sz);
+        for (usize i = 0; i < a.size(); i++) { x[i] = {(Real)a[i], (Real)0}; }
+        for (usize i = 0; i < b.size(); i++) { y[i] = {(Real)b[i], (Real)0}; }
+        transform(x, lg, false), transform(y, lg, false);
+        for (usize i = 0; i < sz; i++) { x[i] *= y[i]; }
+        transform(x, lg, true);
+        std::vector<T> ans(need);
+        for (usize i = 0; i < need; i++) { ans[i] = (T)std::round(x[i].real / (Real)sz); }
+        return ans;
+    }
+    template<typename T = ll, usize division = 2, typename I = int>
+    static std::vector<T> convolute(const std::vector<I>& a, const std::vector<I>& b)
+    {
+        constexpr usize bitnum = (depth + division - 1) / division;
+        const usize need = a.size() + b.size() - 1, lg = clog(need), sz = 1UL << lg;
+        std::vector<complex<value_type>> x[division], y[division], tmp(sz);
+        for (usize i = 0; i < division; i++) {
+            x[i].reserve(sz), x[i].resize(sz), y[i].reserve(sz), y[i].resize(sz);
+            std::fill(tmp.begin() + std::min(a.size(), b.size()), tmp.end(), complex<value_type>{});
+            for (usize j = 0; j < a.size(); j++) { tmp[j].real = value_type((a[j] >> (bitnum * i)) & ((1 << bitnum) - 1)); }
+            for (usize j = 0; j < b.size(); j++) { tmp[j].imag = value_type((b[j] >> (bitnum * i)) & ((1 << bitnum) - 1)); }
+            transform(tmp, lg, false);
+            for (usize j = 0; j < sz; j++) { tmp[j] *= value_type(0.5); }
+            for (usize j = 0; j < sz; j++) {
+                const usize k = j == 0 ? 0UL : sz - j;
+                x[i][j] = complex<value_type>{tmp[j].real + tmp[k].real, tmp[j].imag - tmp[k].imag}, y[i][j] = complex<value_type>{tmp[j].imag + tmp[k].imag, -tmp[j].real + tmp[k].real};
+            }
+        }
+        std::vector<complex<value_type>> z[division];
+        for (usize i = 0; i < division; i++) { z[i].reserve(sz), z[i].resize(sz); }
+        for (usize a = 0; a < division; a++) {
+            for (usize b = 0; b < division; b++) {
+                for (usize i = 0; i < sz; i++) {
+                    if (a + b < division) {
+                        z[a + b][i] += x[a][i] * y[b][i];
+                    } else {
+                        z[a + b - division][i] += x[a][i] * y[b][i] * complex<value_type>(0, 1);
+                    }
+                }
+            }
+        }
+        for (usize i = 0; i < division; i++) { transform(z[i], lg, true); }
+        std::vector<T> ans(need);
+        T base = 1;
+        for (usize k = 0; k < 2 * division - 1; k++, base *= (1LL << bitnum)) {
+            for (usize i = 0; i < need; i++) {
+                if (k < division) {
+                    ans[i] += base * T(std::round(z[k][i].real / value_type(sz)));
+                } else {
+                    ans[i] += base * T(std::round(z[k - division][i].imag / value_type(sz)));
+                }
+            }
+        }
+        return ans;
+    }
+    template<uint mod, bool dynamic = false, usize division = 2>
+    static std::vector<modint_base<mod, dynamic>> convolute(const std::vector<modint_base<mod, dynamic>>& a, const std::vector<modint_base<mod, dynamic>>& b)
+    {
+        using mint             = modint_base<mod, dynamic>;
+        constexpr usize bitnum = (depth + division - 1) / division;
+        const usize need = a.size() + b.size() - 1, lg = clog(need), sz = 1UL << lg;
+        std::vector<complex<value_type>> x[division], y[division], tmp(sz);
+        for (usize i = 0; i < division; i++) {
+            x[i].reserve(sz), x[i].resize(sz), y[i].reserve(sz), y[i].resize(sz);
+            std::fill(tmp.begin() + std::min(a.size(), b.size()), tmp.end(), complex<value_type>{});
+            for (usize j = 0; j < a.size(); j++) { tmp[j].real = value_type((a[j]() >> (bitnum * i)) & ((1 << bitnum) - 1)); }
+            for (usize j = 0; j < b.size(); j++) { tmp[j].imag = value_type((b[j]() >> (bitnum * i)) & ((1 << bitnum) - 1)); }
+            transform(tmp, lg, false);
+            for (usize j = 0; j < sz; j++) { tmp[j] *= value_type(0.5); }
+            for (usize j = 0; j < sz; j++) {
+                const usize k = j == 0 ? 0UL : sz - j;
+                x[i][j] = complex<value_type>{tmp[j].real + tmp[k].real, tmp[j].imag - tmp[k].imag}, y[i][j] = complex<value_type>{tmp[j].imag + tmp[k].imag, -tmp[j].real + tmp[k].real};
+            }
+        }
+        std::vector<complex<value_type>> z[division];
+        for (usize i = 0; i < division; i++) { z[i].reserve(sz), z[i].resize(sz); }
+        for (usize a = 0; a < division; a++) {
+            for (usize b = 0; b < division; b++) {
+                for (usize i = 0; i < sz; i++) {
+                    if (a + b < division) {
+                        z[a + b][i] += x[a][i] * y[b][i];
+                    } else {
+                        z[a + b - division][i] += x[a][i] * y[b][i] * complex<value_type>(0, 1);
+                    }
+                }
+            }
+        }
+        for (usize i = 0; i < division; i++) { transform(z[i], lg, true); }
+        std::vector<mint> ans(need);
+        mint base = 1;
+        for (usize k = 0; k < 2 * division - 1; k++, base *= (1LL << bitnum)) {
+            for (usize i = 0; i < need; i++) {
+                if (k < division) {
+                    ans[i] += int((base * ll(std::round(z[k][i].real / value_type(sz))))());
+                } else {
+                    ans[i] += int((base * ll(std::round(z[k - division][i].imag / value_type(sz))))());
+                }
+            }
+        }
+        return ans;
+    }
+};
+
+template<uint mod = 924844033, uint root = 5>
+class ntt
+{
+private:
+    using value_type             = modint<mod>;
+    static constexpr usize depth = 30;
+    static void transform(std::vector<value_type>& a, const usize lg, const bool rev)
+    {
+        const usize N = a.size();
+        assert(1UL << lg == N);
+        static std::vector<value_type> R[depth];
+        if (R[lg].empty()) {
+            R[lg].reserve(N), R[lg].resize(N, value_type(1));
+            const value_type r = value_type(root) ^ ((mod - 1) / N);
+            for (usize i = 1; i < N; i++) { R[lg][i] = R[lg][i - 1] * r; }
+        }
+        std::vector<value_type> tmp(N);
+        for (usize w = (N >> 1); w > 0; w >>= 1) {
+            for (usize y = 0; y < (N >> 1); y += w) {
+                const value_type r = rev ? R[lg][y == 0 ? 0 : N - y] : R[lg][y];
+                for (usize x = 0; x < w; x++) {
+                    const auto u = a[y << 1 | x], v = a[y << 1 | x | w]() * r;
+                    tmp[y | x] = u + v, tmp[y | x | (N >> 1)] = u - v;
+                }
+            }
+            std::swap(tmp, a);
+        }
+        if (rev) {
+            for (usize i = 0; i < N; i++) { a[i] /= value_type(N); }
+        }
+    }
+
+public:
+    ntt() = delete;
+    static std::vector<value_type> convolute(const std::vector<value_type>& a, const std::vector<value_type>& b)
+    {
+        const usize need = a.size() + b.size() - 1, lg = clog(need), sz = 1UL << lg;
+        std::vector<value_type> A(sz, 0), B(sz, 0);
+        for (usize i = 0; i < a.size(); i++) { A[i] = a[i](); }
+        for (usize i = 0; i < b.size(); i++) { B[i] = b[i](); }
+        transform(A, lg, false), transform(B, lg, false);
+        for (usize i = 0; i < sz; i++) { A[i] *= B[i]; }
+        transform(A, lg, true);
+        std::vector<value_type> ans(need);
+        for (usize i = 0; i < need; i++) { ans[i] = int(A[i]()); }
+        return ans;
+    }
+};
+template<uint mod, uint root, bool dynamic, uint fft_division>
+class poly_base
+{
+public:
+    using value_type = modint_base<mod, dynamic>;
+    poly_base() : v(0) {}
+    poly_base(const value_type& r) : v{r} { shrink(); }
+    poly_base(const std::vector<value_type>& v) : v{v} { shrink(); }
+    poly_base(const std::initializer_list<value_type>&& list) : v{list} { shrink(); }
+    std::vector<value_type> operator()() const { return v; }
+    value_type& operator[](const usize i) { return v[i]; }
+    const value_type& operator[](const usize i) const { return v[i]; }
+    value_type at(const usize i) const { return i < size() ? v[i] : value_type(0); }
+    friend poly_base operator+(const poly_base& p) { return p; }
+    friend poly_base operator-(const poly_base& p)
+    {
+        std::vector<value_type> ans = p.v;
+        for (auto& e : ans) { e = -e; }
+        return poly_base(ans);
+    }
+    friend poly_base operator+(const poly_base& p, const poly_base& q)
+    {
+        const usize sz = std::max(p.size(), q.size());
+        std::vector<value_type> ans(sz);
+        for (usize i = 0; i < sz; i++) { ans[i] = p.at(i) + q.at(i); }
+        return poly_base(ans);
+    }
+    friend poly_base operator-(const poly_base& p, const poly_base& q)
+    {
+        const usize sz = std::max(p.size(), q.size());
+        std::vector<value_type> ans(sz);
+        for (usize i = 0; i < sz; i++) { ans[i] = p.at(i) - q.at(i); }
+        return poly_base(ans);
+    }
+    friend poly_base operator*(const poly_base& p, const poly_base& q) { return p.size() <= 300 or q.size() <= 300 ? naive_multiply(p, q) : fft_multiply(p, q); }
+    friend poly_base operator*(const poly_base& p, const value_type& r)
+    {
+        std::vector<value_type> ans = p.v;
+        for (auto& e : ans) { e *= r; }
+        return poly_base(ans);
+    }
+    friend poly_base operator/(const poly_base& p, const value_type& r)
+    {
+        std::vector<value_type> ans = p.v;
+        for (auto& e : ans) { e /= r; }
+        return poly_base(ans);
+    }
+    friend poly_base operator>>(const poly_base& p, const usize s) { return p.divide_by_power(s); }
+    friend poly_base operator<<(const poly_base& p, const usize s) { return p.multiply_power(s); }
+    friend poly_base operator/(const poly_base& p, const poly_base& q) { return p.div(q); }
+    friend poly_base operator%(const poly_base& p, const poly_base& q) { return p.rem(q); }
+    friend poly_base& operator+=(poly_base& p, const poly_base& q) { return p = p + q; }
+    friend poly_base& operator-=(poly_base& p, const poly_base& q) { return p = p - q; }
+    friend poly_base& operator*=(poly_base& p, const poly_base& q) { return p = p * q; }
+    friend poly_base& operator*=(poly_base& p, const value_type& r) { return p = p * r; }
+    friend poly_base& operator/=(poly_base& p, const value_type& r) { return p = p / r; }
+    friend poly_base& operator>>=(poly_base& p, const usize s) { return p = (p >> s); }
+    friend poly_base& operator<<=(poly_base& p, const usize s) { return p = (p << s); }
+    friend poly_base& operator/=(poly_base& p, const poly_base& q) { return p = p / q; }
+    friend poly_base& operator%=(poly_base& p, const poly_base& q) { return p = p % q; }
+    poly_base multiply_power(const usize s) const
+    {
+        const usize sz = size();
+        if (sz == 0) { return poly_base(); }
+        std::vector<value_type> ans(sz + s, 0);
+        for (usize i = 0; i < sz; i++) { ans[i + s] = v[i]; }
+        return poly_base(ans);
+    }
+    poly_base divide_by_power(const usize s) const
+    {
+        const usize N = size();
+        if (N <= s) { return poly_base(); }
+        std::vector<value_type> ans(N - s);
+        for (usize i = 0; i < N - s; i++) { ans[i] = v[i + s]; }
+        return poly_base(ans);
+    }
+    poly_base rem_by_power(const usize k) const { return size() <= k ? *this : poly_base(std::vector<value_type>(v.begin(), v.begin() + k)); }
+    poly_base inverse(const usize k) const
+    {
+        poly_base q{value_type(1) / v[0]};
+        const auto T = poly_base{2};
+        for (usize i = 1, j = 0; j < k; j++, i *= 2) { q = (q * (T - rem_by_power(2 * i) * q)).rem_by_power(2 * i); }
+        return q;
+    }
+    template<typename Int>
+    static poly_base rem_of_power(const Int k, const poly_base& p)
+    {
+        const usize B = p.size() * 2 - 1;
+        const auto q  = p.pseudo_inv(B);
+        poly_base ans{1};
+        const usize D = log2p1<usize>(k);
+        for (usize i = 0; i < D; i++) {
+            if (k & (static_cast<Int>(1) << (D - i - 1))) { ans = (ans.multiply_power(1)).rem(p, q, B); }
+            if (D - i - 1) { ans = (ans * ans).rem(p, q, B); }
+        }
+        return ans;
+    }
+    usize size() const { return v.size(); }
+    friend std::ostream& operator<<(std::ostream& os, const poly_base& p)
+    {
+        if (p.size() == 0) { return os << "0"; }
+        for (usize i = 0; i < p.size(); i++) { os << (i != 0 ? "+" : "") << p[i] << (i != 0 ? i == 1 ? "X" : "X^" + std::to_string(i) : ""); }
+        return os;
+    }
+
+private:
+    static std::vector<value_type> naive_convolute(const std::vector<value_type>& a, const std::vector<value_type>& b)
+    {
+        std::vector<value_type> ans(a.size() + b.size() - 1, 0);
+        for (usize i = 0; i < a.size(); i++) {
+            for (usize j = 0; j < b.size(); j++) { ans[i + j] += a[i] * b[j]; }
+        }
+        return ans;
+    }
+    static poly_base naive_multiply(const poly_base& p, const poly_base& q) { return p.size() == 0 or q.size() == 0 ? poly_base{} : poly_base{naive_convolute(p(), q())}; }
+    template<typename Poly = poly_base>
+    static std::enable_if_t<root == 0, Poly> fft_multiply(const poly_base& p, const poly_base& q) { return p.size() == 0 or q.size() == 0 ? poly_base() : poly_base{fft<double>::convolute<mod, dynamic, fft_division>(p(), q())}; }
+    template<typename Poly = poly_base>
+    static std::enable_if_t<root != 0, Poly> fft_multiply(const poly_base& p, const poly_base& q) { return p.size() == 0 or q.size() == 0 ? poly_base() : poly_base{ntt<mod, root>::convolute(p(), q())}; }
+    poly_base rev(const usize l) const
+    {
+        std::vector<value_type> ans = v;
+        ans.resize(l), std::reverse(ans.begin(), ans.end());
+        return poly_base(ans);
+    }
+    poly_base div(const poly_base& q) const
+    {
+        assert(q.size() > 0);
+        if (size() < q.size()) { return poly_base(); }
+        const usize N = size();
+        const auto iq = q.pseudoInv(N);
+        return (*this * iq).divide_by_power(N - 1);
+    }
+    poly_base rem(const poly_base& q) const { return *this - div(q) * q; }
+    poly_base rem(const poly_base& q, const poly_base& iq, const usize B) { return *this - q * ((*this * iq).divide_by_power(B - 1)); }
+    void shrink()
+    {
+        for (; not v.empty() and v.back() == 0; v.pop_back()) {}
+    }
+    poly_base pseudo_inv(const usize B) const
+    {
+        const usize N = size();
+        return rev(N).inverse(B + 2 > N ? clog(B - N + 2) : 0).rev(B + 1 - N);
+    }
+    std::vector<value_type> v;
+};
+template<uint mod, uint fft_division = 2>
+using poly = poly_base<mod, 0, false, fft_division>;
+template<uint mod, uint fft_division = 2>
+using dynamic_poly = poly_base<mod, 0, true, fft_division>;
+template<uint mod = 924844033, uint root = 5>
+using ntt_poly = poly_base<mod, root, false, 0>;
+int main()
+{
+    constexpr uint mod = 998244353;
+    using mint         = modint<mod>;
+    using moc          = modcomb<mod>;
+    const auto A = in<std::string>(), B = in<std::string>();
+    const int N = A.size();
+    int x = 0, y = 0;  // |A \cap B|, |A \setminus B|
+    for (int i = 0; i < N; i++) {
+        if (A[i] == '0') { continue; }
+        (B[i] == '0' ? y : x)++;
+    }
+    std::vector<mint> c(x + 1);
+    for (int i = 0; i <= x; i++) { c[i] = moc::inv_fact(i + 1); }
+    using P = ntt_poly<mod>;
+    const P id(1);
+    P p(c);
+    auto pow      = mfp([&](auto&& self, const P& p, const int k) -> P {
+        if (k == 0) { return id; }
+        if (k == 1) { return p; }
+        if (k % 2 == 1) {
+            P ans = self(self, p, k - 1) * p;
+            return ans.rem_by_power(x + 1);
+        } else {
+            const P ans = self(self, (p * p).rem_by_power(x + 1), k / 2);
+            return ans;
+        }
+    });
+    const auto dp = pow(p, y);
+    mint ans      = 0;
+    for (int j = 0; j <= x; j++) { ans += dp.at(j); }
+    ans *= moc::fact(x) * moc::fact(y) * moc::fact(x + y);
+    outln(ans);
+    return 0;
+}

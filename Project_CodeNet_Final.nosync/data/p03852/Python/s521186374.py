@@ -1,0 +1,1 @@
+print('cvoonwseoln a n t'[input() in ['a','e','i','u','o']::2])

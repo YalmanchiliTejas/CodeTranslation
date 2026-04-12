@@ -1,0 +1,24 @@
+#include <iostream>
+#include <math.h>
+#include <algorithm>
+#include <string>
+
+#define REP(i,n) for(int i=0; i<n; i++)
+#define debug(x) cerr << __LINE__ << " : " << #x << " = " << (x) << endl;
+ 
+#define mod 1000000007 //1e9+7(prime number)
+#define INF 1000000000 //1e9
+
+using namespace std;
+typedef long long ll;
+
+int main(){
+	int x;
+	cin >> x;
+	if (x==7 || x==5 || x==3){
+		cout << "YES" << endl;
+	}else{
+		cout << "NO" << endl;
+	}
+	return 0;
+}

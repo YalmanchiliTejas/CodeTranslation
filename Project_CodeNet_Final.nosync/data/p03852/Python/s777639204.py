@@ -1,0 +1,7 @@
+c = input()
+boin = ["a", "e", "i", "o", "u"]
+if c in boin:
+    ans = "vowel"
+else:
+    ans = "consonant"
+print(ans)

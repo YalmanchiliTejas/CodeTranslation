@@ -1,0 +1,1 @@
+t=open(0).read();print(('P'*(t.count('#')<sum(map(int,t.split()[:2])))or'Imp')+'ossible')

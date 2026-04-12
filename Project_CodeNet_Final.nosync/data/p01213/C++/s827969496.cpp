@@ -1,0 +1,73 @@
+/*
+04:47 - 5:08
+ */
+#include<iostream>
+#include<cmath>
+#include<cassert>
+#include<climits>
+#include<algorithm>
+#include<vector>
+
+#define REP(i,s,n) for(int i=s;i<n;i++)
+#define rep(i,n) REP(i,0,n)
+#define IINF (INT_MAX)
+
+using namespace std;
+
+int dx[] = {-1,-1,+0};
+int dy[] = {-1,+0,-1};
+
+string lcs(string A,string B){
+  int lena = A.size();
+  int lenb = B.size();
+  int dp[lena+1][lenb+1],path[lena+1][lenb+1];
+  for(int i=0;i<=lena;i++)for(int j=0;j<=lenb;j++)dp[i][j] = 0, path[i][j] = -1;
+
+  for(int i=0;i<lena;i++){
+    for(int j=0;j<lenb;j++){
+      if(A[i] == B[j]){
+	dp[i+1][j+1] = dp[i][j] + 1; 
+	path[i+1][j+1] = 0;
+      } else {
+	if(dp[i+1][j] < dp[i][j+1]){
+	  dp[i+1][j+1] = dp[i][j+1];
+	  path[i+1][j+1] = 2;
+	} else {
+	  dp[i+1][j+1] = dp[i+1][j];
+	  path[i+1][j+1] = 1;
+	}
+      }
+    }
+  }
+
+  string ret = "";
+  int x = lenb, y = lena;
+  while(true){
+    if(!( 0 <= x && x <= lenb && 0 <= y && y <= lena ))break;
+    if(path[y][x] == -1)break;
+    if(path[y][x] == 0){
+      ret += A[y-1];
+    }
+    int dir = path[y][x];
+    x += dx[dir], y += dy[dir];
+  }
+  reverse(ret.begin(),ret.end());
+  return ret;
+}
+
+int main(){
+  string line;
+  while(cin >> line,line != "#END"){
+    string ans = "";
+    for(int i=0;i<line.size()-1;i++){
+      string A = line.substr(0,i+1);
+      string B = line.substr(i+1);
+      string C = lcs(A,B);
+      if( C.size() > ans.size() ){
+	ans = C;
+      }
+    }
+    cout << ans << endl;
+  }
+  return 0;
+}

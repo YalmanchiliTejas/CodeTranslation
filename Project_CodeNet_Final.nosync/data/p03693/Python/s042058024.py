@@ -1,0 +1,1 @@
+print('YES' if int(input().strip().replace(' ','')) % 4 == 0 else 'NO')

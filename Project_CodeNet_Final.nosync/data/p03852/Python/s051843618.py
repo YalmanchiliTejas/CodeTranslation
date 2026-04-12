@@ -1,0 +1,12 @@
+n = input()
+
+def slv():
+    a = ['a', 'e', 'i', 'o', 'u']
+
+    for i in a:
+        if i == n:
+            print('vowel')
+            return
+    print('consonant')
+
+slv()

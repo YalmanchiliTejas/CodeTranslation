@@ -1,0 +1,10 @@
+def main():
+    RGB = input()
+
+    rgb = int(RGB.replace(' ', ''))
+    if rgb % 4 == 0:
+        print('YES')
+    else:
+        print('NO')
+
+main()

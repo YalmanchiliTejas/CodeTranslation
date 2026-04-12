@@ -1,0 +1,1 @@
+print(["consonant","vowel"][len(set(["a","i","u","e","o",input()]))==5])

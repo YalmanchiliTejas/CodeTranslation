@@ -1,0 +1,1 @@
+print('cvoonwseoln a n t'[len(set(['a','i','u','e','o',input()]))==5::2])

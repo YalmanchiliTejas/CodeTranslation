@@ -1,0 +1,31 @@
+
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <map>
+using namespace std;
+	
+
+
+int main() {
+	string s;
+	cin >> s;
+	
+	if (s == "a" || s == "i" || s == "u" || s == "e" || s == "o") {
+		cout << "vowel";
+	}
+	else {
+		cout << "consonant";
+	}
+	
+	return 0;
+}
+
+
+
+
+
+
+
+

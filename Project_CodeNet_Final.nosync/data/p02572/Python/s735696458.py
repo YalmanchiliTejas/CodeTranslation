@@ -1,0 +1,5 @@
+n = int(input())
+A = list(map(int, input().split()))
+Sum = sum(A)
+square_sum = sum(map(lambda x:x*x, A))
+print((Sum*Sum - square_sum)//2%(10**9+7))

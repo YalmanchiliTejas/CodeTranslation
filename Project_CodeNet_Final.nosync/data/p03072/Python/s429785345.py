@@ -1,0 +1,1 @@
+N,*H,=map(int,open(0).read().split());print(sum(max(H[:i+1])==H[i]for i in range(N)))

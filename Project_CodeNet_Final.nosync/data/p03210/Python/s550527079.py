@@ -1,0 +1,1 @@
+a=input();print("NO") if a!="5" and a!="3" and a!="7" else print("YES")

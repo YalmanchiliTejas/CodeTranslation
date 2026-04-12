@@ -1,0 +1,6 @@
+a,b,c,x,y=map(int,input().split())
+z=min(x,y)
+sm=min((a+b)*z,c*2*z)
+if x>z: sm+=min(a,2*c)*(x-z)
+else : sm+=min(b,2*c)*(y-z)
+print(sm)

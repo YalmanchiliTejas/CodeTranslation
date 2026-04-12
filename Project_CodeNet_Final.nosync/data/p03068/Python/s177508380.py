@@ -1,0 +1,1 @@
+import re;_,s,k=open(0);print(re.sub('[^%s\n]'%s[int(k)-1],'*',s))

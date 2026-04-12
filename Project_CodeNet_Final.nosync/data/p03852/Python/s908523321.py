@@ -1,0 +1,1 @@
+print('vowel'if input()in'aioue'else'consonant')

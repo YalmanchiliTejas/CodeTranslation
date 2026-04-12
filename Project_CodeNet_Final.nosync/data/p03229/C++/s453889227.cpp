@@ -1,0 +1,109 @@
+#include <bits/stdc++.h>
+#define fi first
+#define se second
+#define rep(i,n) for(int i = 0; i < (n); ++i)
+#define drep(i,n) for(int i = (n)-1; i >= 0; --i)
+#define srep(i,s,t) for (int i = s; i < t; ++i)
+#define rng(a) a.begin(),a.end()
+#define maxs(x,y) (x = max(x,y))
+#define mins(x,y) (x = min(x,y))
+#define limit(x,l,r) max(l,min(x,r))
+#define lims(x,l,r) (x = max(l,min(x,r)))
+#define isin(x,l,r) ((l) <= (x) && (x) < (r))
+#define pb push_back
+#define sz(x) (int)(x).size()
+#define pcnt __builtin_popcountll
+#define uni(x) x.erase(unique(rng(x)),x.end())
+#define show(x) cout<<#x<<" = "<<x<<endl;
+#define PQ(T) priority_queue<T,v(T),greater<T> >
+#define bn(x) ((1<<x)-1)
+#define dup(x,y) (((x)+(y)-1)/(y))
+#define newline puts("")
+#define v(T) vector<T>
+#define vv(T) v(v(T))
+using namespace std;
+typedef long long int ll;
+typedef unsigned uint;
+typedef unsigned long long ull;
+typedef pair<int,int> P;
+typedef set<int> S;
+typedef queue<int> Q;
+typedef queue<P> QP;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<ll> vl;
+typedef vector<P> vp;
+inline int in() { int x; scanf("%d",&x); return x;}
+const ll LINF = 1001002003004005006ll;
+const int INF = 1001001001;
+const int MOD = 1000000007;
+#define dame { puts("-1"); return 0;}
+#define yn {puts("YES");}else{puts("NO");}
+  
+int main() {
+  int N;
+  cin >> N;
+  vi A(N);
+  rep(i,N) {
+    cin >> A[i];
+  }
+  sort(rng(A));
+  ll ans = 0;
+  // p0 >= p1 <= p2 => p3 <= p4
+  // p0 - p1 + p2 - p1 + p2 - p3 + p4 - p3
+  // p0 - 2 p1 + 2 p2 - 2p3 + p4
+  if(N % 2 == 1) {
+    rep(i,(N-1)/2) {
+      ans -= 2 * A[i];
+    }
+    ans += A[(N-1)/2];
+    ans += A[(N-1)/2+1];
+    srep(i,(N-1)/2+2,N) {
+      ans += 2 * A[i];
+    }
+  }
+  // p0 >= p1 <= p2 >= p3 <= p4 >= p5
+  // p0 - p1 + p2 - p1 + p2 - p3 + p4 - p3 + p4 - p5
+  // p0 - 2 p1 + 2 p2 - 2p3 + 2 p4 - p5
+  else {
+    rep(i,(N-2)/2) {
+      ans -= 2 * A[i];
+    }
+    ans -= A[(N-1)/2];
+    ans += A[(N-1)/2+1];
+    srep(i,(N-1)/2+2,N) {
+      ans += 2 * A[i];
+    }
+
+  }
+
+  ll ans2 = 0;
+  // p0 <= p1 >= p2 <= p3 >= p4 
+  // p1 - p0 + p1 - p2 + p3 - p2 + p3 - p4 
+  // -p0 + 2 p1 - 2 p2 + 2 p3 - p4
+  if(N % 2 == 1) {
+    rep(i,(N-2)/2) {
+      ans2 -= 2 * A[i];
+    }
+    ans2 -= A[(N-2)/2];
+    ans2 -= A[(N-2)/2+1];
+    srep(i,(N-2)/2+2,N) {
+      ans2 += 2 * A[i];
+    }
+  }
+  // p0 <= p1 >= p2 <= p3 >= p4 <= p5
+  // p1 - p0 + p1 - p2 + p3 - p2 + p3 - p4 + p5 - p4
+  // -p0 + 2 p1 - 2 p2 + 2 p3 - 2 p4 + p5
+  else {
+    rep(i,(N-2)/2) {
+      ans2 -= 2 * A[i];
+    }
+    ans2 -= A[(N-2)/2];
+    ans2 += A[(N-2)/2+1];
+    srep(i,(N-2)/2+2,N) {
+      ans2 += 2 * A[i];
+    }
+  }
+  cout << max(ans,ans2) << endl;
+  return 0;
+}

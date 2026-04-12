@@ -1,0 +1,10 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef pair<int,int> p;
+
+int main(void){
+  int N;
+  cin >> N;
+  cout <<(N*800)-(N/15*200) << endl;
+  return 0;
+}

@@ -1,0 +1,274 @@
+#line 1 "/workspaces/compro/lib/atcoder/segtree.hpp"
+
+
+
+#line 1 "/workspaces/compro/lib/atcoder/internal_bit.hpp"
+
+
+
+#ifdef _MSC_VER
+#include <intrin.h>
+#endif
+
+namespace atcoder {
+
+namespace internal {
+
+// @param n `0 <= n`
+// @return minimum non-negative `x` s.t. `n <= 2**x`
+int ceil_pow2(int n) {
+    int x = 0;
+    while ((1U << x) < (unsigned int)(n)) x++;
+    return x;
+}
+
+// @param n `1 <= n`
+// @return minimum non-negative `x` s.t. `(n & (1 << x)) != 0`
+int bsf(unsigned int n) {
+#ifdef _MSC_VER
+    unsigned long index;
+    _BitScanForward(&index, n);
+    return index;
+#else
+    return __builtin_ctz(n);
+#endif
+}
+
+}  // namespace internal
+
+}  // namespace atcoder
+
+
+#line 5 "/workspaces/compro/lib/atcoder/segtree.hpp"
+#include <algorithm>
+#include <cassert>
+#include <vector>
+
+namespace atcoder {
+
+template <class S, S (*op)(S, S), S (*e)()> struct segtree {
+public:
+  segtree() : segtree(0) {}
+  segtree(int n) : segtree(std::vector<S>(n, e())) {}
+  segtree(const std::vector<S> &v) : _n(int(v.size())) {
+    log = internal::ceil_pow2(_n);
+    size = 1 << log;
+    d = std::vector<S>(2 * size, e());
+    for (int i = 0; i < _n; i++)
+      d[size + i] = v[i];
+    for (int i = size - 1; i >= 1; i--) {
+      update(i);
+    }
+  }
+
+  void set(int p, S x) {
+    assert(0 <= p && p < _n);
+    p += size;
+    d[p] = x;
+    for (int i = 1; i <= log; i++)
+      update(p >> i);
+  }
+
+  S get(int p) {
+    assert(0 <= p && p < _n);
+    return d[p + size];
+  }
+
+  S prod(int l, int r) {
+    assert(0 <= l && l <= r && r <= _n);
+    S sml = e(), smr = e();
+    l += size;
+    r += size;
+
+    while (l < r) {
+      if (l & 1)
+        sml = op(sml, d[l++]);
+      if (r & 1)
+        smr = op(d[--r], smr);
+      l >>= 1;
+      r >>= 1;
+    }
+    return op(sml, smr);
+  }
+
+  S all_prod() { return d[1]; }
+
+  template <bool (*f)(S)> int max_right(int l) {
+    return max_right(l, [](S x) { return f(x); });
+  }
+  template <class F> int max_right(int l, F f) {
+    assert(0 <= l && l <= _n);
+    assert(f(e()));
+    if (l == _n)
+      return _n;
+    l += size;
+    S sm = e();
+    do {
+      while (l % 2 == 0)
+        l >>= 1;
+      if (!f(op(sm, d[l]))) {
+        while (l < size) {
+          l = (2 * l);
+          if (f(op(sm, d[l]))) {
+            sm = op(sm, d[l]);
+            l++;
+          }
+        }
+        return l - size;
+      }
+      sm = op(sm, d[l]);
+      l++;
+    } while ((l & -l) != l);
+    return _n;
+  }
+
+  template <bool (*f)(S)> int min_left(int r) {
+    return min_left(r, [](S x) { return f(x); });
+  }
+  template <class F> int min_left(int r, F f) {
+    assert(0 <= r && r <= _n);
+    assert(f(e()));
+    if (r == 0)
+      return 0;
+    r += size;
+    S sm = e();
+    do {
+      r--;
+      while (r > 1 && (r % 2))
+        r >>= 1;
+      if (!f(op(d[r], sm))) {
+        while (r < size) {
+          r = (2 * r + 1);
+          if (f(op(d[r], sm))) {
+            sm = op(d[r], sm);
+            r--;
+          }
+        }
+        return r + 1 - size;
+      }
+      sm = op(d[r], sm);
+    } while ((r & -r) != r);
+    return 0;
+  }
+
+private:
+  int _n, size, log;
+  std::vector<S> d;
+
+  void update(int k) { d[k] = op(d[2 * k], d[2 * k + 1]); }
+};
+
+} // namespace atcoder
+
+
+#line 1 "/workspaces/compro/lib/template.hpp"
+
+
+#line 1 "/workspaces/compro/lib/io/vector.hpp"
+#include <iostream>
+#line 3 "/workspaces/compro/lib/io/vector.hpp"
+
+#ifndef IO_VECTOR
+#define IO_VECTOR
+
+template <class T> std::ostream &operator<<(std::ostream &out, const std::vector<T> &v) {
+  int size = v.size();
+  for (int i = 0; i < size; i++) {
+    std::cout << v[i];
+    if (i != size - 1)
+      std::cout << " ";
+  }
+  return out;
+}
+
+template <class T> std::istream &operator>>(std::istream &in, std::vector<T> &v) {
+  for (auto &el : v) {
+    std::cin >> el;
+  }
+  return in;
+}
+
+#endif
+#line 4 "/workspaces/compro/lib/template.hpp"
+#include <bits/stdc++.h>
+#define REP(i, n) for (int i = 0; i < n; i++)
+#define FOR(i, m, n) for (int i = m; i < n; i++)
+#define ALL(v) (v).begin(), (v).end()
+#define coutd(n) cout << fixed << setprecision(n)
+#define ll long long int
+#define vl vector<ll>
+#define vi vector<int>
+#define MM << " " <<
+
+using namespace std;
+
+template <class T> void say(bool val, T yes, T no) { cout << (val ? yes : no) << "\n"; }
+
+void say(bool val, string yes = "Yes", string no = "No") { say<string>(val, yes, no); }
+
+template <class T> void chmin(T &a, T b) {
+  if (a > b)
+    a = b;
+}
+
+template <class T> void chmax(T &a, T b) {
+  if (a < b)
+    a = b;
+}
+
+// C++ 17に完全移行したら消す
+// 最大公約数を求める
+template <class T> T gcd(T n, T m) { return n ? gcd(m % n, n) : m; }
+
+// 最小公倍数を求める
+template <class T> T lcm(T n, T m) {
+  int g = gcd(n, m);
+  return n * m / g;
+}
+
+// 重複を消す。計算量はO(NlogN)
+template <class T> void unique(std::vector<T> &v) {
+  std::sort(v.begin(), v.end());
+  v.erase(std::unique(v.begin(), v.end()), v.end());
+}
+
+
+#line 3 "main.cpp"
+
+int op(int a, int b) { return max(a, b); }
+
+int e() { return -1; }
+
+// generated by online-judge-template-generator v4.4.0 (https://github.com/kmyk/online-judge-template-generator)
+int main() {
+  int n, q;
+  std::cin >> n >> q;
+  std::vector<int> a(n);
+  for (int i = 0; i < n; ++i) {
+    std::cin >> a[i];
+  }
+
+  atcoder::segtree<int, op, e> seg(a);
+  for (int i = 0; i < q; ++i) {
+    int t;
+    cin >> t;
+    if (t == 1) {
+      int x;
+      int v;
+      cin >> x >> v;
+      seg.set(x - 1, v);
+    } else if (t == 2) {
+      int l, r;
+      cin >> l >> r;
+      l--;
+      cout << seg.prod(l, r) << endl;
+    } else {
+      int x;
+      int v;
+      cin >> x >> v;
+      x--;
+      cout << seg.max_right(x, [&](int el) { return el < v; }) + 1 << endl;
+    }
+  }
+  return 0;
+}

@@ -1,0 +1,14 @@
+#include <iostream>
+
+using namespace std;
+
+int main() {
+    int x;
+    cin>>x;
+    if(x == 5||x==3||x==7){
+        cout << "YES"<<endl;
+        return 0;
+    }
+    cout << "NO"<<endl;
+    return 0;
+}

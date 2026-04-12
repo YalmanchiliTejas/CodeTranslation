@@ -1,0 +1,5 @@
+n = int("".join(list(input().split())))
+if n % 4:
+    print("NO")
+else:
+    print("YES")

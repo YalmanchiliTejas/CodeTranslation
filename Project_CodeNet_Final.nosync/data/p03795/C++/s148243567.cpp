@@ -1,0 +1,9 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+  int N;
+  cin >> N;
+  cout << N * 800 - (int)(N/15) * 200;
+  return 0;
+}

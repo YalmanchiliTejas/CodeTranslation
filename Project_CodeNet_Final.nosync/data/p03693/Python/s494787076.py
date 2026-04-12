@@ -1,0 +1,10 @@
+r,g,b = map(int,input().split())
+ 
+a = 100*r + 10*g + b
+ 
+if a%4 == 0:
+  m = "YES"
+else:
+  m = "NO"
+  
+print(m)

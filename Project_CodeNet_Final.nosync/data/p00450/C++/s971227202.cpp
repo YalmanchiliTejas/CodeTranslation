@@ -1,0 +1,44 @@
+#include<iostream>
+#include<string>
+#include<vector>
+#include<cstdio>
+#include<map>
+#include<algorithm>
+#include<stack>
+#define P pair<int,int>
+using namespace std;
+
+int main() {
+	int a;
+	while (scanf("%d", &a), a) {
+		stack<P>b;
+		for (int c = 1; c <= a; c++) {
+			int d;
+			scanf("%d", &d);
+			if (c & 1) {
+				if (b.size() && b.top().second == d)b.top().first++;
+				else b.push(P(1, d));
+			}
+			else {
+				if (b.size() && b.top().second == d) {
+					b.top().first++;
+				}
+				else {
+					P x = b.top(); b.pop();
+					P y = P(0, 0);
+					if (b.size()) {
+						y = b.top();
+						b.pop();
+					}
+					b.push(P(x.first + y.first + 1, d));
+				}
+			}
+		}
+		int k = 0;
+		while (b.size()) {
+			P s = b.top(); b.pop();
+			if (s.second == 0)k += s.first;
+		}
+		cout << k << endl;
+	}
+}

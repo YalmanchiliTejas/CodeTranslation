@@ -1,0 +1,1 @@
+print "YES" if int("".join(raw_input().split())) % 4 == 0 else "NO"

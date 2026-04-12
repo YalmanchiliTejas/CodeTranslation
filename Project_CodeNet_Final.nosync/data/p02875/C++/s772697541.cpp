@@ -1,0 +1,156 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef unsigned long long ull;
+typedef long double ld;
+
+template<int m>
+struct modint {
+
+	unsigned x;
+
+	modint() : x(0) {}
+
+	modint(long long arg) {
+		arg %= m;
+		if (arg < 0) {
+			x = arg + m;
+		} else {
+			x = arg;
+		}
+	}	
+
+	modint& operator+= (const modint& other) {
+		x += other.x;
+		if (x >= m) {
+			x -= m;
+		}
+		return *this;
+	}
+
+	modint& operator*= (const modint& other) {
+		x = (x * 1ull * other.x) % m;
+		return *this;
+	}
+
+	modint& operator-= (const modint& other) {
+		x += m - other.x;
+		if (x >= m) {
+			x -= m;
+		}
+		return *this;
+	}
+
+	modint operator+ (const modint& other) const {
+		modint tmp = *this;
+		tmp += other;
+		return tmp;
+	}
+
+	modint operator- (const modint& other) const {
+		modint tmp = *this;
+		tmp -= other;
+		return tmp;
+	}
+
+	modint operator* (const modint& other) const {
+		modint tmp = *this;
+		tmp *= other;
+		return tmp;
+	}
+
+	explicit operator int () const {
+		return x;
+	}
+
+	modint& operator++ () {
+		++x;
+		if (x == m) {
+			x = 0;
+		}
+		return *this;
+	}
+
+	modint& operator-- () {
+		if (x == 0) {
+			x = m-1;
+		} else {
+			--x;
+		}
+		return *this;
+	}
+
+	modint operator++ (int) {
+		modint tmp = *this;
+		++*this;
+		return tmp;
+	}
+
+	modint operator-- (int) {
+		modint tmp = *this;
+		--*this;
+		return tmp;
+	}
+
+	bool operator== (const modint& other) const {
+		return x == other.x;
+	}
+
+	bool operator!= (const modint& other) const {
+		return x != other.x;
+	}
+
+	template<class T>
+	modint operator^ (T arg) const {
+		if (arg == 0) {
+			return 1;
+		}
+		if (arg == 1) {
+			return x;
+		}
+		auto t = *this ^ (arg >> 1);
+		t *= t;
+		if (arg & 1) {
+			t *= *this;
+		}
+		return t;
+	}
+
+	template<class T>
+	modint operator^= (T arg) {
+		return *this = *this ^ arg;
+	}
+
+	modint inv() const {
+		return *this ^ (m-2);
+	}
+};
+
+const int MOD = 998244353;
+typedef modint<MOD> mint;
+
+const int HI = 10'000'005;
+mint f[HI], finv[HI];
+
+int main() {
+	ios_base::sync_with_stdio(false);
+	cin.tie(nullptr);
+	cout.tie(nullptr);
+	cerr.tie(nullptr);
+
+	int n;
+	cin >> n;
+
+	f[0] = finv[0] = 1;
+	for (int i=1; i<HI; i++) {
+		f[i] = f[i-1] * i;
+		finv[i] = f[i].inv();
+	}
+
+	mint sol = mint(3) ^ n;
+	for (int i=n/2+1; i<=n; i++) {
+		sol -= f[n] * finv[i] * finv[n-i] * (mint(2) ^(n-i)) * 2;
+	}
+	cout << (int)sol << '\n';
+}

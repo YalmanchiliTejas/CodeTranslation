@@ -1,0 +1,12 @@
+while True:
+    # num of judges
+    n = int(input())
+    if n == 0:
+        break
+
+    scores = []
+    for i in range(n):
+        scores.append(int(input()))
+
+    final_score = int( (sum(scores) - max(scores) - min(scores)) / (n - 2) )
+    print(final_score)

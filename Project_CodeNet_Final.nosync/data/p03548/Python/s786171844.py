@@ -1,0 +1,7 @@
+s = input().split()
+x = int(s[0])
+y = int(s[1])
+z = int(s[2])
+
+
+print(int((x-z) / (y+z)))

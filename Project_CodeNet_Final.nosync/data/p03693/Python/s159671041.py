@@ -1,0 +1,17 @@
+import sys
+
+def main():
+    line = sys.stdin.readline()
+    lst = line.split()
+    r = int(lst[0])
+    g = int(lst[1])
+    b = int(lst[2])
+
+    if (g * 10 + b) % 4 == 0:
+        print("YES")
+    else:
+        print("NO")
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())

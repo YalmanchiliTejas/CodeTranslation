@@ -1,0 +1,135 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define rep(i, n) for (int i = 0; i < n; ++i)
+#define ALL(a) (a).begin(), (a).end()
+#define rALL(a) (a).rbegin(), (a).rend()
+#define SZ(x) ((int)(x).size())
+using ll = long long;
+using P = pair<int, int>;
+using llP = pair<ll, ll>;
+using DoP = pair<double, double>;
+const int di[] = {0, 1, 0, -1, 1, 1, -1, -1};
+const int dj[] = {1, 0, -1, 0, 1, -1, 1, -1};
+const int INF = 1 << 29;
+const ll INF64 = 1ll << 45;
+const int mod = 1000000007;
+//const int mod = 998244353;
+
+
+template <class T>inline bool chmin(T &a, const T b)
+{
+  if (a > b)
+  {
+    a = b;
+    return true;
+  }
+  return false;
+}
+template <class T>inline bool chmax(T &a, const T b)
+{
+  if (a < b)
+  {
+    a = b;
+    return true;
+  }
+  return false;
+}
+
+struct mint
+{
+  ll x; // typedef long long ll;
+  mint(ll x = 0) : x((x % mod + mod) % mod) {}
+  mint operator-() const { return mint(-x); }
+  mint &operator+=(const mint a)
+  {
+    if ((x += a.x) >= mod)
+      x -= mod;
+    return *this;
+  }
+  mint &operator-=(const mint a)
+  {
+    if ((x += mod - a.x) >= mod)
+      x -= mod;
+    return *this;
+  }
+  mint &operator*=(const mint a)
+  {
+    (x *= a.x) %= mod;
+    return *this;
+  }
+  mint operator+(const mint a) const
+  {
+    mint res(*this);
+    return res += a;
+  }
+  mint operator-(const mint a) const
+  {
+    mint res(*this);
+    return res -= a;
+  }
+  mint &operator++()
+  {
+    if ((x += 1) >= mod)
+      x -= mod;
+    return *this;
+  }
+  mint &operator--()
+  {
+    if ((x += mod - 1) >= mod)
+      x -= mod;
+    return *this;
+  }
+  mint operator*(const mint a) const
+  {
+    mint res(*this);
+    return res *= a;
+  }
+  mint pow(ll t) const
+  {
+    if (!t)
+      return 1;
+    mint a = pow(t >> 1);
+    a *= a;
+    if (t & 1)
+      a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const
+  {
+    return pow(mod - 2);
+  }
+  mint &operator/=(const mint a)
+  {
+    return (*this) *= a.inv();
+  }
+  mint operator/(const mint a) const
+  {
+    mint res(*this);
+    return res /= a;
+  }
+};
+
+
+int main()
+{
+  int n;
+  cin >> n;
+  multiset<ll> st;
+  rep(i, n) {
+    ll a;
+    cin >> a;
+    if(st.size() == 0 || a <= *st.begin()) {
+      st.insert(a);
+    }
+    else {
+      auto it = st.lower_bound(a);
+      --it;
+      st.erase(it);
+      st.insert(a);
+    }
+  }
+  cout << st.size() << endl;
+}

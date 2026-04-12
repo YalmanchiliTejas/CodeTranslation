@@ -1,0 +1,13 @@
+#include<stdio.h>
+int main()
+{
+    int n;
+    while(scanf("%d",&n)!=EOF)
+    {
+        if(n==7||n==5||n==3)
+            printf("YES\n");
+        else
+            printf("NO\n");
+    }
+    return 0;
+}

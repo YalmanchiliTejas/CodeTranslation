@@ -1,0 +1,19 @@
+#include <iostream>
+using namespace std;
+int main() {
+    int n, s;
+    while (cin >> n && n) {
+        int mx = -1;
+        int mn = 1001;
+        int sum = 0;
+        for (int i=0; i<n; ++i) {
+            cin >> s;
+            sum += s;
+            mx = max(mx, s);
+            mn = min(mn, s);
+        }
+        sum = sum - mx - mn;
+        cout << sum / (n - 2) << endl;
+    }
+    return 0;
+}

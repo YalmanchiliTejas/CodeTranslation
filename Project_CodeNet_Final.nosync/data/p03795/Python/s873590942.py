@@ -1,0 +1,1 @@
+n=int(input());print(int(40/3*(n*59+n%15)))

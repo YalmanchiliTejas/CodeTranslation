@@ -1,0 +1,1 @@
+h,w=map(int,input().split());print("Possible"if sum([input().count("#")for i in range(h)])==h+w-1 else "Impossible")

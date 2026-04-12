@@ -1,0 +1,1 @@
+a= int(input());print('YNEOS'[a not in[3,5,7]::2])

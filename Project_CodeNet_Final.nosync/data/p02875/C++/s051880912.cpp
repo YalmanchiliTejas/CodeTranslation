@@ -1,0 +1,63 @@
+#define _USE_MATH_DEFINES
+#include <bits/stdc++.h>
+using namespace std;
+
+//template
+#define rep(i,a,b) for(int i=(a);i<(b);i++)
+#define rrep(i,a,b) for(int i=(a);i>(b);i--)
+#define ALL(v) (v).begin(),(v).end()
+typedef long long int ll; typedef pair<ll, ll> P;
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+template<typename A,size_t N,typename T>void Fill(A(&array)[N],const T &val){fill((T*)array, (T*)(array+N), val);}
+const int inf = 0x3fffffff; const ll INF = 0x3fffffffffffffff;
+//template end
+
+ll mod=998244353;
+struct Mint {
+    ll val;
+    Mint inv() const{
+        ll tmp,a=val,b=mod,x=1,y=0;
+        while(b)tmp=a/b,a-=tmp*b,swap(a,b),x-=tmp*y,swap(x,y);
+        return Mint(x);
+    }
+public:
+    Mint():val(0){}
+    Mint(ll x):val(x>=0?x%mod:x%mod+mod){}
+    int mtoi(){return this->val; }
+    Mint pow(ll t){Mint res=1,b=*this; while(t){if(t&1)res*=b;b*=b;t>>=1;}return res;}
+    Mint& operator+=(const Mint& x){if((val+=x.val)>=mod)val-=mod;return *this;}
+    Mint& operator-=(const Mint& x){if((val+=mod-x.val)>=mod)val-=mod; return *this;}
+    Mint& operator*=(const Mint& x){val=(ll)val*x.val%mod; return *this;}
+    Mint& operator/=(const Mint& x){return *this*=x.inv();}
+    bool operator==(const Mint& x) const{return val==x.val;}
+    bool operator!=(const Mint& x) const{return val!=x.val;}
+    bool operator<(const Mint& x) const{return val<x.val;}
+    bool operator<=(const Mint& x) const{return val<=x.val;}
+    bool operator>(const Mint& x) const{return val>x.val;}
+    bool operator>=(const Mint& x) const{return val>=x.val;}
+    Mint operator+(const Mint& x) const{return Mint(*this)+=x;}
+    Mint operator-(const Mint& x) const{return Mint(*this)-=x;}
+    Mint operator*(const Mint& x) const{return Mint(*this)*=x;}
+    Mint operator/(const Mint& x) const{return Mint(*this)/=x;}
+};
+struct factorial {
+    vector<Mint> Fact, Finv;
+public:
+    factorial(int maxx){
+        Fact.resize(maxx+1),Finv.resize(maxx+1); Fact[0]=Mint(1); rep(i,0,maxx)Fact[i+1]=Fact[i]*Mint(i+1);
+        Finv[maxx]=Mint(1)/Fact[maxx]; rrep(i,maxx,0)Finv[i-1]=Finv[i]*Mint(i);
+    }
+    Mint fact(int n,bool inv=0){if(inv)return Finv[n];else return Fact[n];}
+    Mint nPr(int n,int r){if(n<0||n<r||r<0)return Mint(0);else return Fact[n]*Finv[n-r];}
+    Mint nCr(int n,int r){if(n<0||n<r||r<0)return Mint(0);else return Fact[n]*Finv[r]*Finv[n-r];}
+};
+
+int main(){
+    int n; scanf("%d",&n);
+    factorial fact(10000010);
+    Mint ans=Mint(3).pow(n),mul=Mint(2).pow(n/2-1);
+    rep(i,n/2+1,n+1)ans-=fact.nCr(n,i)*mul*2,mul/=2;
+    printf("%d\n",ans.val);
+    return 0;
+}

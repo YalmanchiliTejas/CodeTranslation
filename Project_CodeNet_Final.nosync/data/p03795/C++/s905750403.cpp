@@ -1,0 +1,12 @@
+#include<iostream>
+using namespace std;
+int main(){
+	int n,x,y;
+	cin>>n;
+	if(1<=n&&n<=100)
+     x=n*800;
+     y=(n/15)*200;
+   cout<<x-y;
+	
+	
+}

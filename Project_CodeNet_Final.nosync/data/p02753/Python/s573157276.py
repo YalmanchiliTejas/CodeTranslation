@@ -1,0 +1,1 @@
+print(["Yes","No"][len(set(list(input()))) == 1])

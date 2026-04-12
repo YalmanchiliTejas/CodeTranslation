@@ -1,0 +1,40 @@
+#include<iostream>
+#include<math.h>
+#include <algorithm>
+#include<float.h>
+#include <limits>
+#include <vector> 
+#include <numeric>
+
+#define rep(i,a,n) for(ll int (i) = (a);(i) < (n);(i)++)
+#define urep(i,a,n) for(ll int (i) = (a);(i) > (n);(i)--)
+#define MOD 1000000007
+#define ll long long
+
+using namespace::std;
+
+int jo(ll int jxo, ll int jyo){
+	ll int jhogeo = 1;
+	rep(jinto,0,jyo) jhogeo=jhogeo*jxo;
+	return jhogeo;
+}
+char tobig(char toxbig){
+  return (toxbig-0x20);
+}
+char tolow(char toxlow){
+  return (toxlow+0x20);
+}
+  
+
+
+int main(){
+
+  int r,g,b;
+  cin>>r>>g>>b;
+  cout<<((10*g+b)%4 ? "NO" : "YES");
+}
+// int *p = new int[N];
+
+// vector<vector<int>> 変数名(左の個数, vector<int>(右の個数));
+
+//

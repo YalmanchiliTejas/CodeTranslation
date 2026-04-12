@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+def solve():
+    abc = input().split()
+    s = ""
+    for i in abc:
+        s += i
+    n = int(s)
+    if n % 4 == 0:
+        print('YES')
+    else:
+        print('NO')
+    
+        
+if __name__ == '__main__':
+    solve()

@@ -1,0 +1,24 @@
+n,s = map(int, input().split())
+a = list(map(int, input().split()))
+
+
+dp = [[0] * (s + 1) for _ in range(n+1)]
+
+
+for i in range(1, n+1):
+    for j in range(1, s+1):
+        if a[i-1] > j:
+            dp[i][j] = dp[i-1][j]
+        elif a[i-1] == j:
+            dp[i][j] = (dp[i-1][j] + i)%998244353
+        else:
+            dp[i][j] = (dp[i-1][j] + dp[i-1][j-a[i-1]])%998244353
+
+ans = 0
+
+for i in range(1, n+1):
+    ans += dp[i][s]
+    ans %= 998244353
+
+
+print(ans)

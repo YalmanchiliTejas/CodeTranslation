@@ -1,0 +1,1 @@
+print("YNEOS"[int("".join(input()[::2]))%4!=0::2])

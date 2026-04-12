@@ -1,0 +1,13 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef pair<ll,ll> P;
+int main(void){
+    int n,m; cin>>n>>m;
+    if(n==m){
+        cout<<"Yes"<<endl;
+    }else{
+        cout<<"No"<<endl;
+    }
+    
+}

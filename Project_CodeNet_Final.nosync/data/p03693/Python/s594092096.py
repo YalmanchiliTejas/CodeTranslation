@@ -1,0 +1,1 @@
+print("NO" if sum([int(i)*10**(2-t) for t,i in enumerate(input().split())])%4 else "YES")

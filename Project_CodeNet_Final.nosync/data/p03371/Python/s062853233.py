@@ -1,0 +1,1 @@
+a,b,c,x,y=map(int,input().split());print(min(c*2*min(x,y)+abs(x-y)*min((a if x>y else b),2*c),a*x+b*y))

@@ -1,0 +1,1 @@
+print("YNeos"[int(bool(int(input()) < 30))::2])

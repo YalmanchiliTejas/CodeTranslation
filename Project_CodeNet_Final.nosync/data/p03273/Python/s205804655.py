@@ -1,0 +1,1 @@
+h,w=map(int,input().split());print(*["".join(e)for e in zip(*["".join(e)for e in zip(*[e for e in[input()for _ in[0]*h]if"#"in e])if"#"in e])],sep="\n")

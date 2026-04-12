@@ -1,0 +1,1 @@
+print("YES"*(input() in "357")or"NO")

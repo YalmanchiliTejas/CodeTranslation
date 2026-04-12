@@ -1,0 +1,2 @@
+#include<stdio.h>
+int m[]={2189,89,1232,866,1796,2603},a,b,c,d,r;char s[9];int main(){for(s[87]=1,s[78]=4,s[69]=3,s[83]=2;~scanf("%s",s);d=s[*s],*s<60?printf(r?"%d\n":0,r),a=c=r=0,b=1:d?d=d+c&3,a=m[a]>>3*d&7,b=m[b]>>3*d&7:c+=*s-76?1:3,r+=a%3?b%3?(b+6-a)%6<3?2:5:3+!b:a?6:1);}

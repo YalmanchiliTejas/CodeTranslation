@@ -1,0 +1,104 @@
+#define __USE_MINGW_ANSI_STDIO 0
+#include <bits/stdc++.h>
+
+using namespace std;
+using ll = long long;
+#define int ll
+using VI = vector<int>;
+using VVI = vector<VI>;
+using PII = pair<int, int>;
+
+#define FOR(i, a, n) for (ll i = (ll)a; i < (ll)n; ++i)
+#define REP(i, n) FOR(i, 0, n)
+#define ALL(x) x.begin(), x.end()
+#define PB push_back
+
+const ll LLINF = (1LL<<60);
+const int INF = (1LL<<30);
+const int MOD = 1000000007;
+
+template <typename T> T &chmin(T &a, const T &b) { return a = min(a, b); }
+template <typename T> T &chmax(T &a, const T &b) { return a = max(a, b); }
+template <typename T> bool IN(T a, T b, T x) { return a<=x&&x<b; }
+template<typename T> T ceil(T a, T b) { return a/b + !!(a%b); }
+template<class S,class T>
+ostream &operator <<(ostream& out,const pair<S,T>& a){
+  out<<'('<<a.first<<','<<a.second<<')';
+  return out;
+}
+template<class T>
+ostream &operator <<(ostream& out,const vector<T>& a){
+  out<<'[';
+  REP(i, a.size()) {out<<a[i];if(i!=a.size()-1)out<<',';}
+  out<<']';
+  return out;
+}
+
+int dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
+
+VI dp[100010];
+//素数ならtrue
+bool prime[100010];
+VI p;
+signed main(void)
+{
+  cin.tie(0);
+  ios::sync_with_stdio(false);
+
+  int n, k;
+  cin >> n >> k;
+
+  if(k == 0) {
+    cout << n*n << endl;
+    return 0;
+  }
+
+  // int deb = 0;
+  // FOR(i, 1, n+1) {
+  //   FOR(j, 1, n+1) {
+  //     cout << i%j << " ";
+  //     if(i%j >= k) deb++;
+  //   }
+  //   cout << endl;
+  // }
+  // cout << deb << endl;
+
+  int ans = 0;
+  FOR(i, 1, n+1) {
+    if(i-1 >= k) {
+      ans += n/i*(i-k);
+      ans += max(0LL, (n%i) - k + 1);
+    }
+  }
+  cout << ans << endl;
+  return 0;
+
+  memset(prime, true, sizeof(prime));
+  prime[0] = prime[1] = false;
+  for (int i = 2; i * i <= 100010; i++) {
+    if (prime[i]) {
+      p.PB(i);
+      for (int j = 2 * i; j <= 100010; j += i) {
+        prime[j] = false;
+      }
+    }
+  }
+
+  // int ans = 0;
+  FOR(i, 1, n+1) {
+    REP(j, p.size()) {
+      if(p[j] >= i) break;
+      // iをp[j]で割る
+      int tmp = i%p[j];
+      cout << tmp << " ";
+      if(tmp >= k) ans += i/p[j];
+    }
+    cout << endl;
+    if(i >= k) ans += (n-i);
+    cout << i << " " << ans << endl;
+  }
+
+  cout << ans << endl;
+
+  return 0;
+}

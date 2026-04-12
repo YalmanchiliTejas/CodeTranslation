@@ -1,0 +1,1 @@
+print('NYOE S'[int(''.join(list(input().split())))%4==0::2])

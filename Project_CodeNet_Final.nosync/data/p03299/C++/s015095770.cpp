@@ -1,0 +1,134 @@
+#include <cstdio>
+#include <cstring>
+
+const int MAXN = 100 + 5;
+
+const int MOD = (int)1e9 + 7;
+
+int n, h[MAXN], sorted[MAXN];
+
+int qpow(int a, int x) {
+    int res = 1;
+    for (; x > 0; x >>= 1) {
+        if (x & 1)
+            res = 1LL * res * a % MOD;
+        a = 1LL * a * a % MOD;
+    }
+    return res;
+}
+
+bool added[MAXN];
+int R_L[MAXN], L_R[MAXN];
+
+int dp[MAXN][MAXN][2][2][2];
+
+void merge(int dp_l[2][2][2], int dp_r[2][2][2], int res[2][2][2]) {
+    int tmp[2][2][2];
+    
+    memset(tmp, 0, sizeof tmp);
+    
+    for (int l = 0; l < 2; ++l)
+    for (int r = 0; r < 2; ++r) {
+        for (int ll = 0; ll < 2; ++ll)
+        for (int rr = 0; rr < 2; ++rr)
+        for (int sl = 0; sl < 2; ++sl)
+        for (int sr = 0; sr < 2; ++sr) {
+            int t = sl | sr | (ll == rr);
+            tmp[l][r][t] = (tmp[l][r][t] + 1LL * dp_l[l][ll][sl] * dp_r[rr][r][sr]) % MOD;
+        }
+    }
+    
+    memcpy(res, tmp, sizeof tmp);
+}
+
+int main() {
+    scanf("%d", &n);
+    for (int i = 1; i <= n; ++i) {
+        scanf("%d", h + i);
+        sorted[i] = i;
+    }
+
+    for (int i = 1; i <= n; ++i)
+        for (int j = n; j > i; --j)
+            if (h[sorted[j - 1]] < h[sorted[j]]) {
+                int t = sorted[j - 1];
+                sorted[j - 1] = sorted[j];
+                sorted[j] = t;
+            }
+
+    for (int i = 1; i <= n; ++i) {
+        int j = sorted[i], k = sorted[i - 1], t = (h[k] - h[j]) & 1;
+
+        if (h[k] > h[j]) {
+            for (int L = 1; L <= n; ) {
+                if (!added[L]) {
+                    ++L;
+                } else {
+                    int R = L;
+                    while (R + 1 <= n && added[R + 1]) ++R;
+
+                    int tmp[2][2][2];
+
+                    for (int l = 0; l < 2; ++l)
+                    for (int r = 0; r < 2; ++r) {
+                        tmp[l][r][1] = dp[L][R][l ^ t][r ^ t][1];
+                        tmp[l][r][0] = 1LL * (dp[L][R][l][r][0] + dp[L][R][l ^ 1][r ^ 1][0]) * qpow(2, h[k] - h[j] - 1) % MOD;
+                    }
+
+                    memcpy(dp[L][R], tmp, sizeof tmp);
+
+                    L = R + 1;
+                }
+            }
+        }
+
+        int tmp[2][2][2];
+        int L = j, R = j;
+
+        memset(tmp, 0, sizeof tmp);
+        tmp[0][0][0] = tmp[1][1][0] = 1;
+
+        if (R_L[j - 1]) {
+            int l = R_L[j - 1], r = j - 1;
+            L_R[l] = R_L[r] = 0;
+            merge(dp[l][r], tmp, tmp);
+            L = l;
+        }
+
+        if (L_R[j + 1]) {
+            int l = j + 1, r = L_R[j + 1];
+            L_R[l] = R_L[r] = 0;
+            merge(tmp, dp[l][r], tmp);
+            R = r;
+        }
+
+        added[j] = true;
+        memcpy(dp[L][R], tmp, sizeof tmp);
+        L_R[L] = R;
+        R_L[R] = L;
+    }
+
+    if (h[sorted[n]] > 1) {
+        int t = (h[sorted[n]] - 1) & 1;
+        int tmp[2][2][2];
+
+        for (int l = 0; l < 2; ++l)
+        for (int r = 0; r < 2; ++r) {
+            tmp[l][r][1] = dp[1][n][l ^ t][r ^ t][1];
+            tmp[l][r][0] = 1LL * (dp[1][n][l][r][0] + dp[1][n][l ^ 1][r ^ 1][0]) * qpow(2, h[sorted[n]] - 1 - 1) % MOD;
+        }
+        
+        memcpy(dp[1][n], tmp, sizeof tmp);
+    }
+
+    int ans = 0;
+    for (int i = 0; i < 2; ++i)
+    for (int j = 0; j < 2; ++j)
+    for (int k = 0; k < 2; ++k) {
+        ans = (ans + dp[1][n][i][j][k]) % MOD;
+    }
+
+    printf("%d\n", ans);
+
+    return 0;
+}

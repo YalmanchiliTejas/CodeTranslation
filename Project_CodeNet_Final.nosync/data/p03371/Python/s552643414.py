@@ -1,0 +1,5 @@
+a, b, c, x, y = map(int, input().split())
+ans = min(a+b, c*2) * min(x, y)
+if x>y: ans += min(a, c*2) * (x-y)
+else: ans += min(b, c*2) * (y-x)
+print(ans)

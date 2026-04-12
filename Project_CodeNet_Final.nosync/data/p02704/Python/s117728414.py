@@ -1,0 +1,19 @@
+n,*s=map(int,open(0).read().split());s,t,f,g=[s[i*n:i*n+n]for i in range(4)];a=[n*[0]for _ in[0]*n];r=range(n)
+for b in range(64):
+ e=1<<b;u=[k&e for k in f];v=[k&e for k in g];l=[0]*n;m=l[:]
+ for i in r:
+  for j in r:
+   if(u[i]&v[j])|((s[i]^1)*u[i])|((t[j]^1)*v[j]):a[i][j]|=e;l[i]+=1;m[j]+=1
+ for i in r:
+  if(l[i]==0)*s[i]*u[i]:
+   for j in r:
+    if(t[j]^1)*(n-m[j]>1):a[i][j]|=e;m[j]+=1;break
+ for j in r:
+  if(m[j]==0)*t[j]*v[j]:
+   for i in r:
+    if(s[i]^1)*(n-l[i]>1):a[i][j]|=e;l[i]+=1;break
+h=a[0][:];w=[i[0]for i in a]
+for i in r:
+ for j in r:w[i]=(w[i]|a[i][j]if s[i]else w[i]&a[i][j]);h[j]=(h[j]|a[i][j]if t[j]else h[j]&a[i][j])
+if(g!=h)|(f!=w):print(-1);exit() 
+for i in a:print(*i)

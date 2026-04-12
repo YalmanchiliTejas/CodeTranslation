@@ -1,0 +1,76 @@
+//AUTHOR - NAVEEN KUMAR(@naveen19991124)
+#include<bits/stdc++.h>
+//#include<boost/multiprecision/cpp_int.hpp>
+//#inlcude<boost/multiprecision/cpp_dec_float.hpp>
+#define ll long long
+#define pb push_back
+#define f(a) for(ll i = 0;i<a;i++)
+#define rep(i,a,b) for(ll i = a;i<b;i++)
+#define rrep(i,a,b) for(ll i = a;i>b;i--)
+#define v vector<ll>
+#define mp make_pair
+#define fir first
+#define sec second
+#define _fast_ ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL);
+using namespace std;
+//using boost :: multiprecision :: cpp_int;
+//using boost :: multiprecision :: cpp_dec_float_50;
+//using boost :: multiprecision :: cpp_dec_float_100;
+ll power(ll a, ll n) {ll p = 1;while (n > 0) {if(n%2) {p = p * a;} n >>= 1; a *= a;} return p;}
+
+ll power(ll a, ll n, ll mod) {ll p = 1;while (n > 0) {if(n%2) {p = p * a; p %= mod;} n >>= 1;
+a *= a; a %= mod;} return p % mod;}
+ll gcd(ll a,ll b) { return b?gcd(b,a%b):a;}
+ll lcm(ll a, ll b) { return a * (b / gcd(a, b)); }
+int main()
+{
+    _fast_
+    ll t = 1;
+  //  cin>>t;
+    while(t--){
+    string s;
+    cin>>s;
+    if(s[0] == 'A')
+    {
+        if(s[1] == 'B' || s[2] == 'B')
+        {
+            cout<<"Yes\n";
+        }
+        else
+        {
+            {cout<<"No\n";}
+        }
+        
+    }
+    else if(s[1] == 'A')
+    {
+        if(s[0] == 'B' || s[2] == 'B')
+        {
+            cout<<"Yes\n";
+        }
+        else
+        {
+            cout<<"No\n";
+        }
+        
+    }
+    else if(s[2] == 'A')
+    {
+        if(s[0] == 'B' ||s[1] == 'B')
+        {
+            cout<<"Yes\n";
+        }
+        else
+        {
+            cout<<"No\n";
+        }
+        
+    }
+    else
+    {
+        cout<<"No\n";
+    }
+    
+    }
+    return 0;
+}

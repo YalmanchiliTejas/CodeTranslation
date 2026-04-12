@@ -1,0 +1,1 @@
+s = input();print(["No","Yes"][len(set(s))-1])

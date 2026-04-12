@@ -1,0 +1,511 @@
+#include <stdio.h>
+#include <iostream>
+#include <algorithm>
+#include <sstream>
+#include <complex>
+#include <vector>
+#include <list>
+#include <queue>
+#include <deque>
+#include <stack>
+#include <set>
+#include <map>
+#include <cstdio>
+#include <string>
+#include <cstdlib>
+#include <cstring>
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+typedef long double ld;
+using edge = struct {ll to; ll cost;};
+typedef string str;
+typedef std::pair<ll,ll> pl;
+typedef std::map<string, ll> msl;
+typedef std::map<char, ll> mcl;
+typedef std::map<ll, ll> mll;
+typedef std::vector<ll> vl;
+typedef std::vector<pl> vpl;
+typedef std::priority_queue<ll> pq;
+typedef std::vector<edge> gr;
+const ll MOD = 1e9 + 7;
+const ll ZERO = 0;
+const ll INF = MOD * MOD;
+const long double EPS = 1e-9;
+const long double PI = 3.14159265358979323846;
+
+#define rep(i, n) for(ll (i) = 0; (i) < (n) ; (i)++ )
+#define revrep(i, n) for(ll (i) = n - 1; (i) >= 0 ; (i)--)
+#define For(i, a, b) for(ll (i) = (a); (i) < (b) ; (i)++ )
+#define revFor(i, b, a) for(ll (i) = (b) - 1; (i) >= (a) ; (i)--)
+#define all(a) (a).begin(), (a).end()
+#define rall(a) (a).rbegin(), (a).rend()
+#define isUpper(c) ('a' - c > 0)
+#define toLower(c) char((c)+0x20)
+#define toUpper(c) char((c)-0x20)
+#define pb push_back
+#define mp make_pair
+#define pr(a) cout << (a)
+#define prl(a) cout << (a) << endl
+#define prl2(a,b) cout << (a) << " " << (b) << endl
+#define prs(a) cout << (a) << " "
+#define yn(condition) if ((condition)) prl("Yes"); else prl("No");
+#define YN(condition) if ((condition)) prl("YES"); else prl("NO");
+#define rpr(i,n,ans) rep((i),(n)) {if ((i) < n - 1) prs((ans[(i)])); else if ((i) == n - 1) prl((ans[(i)]));}
+#define cpr(i,n,ans) rep((i),(n)) prl((ans[(i)]))
+#define in1(a) cin >> (a)
+#define in2(a,b) cin >> (a) >> (b)
+#define in3(a,b,c) cin >> (a) >> (b) >> (c)
+#define in4(a,b,c,d) cin >> (a) >> (b) >> (c) >> (d)
+#define rin1(i,n,a) rep((i),(n)) cin >> (a[(i)])
+#define rin2(i,n,a,b) rep((i),(n)) cin >> (a[(i)]) >> (b[(i)])
+#define rin3(i,n,a,b,c) rep((i),(n)) cin >> (a[(i)]) >> (b[(i)]) >> (c[(i)])
+#define rin1_m1(i,n,a) rep((i),(n)) {cin >> (a[(i)]); a[(i)]--;}
+#define rin2_m1(i,n,a,b) rep((i),(n)) {cin >> (a[(i)]) >> (b[(i)]); a[(i)]--;b[(i)]--;}
+#define rin3_m1(i,n,a,b,c) rep((i),(n)) {cin >> (a[(i)]) >> (b[(i)]) >> (c[(i)]) a[(i)]--;b[(i)]--;c[(i)]--;}
+#define matin(i,h,j,w,a) rep((i),(h)) rep((j),(w)) cin >> a[i][j]
+#define e1 first
+#define e2 second
+#define ctol(c) ll((c)) - ll('0')
+#define ltos(n) to_string((n))
+#define items(kv, v) for(auto &(kv): (v))
+#define ndig(N, n) ctol(ll(ltos((N))[ll(ltos((N)).length()) - (n)]))
+#define beto(a,b,c) (a) < (b) && (b) < (c)
+#define betc(a,b,c) (a) <= (b) && (b) <= (c)
+#define rsort(a,n) sort(a,a+n,greater<>())
+#define Forchar(c,a,z) for(char (c) = (a); (c) <= (z); (c)++)
+#define cntchar(s,c) count(all((s)), c)
+#define substring(s, start, end) s.substr((start), (end) - (start) + 1)
+#define prl_nd(num, digits) cout << fixed << setprecision(digits) << (num) << endl;
+#define XOR(a, b) (a)^(b)
+#define char_to_str(c) string(1, (c))
+
+class UnionFind {
+    vl parents, set_size;
+public:
+    UnionFind(){}
+    UnionFind(ll n){
+        parents = set_size = vl(n);
+        rep(i, n) {parents[i] = i; set_size[i] = 1LL;}
+    }
+
+    ll root_find(ll x){
+        if (parents[x] == x) return x;
+        return parents[x] = root_find(parents[x]);
+    }
+
+    void unite(ll x, ll y){
+        x = root_find(x); y = root_find(y);
+        if (x == y) return;
+        if (set_size[x] < set_size[y]){
+            parents[y] = x; set_size[x] += set_size[y];
+        }else{
+            parents[x] = y; set_size[y] += set_size[x];
+        }
+    }
+
+    bool is_same(ll x, ll y) {// connected or not
+        return root_find(x) == root_find(y);
+    }
+
+    ll size(ll x) {
+        return set_size[root_find(x)];
+    }
+};
+
+ll gcd(ll m, ll n){
+    ll a = max(m, n);
+    ll b = min(m, n);
+    while(b != 1 && b != 0){ a %= b; swap(a, b);}
+    return b == 1 ? 1 : a;
+}
+
+ll lcm(ll m, ll n){ return m / gcd(m, n) * n;}
+
+ll power_mod(ll a, ll power, ll mod){
+    ll value = 1;
+    while(power != 0){
+        if(power & 1) value = (value * a) % mod;
+        a = (a * a) % mod;
+        power = power >> 1;
+    }
+    return value % mod;
+}
+
+ll modinv(ll a, ll mod){
+    return power_mod(a, mod - 2, mod);
+}
+
+ll power_normal(ll a, ll power){
+    ll value = 1;
+    while(power != 0){
+        if(power & 1) value = value * a;
+        a = a * a;
+        power = power >> 1;
+    }
+    return value;
+}
+
+ll combination(ll n, ll r){
+    ll numerator = 1;
+    ll denomenator = 1;
+    for(ll i = 0; i < r ; i++){
+        (numerator *= ll(n - i)) %= MOD;
+        (denomenator *= modinv(i + 1, MOD)) %= MOD;
+    }
+    return (numerator * denomenator) % MOD;
+}
+
+ll bin_search(ll key, ll A[], ll left, ll right){
+    // return the index idx where A[idx] = key.
+    // A[left] is start and A[right] is end..
+    // In other words, A[right], not A[right - 1], must be defined.
+    while(right >= left){
+        ll mid = left + (right - left) / 2;
+        if (A[mid] == key) return mid;
+        else if (A[mid] > key) right = mid - 1;
+        else if (A[mid] < key) left = mid + 1;
+    }
+    return -1;
+}
+
+ll lower_bound_bin_search(ll key, ll A[], ll left, ll right){
+    if (A[left] >= key) return left;
+    ll mid = left + (right - left) / 2;
+
+    while(right >= left){
+        mid = left + (right - left) / 2;
+        if (mid == left) {
+            if (A[left] < key && key <= A[left + 1]) return left + 1;
+            else return -1;
+        }
+        if (A[mid - 1] < key && key <= A[mid]) return mid;
+        else if (A[mid - 1] >= key) right = mid - 1;
+        else if (A[mid] < key) left = mid;
+    }
+
+    return -1; // all the elements < key
+}
+
+ll inf_bin_search(ll key, ll A[], ll left, ll right){
+    if (A[left] > key) return left;
+    ll mid = left + (right - left) / 2;
+
+    while(right >= left){
+        mid = left + (right - left) / 2;
+        if (mid == left) {
+            if (A[left] <= key && key < A[left + 1]) return left + 1;
+            else return -1;
+        }
+        if (A[mid - 1] <= key && key < A[mid]) return mid;
+        else if (A[mid - 1] > key) right = mid - 1;
+        else if (A[mid] <= key) left = mid;
+    }
+
+    return -1; // all the elements <= key
+}
+
+ll upper_bound_bin_search(ll key, ll A[], ll left, ll right){
+    if (A[right] <= key) return right;
+    ll mid = left + (right - left) / 2;
+
+    while(right >= left){
+        mid = left + (right - left) / 2;
+        if (mid == right) {
+            if (A[right - 1] <= key && key < A[right]) return right - 1;
+            else return -1;
+        }
+        if (A[mid] <= key && key < A[mid + 1]) return mid;
+        else if (A[mid] > key) right = mid;
+        else if (A[mid + 1] <= key) left = mid + 1;
+    }
+
+    return -1; // all the elements > key
+}
+
+ll sup_bin_search(ll key, ll A[], ll left, ll right){
+    if (A[right] < key) return right;
+    ll mid = left + (right - left) / 2;
+
+    while(right >= left){
+        mid = left + (right - left) / 2;
+        if (mid == right) {
+            if (A[right - 1] < key && key <= A[right]) return right - 1;
+            else return -1;
+        }
+        if (A[mid] < key && key <= A[mid + 1]) return mid;
+        else if (A[mid] >= key) right = mid;
+        else if (A[mid + 1] < key) left = mid + 1;
+    }
+
+    return -1; // all the elements >= key
+}
+
+ll fact(ll n){
+    if (n == 0) return 1;
+    return n * fact(n - 1);
+}
+
+bool is_prime(ll n){
+    if (n <= 1) return false;
+    for(ll i = 2; i * i <= n; i++){
+        if (n % i == 0) return false;
+    }
+    return true;
+}
+
+ll bool_sum(ll a1, ll a2){
+    if (a1 == 1 || a2 == 1) return 1;
+    return 0;
+}
+
+mll prime_decomposition(ll n){
+    ll i = 2;
+    mll table;
+    while(i * i <= n){
+        while(n % i == 0){
+            table[i] ++;
+            n /= i;
+        }
+        i++;
+    }
+    if (n > 1) table[n] = 1;
+    return table;
+}
+
+ll char_to_idx(char c){
+    ll idx = 0;
+    Forchar(cc, 'a', 'z'){
+        if (c == cc) return idx;
+        else idx ++;
+    }
+}
+
+/*
+const ll N_VERTEX = 310;
+ll a, b, t;
+ll dist[N_VERTEX][N_VERTEX];
+
+void warshall_floyd(ll n){
+    rep(k, n) rep(i, n) rep(j, n) dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
+}
+
+int main(void){
+    in2(n, m);
+    rep(i, n) rep(j, n) {if (i != j) dist[i][j] = INF; else dist[i][i] = 0;}
+    rep(i, m){
+        in3(a, b, t);
+        a--; b--;
+        dist[a][b] = t;
+        dist[b][a] = t;
+    }
+
+    warshall_floyd(n);
+}
+
+const ll N_VERTEX = 310;
+gr G[N_VERTEX];
+ll dist[N_VERTEX], a, b, t, n, m;
+
+void dijkstra(ll start, ll n) {
+    priority_queue<pl, vector<pl>, greater<pl>> edge_costs;
+    fill(dist, dist + n, INF);
+    dist[start] = 0;
+    edge_costs.push(pl(0, start));
+
+    while (!edge_costs.empty()) {
+        pl edge_cost = edge_costs.top();
+        edge_costs.pop();
+        ll idx = edge_cost.second;
+        ll cost = edge_cost.first;
+        if (dist[idx] < cost) continue;
+
+        rep(i, G[idx].size()){
+            edge e = G[idx][i];
+            if (dist[e.to] > dist[idx] + e.cost){
+                dist[e.to] = dist[idx] + e.cost;
+                edge_costs.push(pl(dist[e.to], e.to));
+            }
+        }
+    }
+}
+
+int main(void){
+    in2(n, m);
+    rep(i, m){
+        in3(a, b, t);
+        a--; b--;
+        G[a].pb({b, t});
+        G[b].pb({a, t});
+    }
+
+    dijkstra(0, n);
+}
+
+*/
+
+/*
+    # 1. The usage of map pair
+    map<pl, ll> cnt;
+    cnt[{i, j}] = 0;
+    items(kv, cnt){
+        prl2(kv.first, kv.second);
+    }
+
+    # 2. The usage of pair sort
+
+    vpl c;
+    rep(i, n){
+        ll a, b;
+        in2(a, b);
+        c.pb(mp(a, b));
+    }
+    sort(all(c));
+
+    # 3. The usage of next_permutation and combination (factorial search)
+    ll a[8];
+    rep(i, 8) a[i] = i;
+    do{
+    }while(next_permutation(a, a+n));
+
+    // here, combination
+    ll n, r;
+    ll i1, i2, ..., ir;
+    For(i1, n - r, n) For(i2, n - r - 1, i1) ... For(ir, n - 2 * r + 1, irr){ process;}
+
+    # 4. sort vector in descending order
+    sort(rall(v));
+
+    # 5. exponential order search
+    ll n;
+    in1(n);
+    const ll base = 3;
+    ll upper = 1;
+    rep(i, n) upper *= base;
+    rep(i, upper){
+        ll tmp = i;
+        rep(j, n){
+            rep(k, base) if (tmp % base == k) prl(k);
+            tmp /= base;
+        }
+    }
+
+    # 6. imos method
+    // used when we would like to count the number which
+    // shows how many times the numbers between l and r belongs to smt.
+    // This method is composed of three process.
+    ll n, m, s[MAX_M], l, r;
+    in2(n, m);
+    rep(i, m) s[i] = 0;
+
+    // 1st step
+    rep(i, n){
+        in2(l, r);
+        s[l - 1]++; s[r]--; // if l starts from 1.
+        // s[l]++; s[r + 1]--; // if l starts from 0.
+    }
+
+    // 2nd step
+    rep(i, m - 1) s[i + 1] += s[i];
+    // 3rd step: judgement...
+
+    #7. shakutori method
+    // 1. strech right side while the condition is met.
+    // 2. renew the answer
+    // 3. increments left side
+    // 4. Back to 1. (l <= r must be satisfied all the time.)
+
+    ll n, s[MAX_N]
+    in1(n);
+    rin1(i, n, s);
+
+    while (l < n){
+        r = max(r, l);
+        if (l == r){val = s[l]; r++;}
+        while(r < n && val * s[r] <= k){val *= s[r]; r++;}
+        if (val <= k) answer = max(r - l, answer);
+        val /= s[l]; l++;
+    }
+
+    #8. priority queue
+
+    pq q;
+    ll answer = 0;
+    ll v;
+
+    rep(i, n) q.push(a[i]);
+    rep(i, m){
+        v = q.top(); q.pop(); // get the top value and dump the value from queue
+        v /= 2; q.push(v); // add the new value
+    }
+
+    while(!q.empty()){
+        answer += q.top();
+        q.pop();
+    }
+
+    #9. The shortest path between the k-th edge and another edge (Tree)
+    ll depth[MAX_N];
+    gr tree[MAX_N];
+
+    void dfs(ll now, ll prev, ll all_cost){
+        depth[now] = all_cost;
+        items(e, tree[now]){
+            if (e.to == prev) continue;
+            dfs(e.to, now, all_cost + e.cost);
+        }
+    }
+
+    ll n, k, a, b, c;
+
+    in2(n, k);
+    rep(i, n - 1){
+        in3(a, b, c);
+        a--; b--;
+        tree[a].pb({b, c});
+        tree[b].pb({a, c});
+    }
+
+    k--;
+    dfs(k, -1, 0);
+
+*/
+
+const ll MAX_N = 200005;
+ll n, m, a, b;
+bool okay = false;
+
+const ll N_VERTEX = 10;
+gr G[N_VERTEX];
+
+int main(void){
+    in2(n, m);
+    n--;
+
+    rep(i, m){
+        in2(a, b);
+        a--;b--;
+        G[a].pb({b, 1});
+        G[b].pb({a, 1});
+    }
+
+    ll a[10];
+    ll answer = 0;
+    rep(i, n) a[i] = i + 1;
+    do{
+        okay = false;
+        rep(i, G[0].size()) if (G[0][i].to == a[0]) okay = true;
+        if (!okay) continue;
+
+        rep(i, n - 1) {
+            okay = false;
+            rep(j, G[a[i]].size()) if (G[a[i]][j].to == a[i + 1]) okay = true;
+            if (!okay) break;
+        }
+        if (okay) answer++;
+    }while(next_permutation(a, a+n));
+
+    prl(answer);
+
+    return 0;
+}

@@ -1,0 +1,15 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main(){
+    int i,j,k;
+    int N,M,W,H,A,B,C;
+    int a,b,c;
+
+    cin >> N;
+
+    cout << N*800 - (N/15)*200 << endl;
+
+    return 0;
+
+}

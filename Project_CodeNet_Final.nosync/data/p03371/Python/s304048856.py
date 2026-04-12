@@ -1,0 +1,1 @@
+a,b,c,d,e=map(int,input().split());m=min;C=2*c;print((a*d+b*e,C*m(d,e)+(m(a,C)*(d-e),m(b,C)*(e-d))[e>d])[a+b>C])

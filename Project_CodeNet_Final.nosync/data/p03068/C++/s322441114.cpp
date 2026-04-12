@@ -1,0 +1,22 @@
+#include <bits/stdc++.h>
+
+#define INF ll_MAX
+
+typedef long long ll;
+
+using namespace std;
+
+int main(void){
+	int n,k;
+	string s;
+	cin >> n >> s >> k;
+	
+	for(int i = 0;i < n;i++){
+		if(s[k-1] != s[i]){
+			s[i] = '*';
+		}
+	}
+	cout << s << endl;
+
+	return 0;
+}

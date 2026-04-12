@@ -1,0 +1,1 @@
+n,h=int(input()),list(map(int,input().split()));print(sum(max(h[:x+1])==h[x]for x in range(n)))

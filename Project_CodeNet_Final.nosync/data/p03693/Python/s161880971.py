@@ -1,0 +1,1 @@
+_,g,b=input().split();print("YNEOS"[int(g+b)%4!=0::2])

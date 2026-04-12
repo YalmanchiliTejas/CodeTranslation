@@ -1,0 +1,1 @@
+print("YNEOS"[input() not in set("357")::2])

@@ -1,0 +1,1 @@
+print("YNEOS"[int(input())not in[3,5,7]::2])

@@ -1,0 +1,1 @@
+print['YES','NO'][int(raw_input()[::2])%4>0]

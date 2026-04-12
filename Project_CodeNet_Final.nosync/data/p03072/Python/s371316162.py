@@ -1,0 +1,9 @@
+n = int(input())
+h = list(map(int, input().split()))
+ans = 0
+max_h = 0
+for i in range(n):
+  if max_h <= h[i]:
+    max_h = h[i]
+    ans += 1
+print(ans)

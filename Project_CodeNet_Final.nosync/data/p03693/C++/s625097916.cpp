@@ -1,0 +1,22 @@
+#include <stdio.h>  
+#include <string.h>  
+#include <stdlib.h>  
+#include <iostream>  
+#include <algorithm>  
+#include <time.h>  
+#include<cstdio>
+#include<vector>
+#include<functional>
+
+
+using namespace std;
+
+int main() {
+	int r,g,b;
+	scanf("%d%d%d", &r, &g, &b);
+	int num = 100 * r + 10 * g + b;
+	if (num % 4 == 0)printf("YES");
+	else
+		printf("NO");
+	return 0;
+}

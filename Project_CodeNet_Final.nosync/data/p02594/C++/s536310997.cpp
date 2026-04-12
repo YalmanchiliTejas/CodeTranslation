@@ -1,0 +1,46 @@
+#include<bits/stdc++.h>
+#define IOS ios_base::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+#define endl "\n"
+#define pb push_back
+#define mp make_pair
+#define int long long
+#define mod 1000000007
+#define DEBUG cout<<"Hello1\n";
+#define all(v) (v).begin(),(v).end()
+#define clr(x) memset(x,0,sizeof(x))
+#define deb(...) debug(#__VA_ARGS__, __VA_ARGS__);
+const int N = 1e6 + 5;
+const double pi =  acosl(-1);
+const long long inf = 1e18 + 5;
+using namespace std;
+template<typename T> void debug(string s, T x) {cout << s << " = " << x << "\n";}
+template<typename T, typename... Args> void debug(string s, T x, Args... args) {cout << s.substr(0, s.find(',')) << " = " << x << " | "; debug(s.substr(s.find(',') + 2), args...);}
+template<class T> void print_container(T &container) { for (auto &t : container) { cout << t << " ";} cout << endl;}
+template<class T> void printArr(T &a , int n) { for (int i = 0; i < n; i++) {cout << a[i] << " ";} cout << endl;}
+typedef long long ll;
+typedef pair<int, int> pii;
+
+//Template Ends
+int n;
+
+void solve() {
+	cin >> n;
+
+	if (n >= 30) {
+		cout << "Yes\n";
+	} else {
+		cout << "No\n";
+	}
+}
+
+int32_t main() {
+	IOS;
+
+
+
+	solve();
+
+	return 0;
+}
+
+

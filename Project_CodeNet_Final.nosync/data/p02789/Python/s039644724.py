@@ -1,0 +1,12 @@
+n, k = map(int, input().split())
+# from collections import OrderedDict
+# d = OrderedDict()
+# a = list(input().split())
+# b = list(map(int, input().split()))
+# print(r + max(0, 100*(10-n)))
+# print("Yes" if 500*n >= k else "No") 
+# s = input()
+# a = int(input())
+# b = int(input())
+# c = int(input())
+print("Yes" if n == k else "No")

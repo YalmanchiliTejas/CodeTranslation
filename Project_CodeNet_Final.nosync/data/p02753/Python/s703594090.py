@@ -1,0 +1,5 @@
+S = list(input())
+if S.count('A') >= 1 and S.count('B') >= 1:
+    print('Yes')
+else:
+    print('No')

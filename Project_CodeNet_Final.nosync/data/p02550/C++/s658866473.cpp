@@ -1,0 +1,68 @@
+#include <bits/stdc++.h>
+using namespace std;
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+
+#define COUT(x) cout << #x << " = " << (x) << " (L" << __LINE__ << ")" << endl
+template<class T1, class T2> ostream& operator << (ostream &s, pair<T1,T2> P)
+{ return s << '<' << P.first << ", " << P.second << '>'; }
+template<class T> ostream& operator << (ostream &s, deque<T> P)
+{ for (int i = 0; i < P.size(); ++i) { if (i > 0) { s << " "; } s << P[i]; } return s; }
+template<class T> ostream& operator << (ostream &s, vector<vector<T> > P)
+{ for (int i = 0; i < P.size(); ++i) { s << endl << P[i]; } return s << endl; }
+template<class T> ostream& operator << (ostream &s, set<T> P)
+{ for(auto it : P) { s << "<" << it << "> "; } return s << endl; }
+template<class T1, class T2> ostream& operator << (ostream &s, map<T1,T2> P)
+{ for(auto it : P) { s << "<" << it.first << "->" << it.second << "> "; } return s << endl; }
+
+
+int main() {
+    long long N, X, M;
+    cin >> N >> X >> M;
+
+    map<long long, int> ma;
+    deque<long long> rireki, syu;
+    long long sum = 0;
+    for (long long n = 0; n < N; ++n) {
+        if (ma.count(X)) {
+            int p = ma[X];
+            for (long long i = p; i < n; ++i) syu.push_back(rireki[i]);
+            break;
+        }
+        ma[X] = n;
+        rireki.push_back(X);
+        sum += X;
+
+        X = (X * X) % M;
+    }
+/*
+    COUT(rireki);
+    COUT(syu);
+    COUT(sum);
+*/
+    N -= rireki.size();
+    if (syu.empty()) cout << sum << endl;
+    else {
+    deque<long long> ruiseki(syu.size() + 1, 0);
+    for (int i = 0; i < syu.size(); ++i) ruiseki[i+1] = ruiseki[i] + syu[i];
+    long long q = N / syu.size();
+    long long r = N % syu.size();
+    sum += ruiseki[syu.size()] * q + ruiseki[r];
+    cout << sum << endl;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

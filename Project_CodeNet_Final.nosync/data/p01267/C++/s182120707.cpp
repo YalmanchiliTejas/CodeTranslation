@@ -1,0 +1,2 @@
+#include<iostream>
+using namespace std;int main(){int n,a,b,c,x,i,l,f,y[100];for(;;){cin>>n>>a>>b>>c>>x;if(n==0&&a==0&&b==0&&c==0&&x==0)break;for(i=0;i<n;i++){cin>>y[i];}l=i=0;f=1;for(;;){if(l==10001){f=0;break;}if(y[i]==x){i++;x=(a*x+b)%c;if(i==n)break;l++;}else{l++;x=(a*x+b)%c;}}if(f==1)cout<<l<<endl;else cout<<"-1"<<endl;}}

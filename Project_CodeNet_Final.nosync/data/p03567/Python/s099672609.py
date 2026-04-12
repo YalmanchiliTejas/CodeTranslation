@@ -1,0 +1,1 @@
+print("YNeos"[not input().count("AC")::2])

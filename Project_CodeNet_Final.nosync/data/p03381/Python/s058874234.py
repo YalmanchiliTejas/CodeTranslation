@@ -1,0 +1,9 @@
+N = int(input())
+X = list(map(int, input().split()))
+X_sorted = sorted(X)
+
+for i in range(N):
+    if X[i] < X_sorted[N // 2]:
+        print(X_sorted[N // 2])
+    else:
+        print(X_sorted[(N // 2) - 1])

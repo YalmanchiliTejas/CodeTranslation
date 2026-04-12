@@ -1,0 +1,1 @@
+h,w=map(int,input().split());print(["Impossible","Possible"][sum([list(input()).count('#')for _ in[0]*h])==h+w-1])

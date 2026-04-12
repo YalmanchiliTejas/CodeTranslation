@@ -1,0 +1,23 @@
+h, w = map(int, input().split())
+a = [''] * h
+
+for i in range(h):
+	a[i] = input()
+
+#論理演算子で行列のチェックシートを作っている
+#"#"がある行列をチェックしている
+row = [False] * h
+
+col = [False] * w
+for i in range(h):
+	for j in range(w):
+		if a[i][j] == '#':
+			row[i] = True
+			col[j] = True
+
+for i in range(h):
+	if row[i]:
+		for j in range(w):
+			if col[j]:
+				print(a[i][j], end = '')
+		print()

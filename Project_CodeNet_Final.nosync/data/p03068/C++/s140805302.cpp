@@ -1,0 +1,17 @@
+#include<iostream>
+#include<string>
+using namespace std;
+int main()
+{
+	int n,k;
+	string s;
+	cin >> n >> s >> k;
+	for (int i = 0; i < n; i++) {
+		if (s[i] != s[k-1]) {
+			s.replace(i, 1, "*");
+		}
+	}
+	cout << s << endl;
+    return 0;
+}
+

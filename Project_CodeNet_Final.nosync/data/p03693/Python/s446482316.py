@@ -1,0 +1,1 @@
+a,b,c=input().split();print('NYOE S'[int(a+b+c)%4==0::2])

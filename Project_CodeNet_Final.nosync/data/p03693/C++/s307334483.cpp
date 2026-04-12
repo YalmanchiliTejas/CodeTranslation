@@ -1,0 +1,11 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef signed long long ll;
+
+int main() {
+    int a, b, c;
+    cin >> a >> b >> c;
+    ((a * 100 + b * 10 + c) % 4 == 0) ? cout << "YES\n": cout << "NO\n";
+    return 0;
+}

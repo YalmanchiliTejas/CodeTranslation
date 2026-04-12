@@ -1,0 +1,12 @@
+import numpy as np
+import sys 
+
+readline = sys.stdin.readline
+
+X = int(input())
+
+if X >= 30:
+    print('Yes')
+else:
+    print('No')
+

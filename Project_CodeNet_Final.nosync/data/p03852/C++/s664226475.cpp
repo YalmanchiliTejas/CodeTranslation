@@ -1,0 +1,14 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main()
+{
+    char c;
+    cin >> c;
+    set<char> st = {'a', 'i', 'u', 'e', 'o'};
+    auto it = st.find(c);
+    if (it != st.end()) cout << "vowel" << endl;
+    else cout << "consonant" << endl;
+
+    return 0;
+}

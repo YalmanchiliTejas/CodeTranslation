@@ -1,0 +1,1 @@
+_,*s=open(0);print("".join(sorted(c*min(t.count(c)for t in s)for c in set(s[0]))))

@@ -1,0 +1,19 @@
+#include<iostream>
+#include<algorithm>
+#include<cstring>
+#include<cstdio>
+#include<cmath>
+using namespace std;
+int read(){
+    int x=0,f=1;char ch=getchar();
+    while(ch<'0' || ch>'9'){if(ch=='-')f=-1;ch=getchar();}
+    while(ch>='0' && ch<='9'){x=x*10+ch-'0';ch=getchar();}
+    return x*f;
+}
+int main(){
+	int a=read(),b=read(),c=read();
+	a=a*100+b*10+c;
+	if(a%4)printf("NO\n");
+	else printf("YES\n");
+	return 0;
+}

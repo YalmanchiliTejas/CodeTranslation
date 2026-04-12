@@ -1,0 +1,6 @@
+a, b, c = raw_input().split()
+a = int(a)
+b = int(b)
+c = int(c)
+n = int(round((a-c)/(c + b)))
+print(n)

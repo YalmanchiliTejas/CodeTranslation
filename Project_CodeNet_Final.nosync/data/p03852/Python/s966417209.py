@@ -1,0 +1,1 @@
+print("vowel") if list("aiueo").count(input())!=0 else print("consonant")

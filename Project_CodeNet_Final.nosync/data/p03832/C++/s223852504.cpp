@@ -1,0 +1,114 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define rep(i, n) for (ll i = 0; i < ll(n); i++)
+
+const ll mod = 1000000007;
+struct mint {
+    ll x;  // typedef long long ll;
+    mint(ll x = 0) : x((x % mod + mod) % mod) {}
+    mint& operator+=(const mint a) {
+        if ((x += a.x) >= mod) x -= mod;
+        return *this;
+    }
+    mint& operator-=(const mint a) {
+        if ((x += mod - a.x) >= mod) x -= mod;
+        return *this;
+    }
+    mint& operator*=(const mint a) {
+        (x *= a.x) %= mod;
+        return *this;
+    }
+    mint operator+(const mint a) const {
+        mint res(*this);
+        return res += a;
+    }
+    mint operator-(const mint a) const {
+        mint res(*this);
+        return res -= a;
+    }
+    mint operator*(const mint a) const {
+        mint res(*this);
+        return res *= a;
+    }
+    mint pow(ll t) const {
+        if (!t) return 1;
+        mint a = pow(t >> 1);
+        a *= a;
+        if (t & 1) a *= *this;
+        return a;
+    }
+
+    mint inv() const {
+        return pow(mod - 2);
+    }
+    mint& operator/=(const mint a) {
+        return (*this) *= a.inv();
+    }
+    mint operator/(const mint a) const {
+        mint res(*this);
+        return res /= a;
+    }
+};
+
+struct combination {
+    vector<mint> fact, ifact;
+    // init struct with "n" of "nCk" (maximum number in other words)
+    combination(int n) : fact(n + 1), ifact(n + 1) {
+        assert(n < mod);
+        fact[0] = 1;
+        for (int i = 1; i <= n; ++i) fact[i] = fact[i - 1] * i;
+        ifact[n] = fact[n].inv();
+        for (int i = n; i >= 1; --i) ifact[i - 1] = ifact[i] * i;
+    }
+    // c(n,k) returns mint that contains nCk (mod p (= 1e9+7)) in x
+    // i.e.) mint num = c(n,k), then num.x == nCk (mod p (= 1e9+7))
+    mint operator()(int n, int k) {
+        if (k < 0 || k > n) return 0;
+        return fact[n] * ifact[k] * ifact[n - k];
+    }
+
+    // nPk - permutation
+    mint p(int n, int k) {
+        return fact[n] * ifact[n - k];
+    }
+};
+
+ll modpow(ll a, ll n) {
+    ll res = 1;
+    while (n > 0) {
+        if (n & 1)
+            res = res * a % mod;
+        a = a * a % mod;
+        n >>= 1;
+    }
+    return res;
+}
+
+const int maxn = 1010;
+mint dp[maxn][maxn];
+
+int main() {
+    ll n, a, b, c, d;
+    cin >> n >> a >> b >> c >> d;
+    combination nck(n);
+    dp[0][0] = 1;
+
+    for (ll i = 0; i <= n; i++) {
+        for (ll j = 0; j <= b - a + 1; j++) {
+            ll num = a + j;
+            // F_{num} == 0
+            dp[i][j + 1] += dp[i][j];
+
+            // C <= F_{num} <= D
+            for (ll k = c; k <= d; k++) {
+                ll all = i + num * k;
+                if (all > n) break;
+                mint divide = nck.fact[num * k] * modpow(nck.ifact[num].x, k);
+                mint disregard = nck.ifact[k];
+                dp[all][j + 1] += dp[i][j] * nck(n - i, num * k) * divide * disregard;
+            }
+        }
+    }
+    cout << dp[n][b - a + 1].x << endl;
+}

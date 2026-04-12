@@ -1,0 +1,1 @@
+input();A=input().split();print(*A[::-2]+A[len(A)%2::2])

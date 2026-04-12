@@ -1,0 +1,12 @@
+from sys import stdin                                                                                                                                                                                                                
+                                                                                                                                                                                                                                     
+h, w = [int(x) for x in stdin.readline().rstrip().split()]                                                                                                                                                                           
+                                                                                                                                                                                                                                     
+a = []                                                                                                                                                                                                                               
+for _ in range(h):                                                                                                                                                                                                                   
+    i = list(input())                                                                                                                                                                                                                
+    if "#" in i:                                                                                                                                                                                                                     
+        a.append(i)                                                                                                                                                                                                                  
+ans = zip(*[x for x in zip(*a) if "#" in x])                                                                                                                                                                                         
+for s in ans:                                                                                                                                                                                                                        
+    print(*s, sep="")         

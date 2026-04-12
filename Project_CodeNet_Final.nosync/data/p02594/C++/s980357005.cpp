@@ -1,0 +1,7 @@
+#include<bits/stdc++.h>
+using namespace std;
+long long n;
+int main(){
+	cin>>n;
+  	n>=30?cout<<"Yes":cout<<"No";
+}

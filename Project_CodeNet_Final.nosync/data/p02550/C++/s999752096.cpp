@@ -1,0 +1,127 @@
+#line 2 "header.hpp"
+
+//%snippet.set('header')%
+//%snippet.fold()%
+#ifndef HEADER_H
+#define HEADER_H
+
+// template version 2.0
+using namespace std;
+#include <bits/stdc++.h>
+
+// varibable settings
+const long long INF = 1e18;
+template <class T> constexpr T inf = numeric_limits<T>::max() / 2.1;
+
+#define _overload3(_1, _2, _3, name, ...) name
+#define _rep(i, n) repi(i, 0, n)
+#define repi(i, a, b) for (ll i = (ll)(a); i < (ll)(b); ++i)
+#define rep(...) _overload3(__VA_ARGS__, repi, _rep, )(__VA_ARGS__)
+#define _rrep(i, n) rrepi(i, 0, n)
+#define rrepi(i, a, b) for (ll i = (ll)((b)-1); i >= (ll)(a); --i)
+#define r_rep(...) _overload3(__VA_ARGS__, rrepi, _rrep, )(__VA_ARGS__)
+#define each(i, a) for (auto &&i : a)
+#define all(x) (x).begin(), (x).end()
+#define sz(x) ((int)(x).size())
+#define pb(a) push_back(a)
+#define mp(a, b) make_pair(a, b)
+#define mt(...) make_tuple(__VA_ARGS__)
+#define ub upper_bound
+#define lb lower_bound
+#define lpos(A, x) (lower_bound(all(A), x) - A.begin())
+#define upos(A, x) (upper_bound(all(A), x) - A.begin())
+template <class T, class U> inline void chmax(T &a, const U &b) { if ((a) < (b)) (a) = (b); }
+template <class T, class U> inline void chmin(T &a, const U &b) { if ((a) > (b)) (a) = (b); }
+template <typename X, typename T> auto make_table(X x, T a) { return vector<T>(x, a); }
+template <typename X, typename Y, typename Z, typename... Zs> auto make_table(X x, Y y, Z z, Zs... zs) { auto cont = make_table(y, z, zs...); return vector<decltype(cont)>(x, cont); }
+
+#define cdiv(a, b) (((a) + (b)-1) / (b))
+#define is_in(x, a, b) ((a) <= (x) && (x) < (b))
+#define uni(x) sort(all(x)); x.erase(unique(all(x)), x.end())
+#define slice(l, r) substr(l, r - l)
+
+typedef long long ll;
+typedef long double ld;
+using vl = vector<ll>;
+using vvl = vector<vl>;
+using pll = pair<ll, ll>;
+
+template <typename T>
+using PQ = priority_queue<T, vector<T>, greater<T>>;
+void check_input() { assert(cin.eof() == 0); int tmp; cin >> tmp; assert(cin.eof() == 1); }
+
+#if defined(PCM) || defined(LOCAL)
+#else
+#define dump(...) ;
+#define dump_1d(...) ;
+#define dump_2d(...) ;
+#define cerrendl ;
+#endif
+
+#endif /* HEADER_H */
+//%snippet.end()%
+#line 2 "solve.cpp"
+template<class T=ll> using vec = vector<T>;
+struct Fast { Fast() { std::cin.tie(0); ios::sync_with_stdio(false); } } fast;
+
+
+int solve() {
+    ll n,x,m;cin>>n>>x>>m;
+
+    set<ll> st;
+    ll r = 0;
+    st.insert(x);
+    vl ans(100001, -1);
+    ans[0] = x;
+    vl pos(100001, -1);
+    pos[x] = 0;
+    ll sum = x;
+    ll l;
+    vl y = {x};
+    while(true){
+        x = (x*x)%m;
+        r++;
+
+        if (st.find(x) != st.end()){
+            l = pos[x];
+            break;
+        }
+        st.insert(x);
+        y.pb(x);
+        sum += x;
+        dump(r, x);
+        ans[r] = sum;
+        pos[x] = r;
+    }
+    dump(sum, l, r);
+
+    ll isum = 0;
+    rep(i, l, r) {
+        isum += y[i];
+    }
+    dump(isum);
+
+    dump(ans);
+    if (n-1 < 100001 && ans[n-1]!=-1){
+        cout << ans[n-1] << endl;
+        return 0;
+    }
+
+    ll len = r-l;
+    ll res = ans[r-1];
+    res += (n-r)/len * isum;
+    dump(res);
+    rep(i, l, l+(n-r)%len) {
+        res += y[i];
+    }
+    cout << res << endl;
+
+    return 0; 
+}
+
+
+int main(){/*{{{*/
+    solve();
+    check_input();
+    return 0;
+}/*}}}*/

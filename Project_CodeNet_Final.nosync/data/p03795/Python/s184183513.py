@@ -1,0 +1,1 @@
+print((lambda N: 800 * N - N // 15 * 200)(int(input())))

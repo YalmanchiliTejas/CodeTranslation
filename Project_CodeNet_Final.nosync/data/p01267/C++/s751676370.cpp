@@ -1,0 +1,42 @@
+//#define _GRIBCXX_DEBUG
+#include <bits/stdc++.h>
+# define rep(i, n) for (int i = 0; i < (int)(n); i++)
+using namespace std;
+
+int run(int n, int a, int b, int c, int x, vector<int> &y, vector<int> &z) {
+  int head = 0;
+  rep (t, 10000+1) {
+    if (y[head] == z[t]) head++;
+    if (head == n) return t;
+  }
+  return -1;
+}
+
+int main() {
+  int n, a, b, c, x;
+  vector<int> z;
+  vector<int> y;
+
+  while(cin >> n >> a >> b >> c >> x, n) {
+    y.resize(n);
+    z.resize(10000+1);
+
+    // vector<int> y(n);
+    // vector<int> z(10000+1);
+    z[0] = x;
+    rep (i, n) cin >> y[i];
+
+    for (int i=1; i<=10000+1; i++) z[i] = (a*z[i-1] + b) % c;
+
+    // cout << "y: ";
+    // rep (i, n) cout << y[i] << ' ';
+    // cout << endl;
+    // cout << "z: ";
+    // rep (i, 300) cout << z[i] << ' ';
+    // cout << endl;
+
+    int ans = run(n, a, b, c, x, y, z);
+    cout << ans << endl;
+  }
+  return 0;
+}

@@ -1,0 +1,13 @@
+#include "bits/stdc++.h"
+using namespace std;
+typedef long long ll;
+
+int main(){
+
+    ll X;
+    cin >> X;
+    if(X == 7 || X == 5 || X == 3)cout << "YES" << endl;
+    else cout << "NO" << endl;
+
+    return 0;
+}

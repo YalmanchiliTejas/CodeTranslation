@@ -1,0 +1,1 @@
+print "YES" if int(raw_input().replace(" ", "")) % 4 == 0 else "NO"

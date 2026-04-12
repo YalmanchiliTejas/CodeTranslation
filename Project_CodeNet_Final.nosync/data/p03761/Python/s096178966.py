@@ -1,0 +1,39 @@
+import sys
+import itertools
+
+def get_ch_cnt(line):
+    d = {}
+    for ch in line:
+        if ch in d:
+            d[ch] += 1
+        else:
+            d[ch] = 1
+
+    return d
+
+def main():
+    n = int(sys.stdin.readline())
+    line = sys.stdin.readline().rstrip()
+
+    ans_dic = get_ch_cnt(line)
+
+    for line in sys.stdin:
+        line = line.rstrip()
+
+        ch_cnt = get_ch_cnt(line)
+
+        for ch, cnt in ans_dic.items():
+            if ch in ch_cnt:
+                ans_dic[ch] = min(cnt, ch_cnt[ch])
+            else:
+                ans_dic[ch] = 0
+
+    ans_ch_lst = []
+    for ch,cnt in ans_dic.items():
+        ans_ch_lst.extend(list(itertools.repeat(ch, cnt)))
+
+    print("".join(sorted(ans_ch_lst)))
+    return 0
+
+if __name__ == '__main__':
+    sys.exit(main())

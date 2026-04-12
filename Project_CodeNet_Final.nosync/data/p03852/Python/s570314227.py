@@ -1,0 +1,1 @@
+print 'vowel' if raw_input() in 'aeiou' else 'consonant'

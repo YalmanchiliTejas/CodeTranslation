@@ -1,0 +1,1 @@
+from collections import*;c=eval(("Counter(list(input()))&"*int(input()))[:-1]);print("".join(sorted(v*k for k,v in c.items())))

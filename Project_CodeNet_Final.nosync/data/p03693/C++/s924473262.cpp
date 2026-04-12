@@ -1,0 +1,23 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef pair<int,int> pii;
+
+long long MOD = 1000000000 + 7;
+
+int main(){
+  int a,b,c;
+  cin >> a >> b >> c;
+  int x = 100 * a + 10 * b + c;
+  if(x % 4 == 0){
+    cout << "YES" << endl;
+  } else { 
+    cout << "NO" << endl;
+  }
+}
+
+
+
+
+

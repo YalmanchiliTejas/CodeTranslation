@@ -1,0 +1,1 @@
+import re;print('Yes'if re.match('.*AC',input())else'No')

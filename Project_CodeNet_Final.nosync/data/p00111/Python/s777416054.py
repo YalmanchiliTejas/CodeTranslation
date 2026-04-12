@@ -1,0 +1,51 @@
+# -*- coding: utf-8 -*-
+"""
+http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=0111
+
+"""
+import sys
+from sys import stdin
+input = stdin.readline
+
+
+def solve(data):
+    txt = ''
+    for d in data:
+        txt += rev_decoder[d]
+
+    result = ''
+    while txt:
+        match = False
+        for k in rev_encoder.keys():
+            if txt.startswith(k):
+                match = True
+                result += rev_encoder[k]
+                txt = txt[len(k):]
+                break
+        if match is False:
+            break
+    return result
+
+
+# AOJ 0088?????????
+encoder = {' ':'101', "'":'000000', ',':'000011', '-':'10010001', '.':'010001', '?':'000001', 'A':'100101', 'B':'10011010',
+               'C':'0101','D':'0001', 'E':'110', 'F':'01001', 'G':'10011011', 'H':'010000', 'I':'0111','J':'10011000',
+               'K':'0110', 'L':'00100', 'M':'10011001', 'N':'10011110', 'O':'00101', 'P':'111', 'Q':'10011111', 'R':'1000',
+               'S':'00110', 'T':'00111', 'U':'10011100', 'V':'10011101', 'W':'000010', 'X':'10010010', 'Y':'10010011', 'Z':'10010000'
+}
+rev_encoder = dict(zip(encoder.values(), encoder.keys()))
+
+decoder = {'00000':'A', '00001':'B', '00010':'C', '00011':'D', '00100':'E', '00101':'F', '00110':'G', '00111':'H',
+               '01000':'I', '01001':'J', '01010':'K', '01011':'L', '01100':'M', '01101':'N', '01110':'O', '01111':'P',
+               '10000':'Q', '10001':'R', '10010':'S', '10011':'T', '10100':'U', '10101':'V', '10110':'W', '10111':'X',
+               '11000':'Y', '11001':'Z', '11010':' ', '11011':'.', '11100':',', '11101':'-', '11110':"'", '11111':'?'
+}
+rev_decoder = dict(zip(decoder.values(), decoder.keys()))
+def main(args):
+    for data in sys.stdin:
+        result = solve(data.strip('\n'))
+        print(result)
+
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

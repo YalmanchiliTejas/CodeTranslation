@@ -1,0 +1,126 @@
+#include <iostream>
+#include <cstdio>
+#include <cstdlib>
+#include <algorithm>
+#include <cmath>
+#include <vector>
+#include <set>
+#include <map>
+#include <unordered_set>
+#include <unordered_map>
+#include <queue>
+#include <ctime>
+#include <cassert>
+#include <complex>
+#include <string>
+#include <cstring>
+#include <chrono>
+#include <random>
+#include <queue>
+#include <bitset>
+#include <iomanip>
+#include <fstream>
+#include <stack>
+
+using namespace std;
+ 
+#define ll long long
+typedef unsigned long long ull;
+typedef long double ld;
+
+#define pii         pair<ll ,ll >
+#define vi          vector<ll >
+#define vii         vector<pii>
+#define mi          map<ll ,ll >
+#define mii         map<pii,int>
+#define all(a)      (a).begin(),(a).end()
+#define F           first
+#define S           second
+#define pb          push_back
+#define hell        1000000007 
+#define rep(i,a,b)  for(ll int i=a;i<b;i++)
+#define take        rep(i,0,n) cin>>v[i];
+#define MAXN        1000005
+
+
+#define allr(c) (c).rbegin(),(c).rend()
+int mod = 1000000007;
+const int inf = 1034567891;
+const ll LL_INF = 1234567890123456789ll;
+#define PI 3.14159265
+#define endl '\n'
+#define F first
+#define S second
+#define debug(x) cout << #x << " = " << x << endl;
+#define TRACE
+
+#ifdef TRACE
+#define trace(...) __f(#__VA_ARGS__, __VA_ARGS__)
+template <typename Arg1>
+void __f(const char* name, Arg1&& arg1){
+  cout << name << " : " << arg1 << endl;
+}
+template <typename Arg1, typename... Args>
+void __f(const char* names, Arg1&& arg1, Args&&... args){
+  const char* comma = strchr(names + 1, ',');cout.write(names, comma - names) << " : " << arg1<<" | ";__f(comma+1, args...);
+}
+#else
+#define trace(...)
+#endif
+ 
+#define out(container) for (auto it : container) cout << it << " "; cout << endl;
+ 
+ 
+template < typename T > T GCD(T a, T b)            { ll t; while(a) { t = a; a = b % a; b = t; } return b; }
+template < typename T > string toString(T a)       { return to_string(a); }
+template < typename T > void toInt(string s, T &x) { stringstream str(s); str >> x;}
+inline int add(int x, int y){ x += y; if(x >= mod) x -= mod; return x;}
+inline int sub(int x, int y){ x -= y; if(x < 0) x += mod; return x;}
+inline int mul(int x, int y){ return (x * 1ll * y) % mod;}
+inline int powr(int a, ll b){
+  int x = 1 % mod;
+  while(b){
+    if(b & 1) x = mul(x, a);
+    a = mul(a, a);
+    b >>= 1;
+  }
+  return x;
+}
+inline int inv(int a){ return powr(a, mod - 2);}
+
+
+
+void solve()
+{
+	ll n;
+	cin>>n;
+	vi v(n);
+	take;
+	vi ps(n+1);
+	for(ll i=n-1;i>=0;i--)
+	{
+		ps[i]=add(ps[i+1],v[i]);
+	}
+	ll a=0;
+	for(ll i=0;i<n;i++)
+	{
+		ll b= mul(ps[i+1],v[i]);
+		a=add(a,b);
+	}
+	cout<<a<<endl;
+}
+int main()
+    {
+    	ios::sync_with_stdio(false);
+        cin.tie(0);
+        cout.tie(0);
+      
+        ll t;
+        
+        t=1;
+        
+    
+ //   cin>>t;
+        while(t--)
+        solve();
+    }

@@ -1,0 +1,5 @@
+A,B,C,X,Y=(int(i) for i in input().split())
+A = min(A,2*C)
+B = min(B,2*C)
+AB = min(A+B,2*C)
+print(AB*min(X,Y)+A*(X-min(X,Y))+B*(Y-min(X,Y)))

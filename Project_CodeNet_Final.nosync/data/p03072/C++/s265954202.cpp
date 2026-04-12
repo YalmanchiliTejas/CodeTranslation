@@ -1,0 +1,192 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define INCANT cin.tie(0), ios::sync_with_stdio(false), cout << fixed << setprecision(20);
+#define int long long
+#define double long double
+#define pb push_back
+#define mp make_pair
+#define mt make_tuple
+#define gcd __gcd
+#define sz(x) x.size()
+#define all(x) (x).begin(), (x).end()
+#define sortv(v) sort(all(v))
+#define sortvg(v) sort(all(v), greater<int>())
+#define countv(v, c) count(all(v), c)
+#define _overload(_1, _2, _3, name, ...) name
+#define _rep(i, n) repi(i, 0, n)
+#define repi(i, a, b) for(int i = (int)(a); i < (int)(b); i++)
+#define rep(...) _overload(__VA_ARGS__, repi, _rep)(__VA_ARGS__)
+#define _rev(i, n) revi(i, n, 0)
+#define revi(i, a, b) for(int i = (int)(a - 1); i >= (int)(b); i--)
+#define rev(...) _overload(__VA_ARGS__, revi, _rev)(__VA_ARGS__)
+#define each(i, n) for(auto&& i: n)
+void in(){}
+template<typename F, typename... R>
+void in(F& f, R&... r){
+    cin >> f, in(r...);
+}
+#define inv(x) each(i, x) in(i)
+#define out(x) cout << (x)
+#define space() cout << " "
+#define indent() cout << '\n'
+#define print(x) out(x), indent()
+#define printv(x) each(i, x) out(i), space(); indent()
+#define debughead(x) cerr << "Line " << __LINE__ << ": " << #x << ": "
+#define debugout(x) cerr << (x) << " "
+#define debugindent() cerr << '\n'
+#define debug(x)  debughead(x), debugout(x), debugindent()
+#define YN(x) out((x) ? "YES" : "NO"), indent()
+#define Yn(x) out((x) ? "Yes" : "No"), indent()
+#define yn(x) out((x) ? "yes" : "no"), indent()
+const int INF = 1e18, MOD = 1e9 + 7, LIMIT = 100001, S_LIMIT = 101;
+const int dx[] = {0, 0, 1, 0, -1, -1, 1, 1, -1}, dy[] = {0, -1, 0, 1, 0, -1, -1, 1, 1};
+const string alphabet = "abcdefghijklmnopqrstuvwxyz";
+const string ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+int g[S_LIMIT][S_LIMIT] = {};
+bool chmax(int& a, int b){return (a = max(a, b)) == b;}
+bool chmin(int& a, int b){return (a = min(a, b)) == b;}
+int lcm(int a, int b){return a / gcd(a, b) * b;}
+int modpow(int x, int n){return n < 2 ? x : modpow(x * x % MOD, n / 2) * (n % 2 ? x : 1) % MOD;}
+int factorial(int a){return a < 2 ? 1 : factorial(a - 1) * a;}
+int modfact(int a){return a < 2 ? 1 : factorial(a - 1) * a % MOD;}
+int summation(int a){return a < 1 ? 0 : (a * a + a) / 2;}
+int combination(int n, int r){
+    int res = 1;
+    rep(i, 1, r + 1){
+        res *= n--, res /= i;
+    }
+    return res;
+}
+int modcomb(int n, int r){return modfact(n) * modpow(modfact(r), MOD - 2) % MOD * modpow(modfact(n - r), MOD - 2) % MOD;}
+bool isPrime(int n){
+    rep(i, 2, sqrt(n) + 1){
+        if(i > 3){
+            i++;
+        }
+        if(!(n % i)){
+            return false;
+        }
+    }
+    return true;
+}
+void warshall(int n){
+    rep(i, n){
+        rep(j, n){
+            rep(k, n){
+                chmin(g[j][k], g[j][i] + g[i][k]);
+            }
+        }
+    }
+}
+vector<int> divisor(int n){
+    vector<int> ans;
+    rep(i, 1, sqrt(n) + 1){
+        if(!(n % i)){
+            ans.pb(i);
+            if(i * i < n){
+                ans.pb(n / i);
+            }
+        }
+    }
+    return ans;
+}
+map<int, int> factorization(int n){
+    map<int, int> ans;
+    rep(i, 2, sqrt(n) + 1){
+        if(i > 3){
+            i++;
+        }
+        while(!(n%i)){
+            ans[i]++, n /= i;
+        }
+    }
+    if(n > 1){
+        ans[n]++;
+    }
+    return ans;
+}
+struct UF{
+    vector<int> t;
+    UF(int size): t(size, -1){}
+    int root(int x){
+        return t[x] < 0 ? x : t[x] = root(t[x]);
+    }
+    int size(int x){
+        return -t[root(x)];
+    }
+    bool isSame(int x, int y){
+        return root(x) == root(y);
+    }
+    bool unite(int x, int y){
+        x = root(x), y = root(y);
+        if(x != y){
+            if(t[y] < t[x]){
+                swap(x, y)
+            ;}
+            t[x] += t[y], t[y] = x;
+        }
+        return x != y;
+    }
+};
+template<typename T>
+struct Segtree{
+    int n;
+    T op;
+    vector<T> elm;
+    function<T(T, T)> f;
+    Segtree(int n, T init, function<T(T, T)> f, T op = T()) :
+        n(n),
+        op(op),
+        elm(2 * n, init),
+        f(f)
+    {
+        for(int i = n - 1; i >= 1; --i)
+            elm[i] = f(elm[2 * i], elm[2 * i + 1]);
+    }
+    Segtree(int n, vector<T> init, function<T(T, T)> f, T op = T()) :
+        n(n),
+        op(op),
+        elm(2 * n),
+        f(f)
+    {
+        for(int i = 0; i < n; ++i)
+            elm[i + n] = init[i];
+        for(int i = n - 1; i >= 1; --i)
+            elm[i] = f(elm[2 * i], elm[2 * i + 1]);
+    }
+    void set(int x, T val){
+        x += n;
+        elm[x] = val;
+        while(x >>= 1)
+            elm[x] = f(elm[2 * x], elm[2 * x + 1]);
+    }
+    void update(int x, T val){
+        x += n;
+        elm[x] = f(val, elm[x]);
+        while(x >>= 1)
+            elm[x] = f(elm[2 * x], elm[2 * x + 1]);
+    }
+    T get(int x, int y) const{
+        T l = op, r = op;
+        for(x += n, y += n - 1; x <= y; x >>= 1, y >>= 1){
+            if(x & 1)
+                l = f(l, elm[x++]);
+            if(!(y & 1))
+                r = f(elm[y--], r);
+        }
+        return f(l, r);
+    }
+};
+int a, b, c, k, n, m, l, r, x, y, h, w, res = 0, sum = 0, mx = -INF, mn = INF;
+string s, t;
+main(){
+    INCANT;
+    in(n);
+    while(n--){
+        in(a);
+        if(chmax(mx, a)){
+            res++;
+        }
+    }
+    print(res);
+}

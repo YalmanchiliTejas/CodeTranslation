@@ -1,0 +1,1 @@
+print("YES" if int("".join(list(map(str, input().strip().split())))) % 4 == 0 else "NO")

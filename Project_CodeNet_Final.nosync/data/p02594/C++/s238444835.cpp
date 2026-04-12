@@ -1,0 +1,11 @@
+#include <bits/stdc++.h>
+//#include <iostream>
+//#include <vector>
+using namespace std;
+
+int main(){
+    int X;
+    cin >> X;
+    if (X>=30) cout << "Yes" << endl;
+    else cout << "No" << endl;
+}

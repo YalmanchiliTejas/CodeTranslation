@@ -1,0 +1,17 @@
+#include "bits/stdc++.h"
+#define rep(i,n) for(int i = 0; i < (n); ++i)
+using namespace std;
+using ll = long long;
+using P = pair<int, int>;
+template<class T> inline bool chmax(T& a, T b) { if (a < b) { a = b; return 1; } return 0; }
+template<class T> inline bool chmin(T& a, T b) { if (a > b) { a = b; return 1; } return 0; }
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+    string s;
+    cin >> s;
+    if(s[0] == s[1] && s[1] == s[2]) cout << "No" << endl;
+    else cout << "Yes" << endl;
+    return 0;
+}

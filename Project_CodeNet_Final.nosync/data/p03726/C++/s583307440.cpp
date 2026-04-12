@@ -1,0 +1,48 @@
+#include <cstdio>
+#include <vector>
+#include <functional>
+#define repeat(i,n) for (int i = 0; (i) < int(n); ++(i))
+using ll = long long;
+using namespace std;
+
+vector<pair<int, int> > complete_matching_of_tree(vector<vector<int> > const & g) {
+    int n = g.size();
+    vector<pair<int, int> > result;
+    vector<bool> used(n);
+    function<bool (int, int)> dfs = [&](int i, int p) {
+        int unused = -1;
+        for (int j : g[i]) if (j != p) {
+            if (not dfs(j, i)) return false;
+            if (not used[j]) {
+                if (unused != -1) {
+                    return false;
+                }
+                unused = j;
+            }
+        }
+        if (unused != -1) {
+            result.emplace_back(i, unused);
+            used[i] = true;
+            used[unused] = true;
+        }
+        return true;
+    };
+    const int root = 0;
+    if (not dfs(root, -1) or not used[root]) {
+        result.clear();
+    }
+    return result;
+}
+
+int main() {
+    int n; scanf("%d", &n);
+    vector<vector<int> > g(n);
+    repeat (i,n-1) {
+        int a, b; scanf("%d%d", &a, &b); -- a; -- b;
+        g[a].push_back(b);
+        g[b].push_back(a);
+    }
+    vector<pair<int, int> > result = complete_matching_of_tree(g);
+    printf("%s\n", result.empty() ? "First" : "Second");
+    return 0;
+}

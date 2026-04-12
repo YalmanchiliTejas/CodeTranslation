@@ -1,0 +1,8 @@
+def f(v, i):
+    s = 4 * 2 ** v - 3
+    n = 2 * 2 ** v - 1
+    m = (s + 1) / 2
+    if i < 1 or i > s: return 0
+    return [0, f(v - 1, i - 1), n / 2 + 1, f(v - 1, i - s / 2 - 1) + n / 2 + 1, n, 1][(i > 1) + (i >= m) + (i > m) + (i >= s) + (v == 0) * 3]
+
+print f(*map(int, raw_input().split()))

@@ -1,0 +1,16 @@
+#include <bits/stdc++.h>
+using namespace std;
+typedef long long ll;
+#define rep(i, n) for (int i = 0; i < (int)(n); i++)
+const int inf = 1000000000;
+
+int main(){
+    int n;
+    cin >> n;
+    if(n >= 30){
+        cout << "Yes" << endl;
+    }
+    else{
+        cout << "No" << endl;
+    }
+}

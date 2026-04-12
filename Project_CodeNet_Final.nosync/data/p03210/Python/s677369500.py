@@ -1,0 +1,2 @@
+a='YES' if input() in ['3','5','7'] else 'NO'
+print(a)

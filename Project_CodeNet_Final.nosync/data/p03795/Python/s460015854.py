@@ -1,0 +1,1 @@
+print(sum([(800,600)[i%15==14] for i in range(int(input()))]))

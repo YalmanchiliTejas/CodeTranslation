@@ -1,0 +1,2 @@
+#include<iostream>
+using namespace std;main(){string r, k="hijklmnopyu";while(cin>>r,r!="#"){bool f,s;int ans=0,i=0;f = ~(k.find(r[0]));for(;i<r.size();i++){s=~(k.find(r[i]));if(f^s)ans++;f=s;}cout<<ans<<endl;}}

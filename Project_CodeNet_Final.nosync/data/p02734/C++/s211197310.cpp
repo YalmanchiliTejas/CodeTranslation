@@ -1,0 +1,80 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define rep(i, n) for(int i = 0, i##_len = (n); i < i##_len; ++i)
+#define rep2(i, x, n) for(int i = x, i##_len = (n); i < i##_len; ++i)
+#define all(n) begin(n), end(n)
+using ll = long long;
+using P = pair<int, int>;
+using vi = vector<int>;
+using vl = vector<ll>;
+using vs = vector<string>;
+using vc = vector<char>;
+using vb = vector<bool>;
+using vd = vector<double>;
+vi dir = {-1, 0, 1, 0, -1, -1, 1, 1, -1};
+
+const int mod = 998244353;
+struct mint {
+  ll x;
+  mint(ll x = 0) : x((x % mod + mod) % mod) {}
+  mint operator-() const { return mint(-x); }
+  mint& operator+=(const mint a) {
+    if((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if((x += mod - a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) {
+    (x *= a.x) %= mod;
+    return *this;
+  }
+  mint operator+(const mint a) const {
+    mint res(*this);
+    return res += a;
+  }
+  mint operator-(const mint a) const {
+    mint res(*this);
+    return res -= a;
+  }
+  mint operator*(const mint a) const {
+    mint res(*this);
+    return res *= a;
+  }
+  mint pow(ll t) const {
+    if(!t) return 1;
+    mint a = pow(t >> 1);
+    a *= a;
+    if(t & 1) a *= *this;
+    return a;
+  }
+  // for prime mod
+  mint inv() const { return pow(mod - 2); }
+  mint& operator/=(const mint a) { return (*this) *= a.inv(); }
+  mint operator/(const mint a) const {
+    mint res(*this);
+    return res /= a;
+  }
+};
+mint fact(int n) {
+  if(n == 1 || n == 0) return 1;
+  mint res = n;
+  return res * fact(n - 1);
+}
+
+int main() {
+  ll n, s;
+  cin >> n >> s;
+  vl a(n);
+  rep(i, n) cin >> a[i];
+  vector<vector<mint>> dp(n + 1, vector<mint>(s + 3010, 0));
+  rep(i, n + 1) dp[i][0] = 1;
+  rep(i, n) rep(j, s + 1) {
+    dp[i + 1][j] += dp[i][j];
+    dp[i + 1][j + a[i]] += dp[i][j];
+  }
+  mint ans = 0;
+  rep(i, n + 1) ans += dp[i][s];
+  cout << ans.x << endl;
+}

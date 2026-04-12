@@ -1,0 +1,86 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+#define rep(i, a, b) for(int i = (a); i < (b); ++i)
+#define per(i, a, b) for(int i = (b)-1; i >= (a); --i)
+#define all(x) begin(x), end(x)
+#define sz(x) (int)(x).size()
+#define pb push_back
+#define eb emplace_back
+#define mp make_pair
+#define fst first
+#define snd second
+
+template<class T> bool ckmin(T& a, const T& b) { return b < a ? a = b, 1 : 0; }
+template<class T> bool ckmax(T& a, const T& b) { return a < b ? a = b, 1 : 0; }
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<int, int> pii;
+typedef vector<int> vi;
+typedef vector<vi> vvi;
+typedef vector<ll> vl;
+typedef vector<vl> vvl;
+typedef vector<pii> vii;
+
+mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+
+int main() {
+  cin.tie(0)->sync_with_stdio(0);
+  cin.exceptions(cin.failbit);
+
+  ll n, x, m;
+  cin >> n >> x >> m;
+
+  vi sn(m, -1);
+  sn[x] = 0;
+
+  vl seq = {x};
+
+  ll cs = 0;
+  bool zero=0, cyc=0;
+
+  rep(i,0,m) {
+    x *= x;
+    x %= m;
+    if (sn[x] != -1) {
+      cyc = 1;
+      cs = sn[x];
+      break;
+    } else if (x==0) {
+      zero = 1;
+      break;
+    } else {
+      sn[x] = i+1;
+      seq.pb(x);
+    }
+  }
+
+  if (zero) {
+    cout << accumulate(all(seq), 0ll) << '\n';
+    return 0;
+  }
+
+  assert(cyc);
+
+  ll ans = 0;
+  rep(i,0,min(n,cs)) {
+    ans += seq[i];
+  }
+
+  int k = sz(seq)-cs;
+  ll sm = 0;
+  rep(i,cs,sz(seq)) sm += seq[i];
+
+  n -= min(n,cs);
+  ans += sm*(n/k);
+  int rem = n%k;
+
+  rep(i,cs,cs+rem) {
+    ans += seq[i];
+  }
+
+  cout << ans << '\n';
+
+
+}

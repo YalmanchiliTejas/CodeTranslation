@@ -1,0 +1,5 @@
+n = int(input())
+A = list(map(int, input().split()))
+S = sum(A)
+T = sum(map(lambda x: x**2, A))
+print((S**2-T)//2 % (10**9+7))

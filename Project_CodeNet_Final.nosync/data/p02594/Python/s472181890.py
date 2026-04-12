@@ -1,0 +1,11 @@
+import sys
+
+
+def main():
+    input = sys.stdin.buffer.readline
+    x = int(input())
+    print("Yes" if x >= 30 else "No")
+
+
+if __name__ == "__main__":
+    main()

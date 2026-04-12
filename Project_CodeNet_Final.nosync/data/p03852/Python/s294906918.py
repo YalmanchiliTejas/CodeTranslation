@@ -1,0 +1,1 @@
+print("vowel" if list("aeiou").count(input()) else "consonant")

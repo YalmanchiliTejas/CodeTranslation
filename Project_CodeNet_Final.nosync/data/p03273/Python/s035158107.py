@@ -1,0 +1,7 @@
+h, w = map(int, input().split())
+grid = [list(input()) for _ in range(h)]
+for _ in range(2):
+    grid = list(filter(lambda x: '#' in x, grid))
+    grid = [list(x) for x in zip(*grid)]
+for i in range(len(grid)):
+    print(''.join(grid[i]))

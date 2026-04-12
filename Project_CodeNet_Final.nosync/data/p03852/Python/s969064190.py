@@ -1,0 +1,1 @@
+print('vowel' if str(input()) in ['a','e','i','o','u'] else 'consonant')

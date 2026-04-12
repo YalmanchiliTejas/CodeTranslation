@@ -1,0 +1,1 @@
+print('Yes' if 'AAA'<input()<'BBB' else 'No')

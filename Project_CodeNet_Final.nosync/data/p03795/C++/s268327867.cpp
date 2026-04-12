@@ -1,0 +1,18 @@
+#include <iostream>
+using namespace std;
+
+
+int main()
+{
+    int a;
+    cin >> a;
+    
+    if(a<15)
+    {
+        cout << a*800;
+    }
+    if(a>=15)
+    {
+        cout << a*800 - (a/15)*200;
+    }
+}

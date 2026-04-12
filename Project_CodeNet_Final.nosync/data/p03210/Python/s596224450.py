@@ -1,0 +1,1 @@
+print("YES" if "753".count(input())>=1 else "NO")

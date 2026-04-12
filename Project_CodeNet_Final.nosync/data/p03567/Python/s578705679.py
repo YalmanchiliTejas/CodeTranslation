@@ -1,0 +1,1 @@
+print "Yes" if raw_input().find("AC")>=0 else "No"

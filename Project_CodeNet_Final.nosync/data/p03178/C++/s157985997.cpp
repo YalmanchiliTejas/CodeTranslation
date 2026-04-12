@@ -1,0 +1,106 @@
+#include <bits/stdc++.h>
+#include <stdio.h>
+using namespace std;
+ 
+#define int long long int
+#define ld long double
+#define mod 1000000007 
+#define pii pair<int,int>
+#define F first
+#define S second
+#define mp make_pair
+#define pb push_back
+#define all(a) (a).begin(), (a).end()
+#define forn(i,s, e) for (int i = s; i <= e; i++)
+#define fornd(i,s, e) for (int i = s ; i >= e; i--)
+#define autoit(x,it) for(auto it = x.begin(); it != x.end(); it++)
+#define print(x) for(auto el: x) cout<<el<<" ";cout<<"\n"
+#define PSET(x,y) fixed<<setprecision(y)<<x
+// #define bits(x) __builtin_popcount(x)
+#define fast ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0)
+// void fileio()
+// {
+// #ifndef ONLINE_JUDGE
+//     freopen("input.txt", "r", stdin);
+//     freopen("output.txt", "w", stdout);
+// #endif
+// }
+ 
+ 
+template <typename T> 
+void swap(T& a, T& b){
+    T temp = a;
+    a = b;
+    b = temp;
+}
+void selfadd(int& a, int b){
+    a = a+b;
+    if(a>=mod)
+        a = a-mod;
+}
+void selfsub(int& a, int b){
+    a = a-b+mod;
+    if(a>=mod)
+        a = a-mod;
+}  
+const int N = 200005; 
+ 
+int dp[10003][103][2];
+int D;
+string s;
+int rec(int index,int d, int state){
+    
+    if(index==s.size()){
+        if(d==0)
+            return 1;
+        else
+            return 0;
+    }
+    if(dp[index][d][state] != -1){
+        return dp[index][d][state];
+    }
+ 
+    int a = s[index]-'0';
+ 
+    int ans = 0;
+    if(state){
+        for(int i=0;i<a;i++){
+            ans  = ans + rec(index+1,(d+i)%D, 0); 
+            if(ans > mod)
+                ans -= mod;
+        }
+        ans = ans +rec(index+1,(d+a)%D,1);
+        if(ans > mod)
+            ans -= mod;
+    }
+    else{
+        for(int i=0;i<=9;i++){
+            ans  = ans +rec(index+1,(d+i)%D, 0); 
+            if(ans > mod)
+                ans -= mod;
+        }
+    }
+    // if(ans )
+    // cout<<index<<" "<<d<<" "<<state<<" "<<ans<<endl;
+    return dp[index][d][state] = ans;
+ 
+}
+
+ 
+int32_t main()
+{
+    // fileio();
+    fast;
+    cin>>s;
+    cin>>D;
+    // memset(dp,-1,sizeof(dp));
+    for(int i=0;i<10003;i++){
+        for(int j = 0;j<103;j++){
+            for(int k = 0;k<2;k++){
+                dp[i][j][k] = -1;
+            }
+        }
+    }
+    cout<<(rec(0,0,1)-1)%mod;
+    return 0;
+} 

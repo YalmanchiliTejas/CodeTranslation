@@ -1,0 +1,10 @@
+#include<iostream>
+#include<cstdio>
+using namespace std;
+int main(){
+	char ch=getchar();
+	if(ch=='a'||ch=='e'||ch=='i'||ch=='o'||ch=='u')
+	cout<<"vowel"<<endl;
+	else cout<<"consonant"<<endl;
+	return 0;
+}

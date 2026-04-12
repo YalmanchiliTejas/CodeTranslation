@@ -1,0 +1,73 @@
+#include <cstdio>
+#include <functional>
+#include <algorithm>
+#include <vector>
+#include <limits>
+#include <numeric>
+#include <type_traits>
+#include <iostream>
+#include <queue>
+#include <bits/stdc++.h>
+#define INF (1ll<<60)
+#define MOD 1000000007
+#define BOUND 27182818284
+
+typedef long long ll;
+typedef long long int lli;
+
+#define rep(i,n) for(int i = 0; i < (int)(n); i++)
+#define repi(i,a,b) for(int i=int(a);i<int(b);++i)
+
+template<class T>bool umax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool umin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+
+using namespace std;
+
+// gcd
+int gcd(int a, int b){
+    if(a==0)
+        return b;
+    return gcd(b%a,a);
+}
+// gcd array
+int findGCD(int arr[], int n){
+    int result = arr[0];
+    for (int i=1; i < n; i++)
+        result = gcd(arr[i], result);
+
+    return result;
+}
+
+// sort big to small
+// sort(A,A+N, greater<int>());
+
+// v.front() = -BOUND;
+// v.back() = BOUND;
+
+// Iterator
+// v.begin
+// v.end
+
+int main() {
+    int A,B,C,X,Y;
+    cin >> A >> B >> C >> X >> Y;
+    int a_rest=X;
+    int b_rest=Y;
+    int ans=A*X+B*Y;
+
+    if(2*C < A+B){
+        ans = 2*C*min(X,Y) + A*(X-min(X,Y))+B*(Y-min(X,Y));
+        a_rest = X - min(X,Y);
+        b_rest = Y - min(X,Y);
+    }
+
+    if(2*C < A && a_rest>0){
+        ans= ans + 2*C*a_rest - A*a_rest;
+    }
+    if(2*C < B && b_rest>0){
+        ans = ans + 2*C*b_rest - B*b_rest;
+    }
+    cout << ans <<endl;
+    return 0;
+}
+

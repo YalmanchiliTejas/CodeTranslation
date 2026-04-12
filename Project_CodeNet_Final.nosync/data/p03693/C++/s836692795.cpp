@@ -1,0 +1,12 @@
+#include<bits/stdc++.h>
+using namespace std;
+int main(){
+  int r,g,b,x;
+  cin >> r >> g >> b;
+  x = 10*g + b;
+  if(x%4==0||(g==0&&b==0)){
+    cout << "YES" << endl;
+  }else{
+    cout << "NO" << endl;
+  }
+}

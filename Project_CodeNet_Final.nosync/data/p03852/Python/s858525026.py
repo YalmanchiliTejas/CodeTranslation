@@ -1,0 +1,1 @@
+print('vowel' if input()[0] in 'aiueo' else 'consonant')

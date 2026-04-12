@@ -1,0 +1,13 @@
+#include<bits/stdc++.h>
+#define REP(i,n) for(int i=0,i##_len=int(n);i<i##_len;++i)
+#define rep(i,a,b) for(int i=int(a);i<int(b);++i)
+#define All(x) (x).begin(),(x).end()
+#define rAll(x) (x).rbegin(),(x).rend()
+using namespace std;
+using ll = long long;
+
+int main(){
+    int X;cin>>X;
+    if(X==3||X==5||X==7) cout<<"YES"<<endl;
+    else cout<<"NO"<<endl;
+}

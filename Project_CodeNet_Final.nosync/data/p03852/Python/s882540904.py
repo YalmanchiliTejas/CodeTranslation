@@ -1,0 +1,1 @@
+print(['vowel','consonant'][len((input().strip('aeiou')))])

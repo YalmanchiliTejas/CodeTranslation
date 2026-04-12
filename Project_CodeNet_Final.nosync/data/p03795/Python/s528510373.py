@@ -1,0 +1,1 @@
+N=int(input());print(200*(4*N-N//15))

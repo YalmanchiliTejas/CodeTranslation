@@ -1,0 +1,84 @@
+#include <bits/stdc++.h>
+using namespace std;
+#define REP(i, n) for(int i = 0;i < n;i++)
+#define REPR(i, n) for(int i = n;i >= 0;i--)
+#define FOR(i, m, n) for(int i = m;i < n;i++)
+#define itrfor(itr,A) for(auto itr = A.begin(); itr !=A.end();itr++)
+typedef long long llong;
+char moji[26]={'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
+char moji2[26]={'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'};
+char moji3[10]={'0','1','2','3','4','5','6','7','8','9'};
+#define Sort(a) sort(a.begin(),a.end());
+#define Reverse(a) reverse(a.begin(),a.end());
+#define print(a) cout << a << endl; 
+#define n_max int(1e5+5)
+
+
+
+int main(){
+    int n;
+    cin >>n;
+    string s;
+    cin >> s;
+    int ans[n_max]={};
+    bool flag = false;
+    REP(i,2){
+        if(flag) break;
+        REP(j,2){
+            ans[0]=i;
+            ans[1]=j;
+            FOR(k,1,n){
+                if(ans[k]){
+                    if(s[k]=='o') ans[k+1] = ans[k-1];
+                    else ans[k+1] = 1 - ans[k-1];
+                }
+                else{
+                    if(s[k]=='x') ans[k+1] = ans[k-1];
+                    else ans[k+1] = 1 - ans[k-1];
+                }
+            }
+            if(ans[0] != ans[n]){
+                continue;
+            }
+            if(ans[0]){
+                if(s[0] == 'o'){
+                    if(ans[1] == ans[n-1]){
+                        flag = true;
+                        break;
+                    }
+                }
+                else{
+                    if(ans[1] != ans[n-1]){
+                        flag = true;
+                        break;
+                    }
+                }
+            }
+            else{
+                if(s[0] == 'x'){
+                    if(ans[1] == ans[n-1]){
+                        flag = true;
+                        break;
+                    }
+                }
+                else{
+                    if(ans[1] != ans[n-1]){
+                        flag = true;
+                        break;
+                    }
+                }                
+            }
+        }
+    }
+
+    if( not flag ){
+       print(-1);
+    }
+    else{
+        REP(i,n){
+            if(ans[i]) cout << 'S';
+            else cout << 'W';
+        }
+        cout << endl;
+    }
+}

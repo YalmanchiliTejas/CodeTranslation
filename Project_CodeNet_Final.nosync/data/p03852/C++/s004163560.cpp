@@ -1,0 +1,17 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+  string C;
+  cin >> C;
+  
+  if( C == "a" || C == "i" || C == "u" || C == "e" || C == "o" ){
+    cout << "vowel";
+  }
+  
+ 
+   else{
+    cout << "consonant";
+  }
+  
+}

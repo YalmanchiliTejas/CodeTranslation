@@ -1,0 +1,137 @@
+#include<iostream>
+#include<vector>
+#include<string>
+ 
+int main(){
+    int a=0;
+    int z=1;
+    while(1){
+        std::cin>>a;
+        if(a==0)break;
+        std::vector<int> vec(7);
+        std::vector<int> vec1(7);
+        for(int i=1;i<7;i++){
+            vec[i]=i;
+            vec1[i]=i;
+        }
+        std::string str;
+        for(int i=0;i<a;i++){
+            std::cin>>str;
+            if(i%2==0){
+                if(str=="North"){
+                    vec[1]=vec1[2];
+                    vec[2]=vec1[6];
+                    vec[6]=vec1[5];
+                    vec[5]=vec1[1];
+                    vec[3]=vec1[3];
+                    vec[4]=vec1[4];
+                    z=z+vec[1];
+                }
+                if(str=="East"){
+                    vec[1]=vec1[4];
+                    vec[4]=vec1[6];
+                    vec[6]=vec1[3];
+                    vec[3]=vec1[1];
+                    vec[2]=vec1[2];
+                    vec[5]=vec1[5];
+                    z=z+vec[1];
+                }
+                if(str=="West"){
+                    vec[1]=vec1[3];
+                    vec[3]=vec1[6];
+                    vec[6]=vec1[4];
+                    vec[4]=vec1[1];
+                    vec[2]=vec1[2];
+                    vec[5]=vec1[5];
+                    z=z+vec[1];
+                }
+                if(str=="South"){
+                    vec[1]=vec1[5];
+                    vec[5]=vec1[6];
+                    vec[6]=vec1[2];
+                    vec[2]=vec1[1];
+                    vec[3]=vec1[3];
+                    vec[4]=vec1[4];
+                    z=z+vec[1];
+                }
+                if(str=="Left"){
+                    vec[2]=vec1[4];
+                    vec[4]=vec1[5];
+                    vec[5]=vec1[3];
+                    vec[3]=vec1[2];
+                    vec[1]=vec1[1];
+                    vec[6]=vec1[6];
+                    z=z+vec[1];
+                }
+                if(str=="Right"){
+                    vec[2]=vec1[3];
+                    vec[3]=vec1[5];
+                    vec[5]=vec1[4];
+                    vec[4]=vec1[2];
+                    vec[1]=vec1[1];
+                    vec[6]=vec1[6];
+                    z=z+vec[1];
+                }
+            }
+            if(i%2==1){
+                if(str=="North"){
+                    vec1[1]=vec[2];
+                    vec1[2]=vec[6];
+                    vec1[6]=vec[5];
+                    vec1[5]=vec[1];
+                    vec1[3]=vec[3];
+                    vec1[4]=vec[4];
+                    z=z+vec1[1];
+                }
+                if(str=="East"){
+                    vec1[1]=vec[4];
+                    vec1[4]=vec[6];
+                    vec1[6]=vec[3];
+                    vec1[3]=vec[1];
+                    vec1[2]=vec[2];
+                    vec1[5]=vec[5];
+                    z=z+vec1[1];
+                }
+                if(str=="West"){
+                    vec1[1]=vec[3];
+                    vec1[3]=vec[6];
+                    vec1[6]=vec[4];
+                    vec1[4]=vec[1];
+                    vec1[2]=vec[2];
+                    vec1[5]=vec[5];
+                    z=z+vec1[1];
+                }
+                if(str=="South"){
+                    vec1[1]=vec[5];
+                    vec1[5]=vec[6];
+                    vec1[6]=vec[2];
+                    vec1[2]=vec[1];
+                    vec1[3]=vec[3];
+                    vec1[4]=vec[4];
+                    z=z+vec1[1];
+                }
+                if(str=="Left"){
+                    vec1[2]=vec[4];
+                    vec1[4]=vec[5];
+                    vec1[5]=vec[3];
+                    vec1[3]=vec[2];
+                    vec1[1]=vec[1];
+                    vec1[6]=vec[6];
+                    z=z+vec1[1];
+                }
+                if(str=="Right"){
+                    vec1[2]=vec[3];
+                    vec1[3]=vec[5];
+                    vec1[5]=vec[4];
+                    vec1[4]=vec[2];
+                    vec1[1]=vec[1];
+                    vec1[6]=vec[6];
+                    z=z+vec1[1];
+                }
+            }
+        }
+        std::cout<<z<<std::endl;
+        z=1;
+    }
+    return 0;
+}

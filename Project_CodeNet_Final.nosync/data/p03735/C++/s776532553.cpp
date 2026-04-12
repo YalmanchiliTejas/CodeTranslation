@@ -1,0 +1,41 @@
+#include<bits/stdc++.h>
+using namespace std;
+long long lmax,lmin,rmax,rmin,lx,lm,rx,rm,lx1,lm1,rx1,rm1,ans1,ans2,sum,n,a[200003],b[200003],hhh[200003],ran,aaa=1e18;
+int main()
+{
+	srand(time(0));
+	cin>>n;
+	for(long long i=1; i<=n; i++)
+		cin>>a[i]>>b[i];
+	for(int k=1; k<=30; k++)
+	{
+		memset(hhh,0,sizeof(hhh));
+		ran=rand()%n+1,sum=0,hhh[ran]=1,lmax=a[ran],lmin=a[ran],rmax=b[ran],rmin=b[ran];
+		for(long long i=1; i<=n*10; i++)
+		{
+			ran=rand()%n+1;
+			if(hhh[ran]==0)
+			{
+				hhh[ran]=1,lx=lmax,lm=lmin,rx=rmax,rm=rmin,lx=max(lx,a[ran]),lm=min(lm,a[ran]),rx=max(rx,b[ran]),rm=min(rm,b[ran]),ans1=(lx-lm)*(rx-rm),lx1=lmax,lm1=lmin,rx1=rmax,rm1=rmin,lx1=max(lx1,b[ran]),lm1=min(lm1,b[ran]),rx1=max(rx1,a[ran]),rm1=min(rm1,a[ran]),ans2=(lx1-lm1)*(rx1-rm1);
+				if(ans1<=ans2)
+					lmax=lx,lmin=lm,rmax=rx,rmin=rm,sum=ans1;
+				else
+					lmax=lx1,lmin=lm1,rmax=rx1,rmin=rm1,sum=ans2;
+			}
+		}
+		for(long long i=1; i<=n; i++)
+		{
+			if(hhh[i]==0)
+			{
+				lx=lmax,lm=lmin,rx=rmax,rm=rmin,lx=max(lx,a[i]),lm=min(lm,a[i]),rx=max(rx,b[i]),rm=min(rm,b[i]),ans1=(lx-lm)*(rx-rm),lx1=lmax,lm1=lmin,rx1=rmax,rm1=rmin,lx1=max(lx1,b[i]),lm1=min(lm1,b[i]),rx1=max(rx1,a[i]),rm1=min(rm1,a[i]),ans2=(lx1-lm1)*(rx1-rm1);
+				if(ans1<=ans2)
+					lmax=lx,lmin=lm,rmax=rx,rmin=rm,sum=ans1;
+				else
+					lmax=lx1,lmin=lm1,rmax=rx1,rmin=rm1,sum=ans2;
+			}
+		}
+		aaa=min(aaa,sum);
+	}
+	cout<<aaa;
+	return 0;
+}

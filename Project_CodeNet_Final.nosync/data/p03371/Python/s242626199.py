@@ -1,0 +1,8 @@
+a,b,c,x,y = map(int,input().split())
+a = min(a,2*c)
+b = min(b,2*c)
+ans = 10**20
+for i in range(min(x,y)*2+1):
+    ans = min(ans,c*i+a*max(0,x-i//2)+b*max(0,y-i//2))
+
+print(ans)

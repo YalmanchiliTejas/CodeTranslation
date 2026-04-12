@@ -1,0 +1,1 @@
+[print(["NO" if not [i for i in [int(input())] if i in [3, 5, 7]] else "YES" for i in [None]][0]) for i in [None]]

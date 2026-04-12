@@ -1,0 +1,7 @@
+a, b = [int(n) for n in raw_input().split()]
+if a < b:
+    print 'a < b'
+elif a > b:
+    print 'a > b'
+else:
+    print 'a == b'

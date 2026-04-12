@@ -1,0 +1,1 @@
+print('NYoe s'['AAA'<input()<'BBB'::2])

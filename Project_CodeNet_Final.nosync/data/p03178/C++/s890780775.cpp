@@ -1,0 +1,141 @@
+#include <bits/stdc++.h>
+#ifdef __LOCAL
+    #define DBG(X) cout << #X << " = " << (X) << endl;
+    #define SAY(X) cout << (X) << endl;
+#else
+    #define DBG(X)
+    #define SAY(X)
+#endif
+
+#ifdef __LOCAL
+    #include <filesystem>
+    namespace fs = std::filesystem;
+#endif
+
+using namespace std;
+using ll = long long int;
+
+template< int mod >
+struct ModInt {
+  int x;
+
+  ModInt() : x(0) {}
+
+  ModInt(int64_t y) : x(y >= 0 ? y % mod : (mod - (-y) % mod) % mod) {}
+
+  ModInt &operator+=(const ModInt &p) {
+    if((x += p.x) >= mod) x -= mod;
+    return *this;
+  }
+
+  ModInt &operator-=(const ModInt &p) {
+    if((x += mod - p.x) >= mod) x -= mod;
+    return *this;
+  }
+
+  ModInt &operator*=(const ModInt &p) {
+    x = (int) (1LL * x * p.x % mod);
+    return *this;
+  }
+
+  ModInt &operator/=(const ModInt &p) {
+    *this *= p.inverse();
+    return *this;
+  }
+
+  ModInt operator-() const { return ModInt(-x); }
+
+  ModInt operator+(const ModInt &p) const { return ModInt(*this) += p; }
+
+  ModInt operator-(const ModInt &p) const { return ModInt(*this) -= p; }
+
+  ModInt operator*(const ModInt &p) const { return ModInt(*this) *= p; }
+
+  ModInt operator/(const ModInt &p) const { return ModInt(*this) /= p; }
+
+  bool operator==(const ModInt &p) const { return x == p.x; }
+
+  bool operator!=(const ModInt &p) const { return x != p.x; }
+
+  ModInt inverse() const {
+    int a = x, b = mod, u = 1, v = 0, t;
+    while(b > 0) {
+      t = a / b;
+      swap(a -= t * b, b);
+      swap(u -= t * v, v);
+    }
+    return ModInt(u);
+  }
+
+  ModInt pow(int64_t n) const {
+    ModInt ret(1), mul(x);
+    while(n > 0) {
+      if(n & 1) ret *= mul;
+      mul *= mul;
+      n >>= 1;
+    }
+    return ret;
+  }
+
+  friend ostream &operator<<(ostream &os, const ModInt &p) {
+    return os << p.x;
+  }
+
+  friend istream &operator>>(istream &is, ModInt &a) {
+    int64_t t;
+    is >> t;
+    a = ModInt< mod >(t);
+    return (is);
+  }
+
+  static int get_mod() { return mod; }
+};
+const ll mod = 1e9+7;
+using modint = ModInt< mod >;
+
+
+string K;
+int D;
+void input(){
+  #ifdef __LOCAL
+      fs::path p = __FILE__;
+      fs::path input,output;
+      input = output = p.parent_path();
+      input += string("/input/") + string(p.stem()) + string(".txt");
+      output += string("/output/") + string(p.stem()) + string(".txt");
+      freopen(input.c_str(), "r", stdin);
+      freopen(output.c_str(), "w", stdout);
+  #endif
+  cin >> K >> D;
+}
+
+modint dp[10010][110][3];
+
+int solve(){
+  int n = K.length();
+  // dp[i][smaller]
+  memset(dp,0,sizeof(dp));
+  dp[0][0][0] = 1;
+  for (int i = 0; i < n; i++)
+  {
+    for (int d = 0; d < D; d++)
+    {
+      dp[i+1][(d+K[i]-'0')%D][0] += dp[i][d][0];
+      for (int k = 0; k < 10; k++)
+      {
+        if(k<K[i]-'0') dp[i+1][(d+k)%D][1] += dp[i][d][0];
+        dp[i+1][(d+k)%D][1] += dp[i][d][1];
+      } 
+    }
+  }
+  cout << (dp[n][0][0]+dp[n][0][1]-1) << endl;
+  return 0;
+}
+
+int main()
+{
+  // maketestcase(400);
+  input();
+  solve();
+  return 0;
+}

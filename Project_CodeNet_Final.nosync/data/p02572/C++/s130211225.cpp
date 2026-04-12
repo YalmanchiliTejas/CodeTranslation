@@ -1,0 +1,28 @@
+#include<iostream>
+#include<vector>
+using namespace std;
+
+int main(){
+    int N;
+    scanf("%d",&N);
+    vector<int>A(N);
+    int mod=1000000007;
+    long long sum=0;
+
+    for(int i=0;i<N;i++){
+        scanf("%d",&A[i]);
+        sum+=A[i];
+        sum%=mod;
+    }
+
+long ans=0;
+
+    for(int i=0;i<N;i++){
+        sum-=A[i];
+            if(sum<0)sum+=mod;
+        ans+=sum*A[i];
+        ans%=mod;
+    }
+    cout<<ans;
+
+}

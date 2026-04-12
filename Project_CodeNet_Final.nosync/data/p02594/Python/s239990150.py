@@ -1,0 +1,1 @@
+print 'Yes' if int(raw_input()) >= 30 else 'No'

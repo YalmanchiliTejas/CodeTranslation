@@ -1,0 +1,1 @@
+n,*h=map(int,open(0).read().split());print(sum(h[i]>=max(h[:i]+[0])for i in range(n)))

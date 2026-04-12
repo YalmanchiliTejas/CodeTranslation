@@ -1,0 +1,1 @@
+print (lambda N:N*800-(N/15)*200)(int(raw_input()))

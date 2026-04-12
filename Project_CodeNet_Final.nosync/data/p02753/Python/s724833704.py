@@ -1,0 +1,1 @@
+print(' YNeos'['AAA'!=input()!='BBB'::2])

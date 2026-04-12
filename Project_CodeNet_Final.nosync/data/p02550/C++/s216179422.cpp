@@ -1,0 +1,292 @@
+#ifdef LOCAL
+    #define _GLIBCXX_DEBUG
+    #define __clock__
+#else
+    #pragma GCC optimize("Ofast")
+#endif
+#include<bits/stdc++.h>
+using namespace std;
+using ll = long long;
+using ld = long double;
+using VI = vector<ll>;
+using VV = vector<VI>;
+using VS = vector<string>;
+using PII = pair<ll, ll>;
+
+// tourist set
+template <typename A, typename B>
+string to_string(pair<A, B> p);
+
+template <typename A, typename B, typename C>
+string to_string(tuple<A, B, C> p);
+
+template <typename A, typename B, typename C, typename D>
+string to_string(tuple<A, B, C, D> p);
+
+string to_string(const string& s) {
+  return '"' + s + '"';
+}
+
+string to_string(const char* s) {
+  return to_string((string) s);
+}
+
+string to_string(bool b) {
+  return (b ? "true" : "false");
+}
+
+string to_string(vector<bool> v) {
+  bool first = true;
+  string res = "{";
+  for (int i = 0; i < static_cast<int>(v.size()); i++) {
+    if (!first) {
+      res += ", ";
+    }
+    first = false;
+    res += to_string(v[i]);
+  }
+  res += "}";
+  return res;
+}
+
+template <size_t N>
+string to_string(bitset<N> v) {
+  string res = "";
+  for (size_t i = 0; i < N; i++) {
+    res += static_cast<char>('0' + v[i]);
+  }
+  return res;
+}
+
+template <typename A>
+string to_string(A v) {
+  bool first = true;
+  string res = "{";
+  for (const auto &x : v) {
+    if (!first) {
+      res += ", ";
+    }
+    first = false;
+    res += to_string(x);
+  }
+  res += "}";
+  return res;
+}
+
+template <typename A, typename B>
+string to_string(pair<A, B> p) {
+  return "(" + to_string(p.first) + ", " + to_string(p.second) + ")";
+}
+
+template <typename A, typename B, typename C>
+string to_string(tuple<A, B, C> p) {
+  return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ")";
+}
+
+template <typename A, typename B, typename C, typename D>
+string to_string(tuple<A, B, C, D> p) {
+  return "(" + to_string(get<0>(p)) + ", " + to_string(get<1>(p)) + ", " + to_string(get<2>(p)) + ", " + to_string(get<3>(p)) + ")";
+}
+
+void debug_out() { cerr << '\n'; }
+
+template <typename Head, typename... Tail>
+void debug_out(Head H, Tail... T) {
+  cerr << " " << to_string(H);
+  debug_out(T...);
+}
+
+#ifdef LOCAL
+#define debug(...) cerr << "[" << #__VA_ARGS__ << "]:", debug_out(__VA_ARGS__)
+#else
+#define debug(...) 42
+#endif
+// tourist set end
+
+template<class T>bool chmax(T &a, const T &b) { if (a<b) { a=b; return 1; } return 0; }
+template<class T>bool chmin(T &a, const T &b) { if (b<a) { a=b; return 1; } return 0; }
+
+#define FOR(i,a,b) for(ll i=(a);i<(b);++i)
+#define rep(i,b) FOR(i, 0, b)
+#define ALL(v) (v).begin(), (v).end()
+#define p(s) cout<<(s)<<'\n'
+#define p2(s, t) cout << (s) << " " << (t) << '\n'
+#define br() p("")
+#define pn(s) cout << (#s) << " " << (s) << '\n'
+#define SZ(x) ((int)(x).size())
+#define SORT(A) sort(ALL(A))
+#define RSORT(A) sort(ALL(A), greater<ll>())
+#define MP make_pair
+#define p_yes() p("YES")
+#define p_no() p("NO")
+#define possible() p("Possible")
+#define impossible() p("Impossible")
+
+ll SUM(VI& V){
+  return accumulate(ALL(V), 0LL);
+}
+
+ll MIN(VI& V){return *min_element(ALL(V));}
+ll MAX(VI& V){return *max_element(ALL(V));}
+
+void print_vector(VI& V){
+  ll n = V.size();
+  rep(i, n){
+    if(i) cout << ' ';
+    cout << V[i];
+  }
+  cout << endl;
+}
+
+ll gcd(ll a,ll b){
+    if(b == 0) return a;
+    return gcd(b,a%b);
+}
+
+ll lcm(ll a,ll b){
+    ll g = gcd(a,b);
+    return a / g * b;
+}
+
+// long double
+using ld = long double;
+#define EPS (1e-14)
+#define equals(a,b) (fabs((a)-(b)) < EPS)
+
+void no(){p_no(); exit(0);}
+void yes(){p_yes(); exit(0);}
+
+const ll mod = 1e9 + 7;
+const ll inf = 1e18;
+const double PI = acos(-1);
+
+// snuke's mint
+// auto mod int
+// https://youtu.be/L8grWxBlIZ4?t=9858
+// https://youtu.be/ERZuLAxZffQ?t=4807 : optimize
+// https://youtu.be/8uowVvQ_-Mo?t=1329 : division
+// const int mod = 1000000007;
+struct mint {
+  ll x; // typedef long long ll;
+  mint(ll x=0):x((x%mod+mod)%mod){}
+  mint operator-() const { return mint(-x);}
+  mint& operator+=(const mint a) {
+    if ((x += a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator-=(const mint a) {
+    if ((x += mod-a.x) >= mod) x -= mod;
+    return *this;
+  }
+  mint& operator*=(const mint a) {
+    (x *= a.x) %= mod;
+    return *this;
+  }
+  mint operator+(const mint a) const {
+    mint res(*this);
+    return res+=a;
+  }
+  mint operator-(const mint a) const {
+    mint res(*this);
+    return res-=a;
+  }
+  mint operator*(const mint a) const {
+    mint res(*this);
+    return res*=a;
+  }
+  mint pow(ll t) const {
+    if (!t) return 1;
+    mint a = pow(t>>1);
+    a *= a;
+    if (t&1) a *= *this;
+    return a;
+  }
+
+  // for prime mod
+  mint inv() const {
+    return pow(mod-2);
+  }
+  mint& operator/=(const mint a) {
+    return (*this) *= a.inv();
+  }
+  mint operator/(const mint a) const {
+    mint res(*this);
+    return res/=a;
+  }
+};
+
+//#include <atcoder/dsu>
+//using namespace atcoder; // 忘れがち
+
+// for codeforces
+void solve(){
+  ll N;
+  cin>>N;
+  VI A(N);
+  rep(i, N){
+    cin >> A[i];
+  }
+}
+
+int main(){
+    cin.tie(0);
+    ios::sync_with_stdio(false);
+
+    // input
+    ll N,X,M;
+    cin>>N>>X>>M;
+
+    map<ll, VI> mp;
+    ll a = X;
+    ll len = -1;
+    ll loop_start_index = -1;
+    rep(i,100010){
+      mp[a].push_back(i);
+      if(mp[a].size()>1){
+        // in loop
+        len = mp[a][1] - mp[a][0];
+        loop_start_index = mp[a][0];
+        break;
+      }
+      a = (a*a)%M;
+    }
+
+    ll loop_sum = 0;
+    
+    VI A(200200);
+    A[0]=X;
+    FOR(i,1,200200){
+      A[i] = (A[i-1]*A[i-1])%M;
+    }
+    FOR(i,loop_start_index, loop_start_index+len){
+      loop_sum += A[i];
+    }
+    debug(loop_sum);
+    debug(loop_start_index);
+    debug(len);
+    
+    ll sum=0;
+    a = X;
+    rep(i,loop_start_index){
+      sum += a;
+      a = (a*a)%M;
+    }
+    debug("before loop", sum);
+
+    ll rest = N-loop_start_index;
+    ll num = rest / len;
+
+    sum += num * loop_sum;
+
+    // 残りちょい
+    ll r = rest%len;
+    FOR(i,loop_start_index, loop_start_index+r){
+      sum += A[i];
+    }
+
+    p(sum);
+
+
+
+    return 0;
+}

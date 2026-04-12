@@ -1,0 +1,888 @@
+/**
+ * 
+ */
+
+// header {{{
+#include <bits/stdc++.h>
+using namespace std;
+
+#define CPP_STR(x) CPP_STR_I(x)
+#define CPP_CAT(x,y) CPP_CAT_I(x,y)
+#define CPP_STR_I(args...) #args
+#define CPP_CAT_I(x,y) x ## y
+
+#define SFINAE(pred...) std::enable_if_t<(pred), std::nullptr_t> = nullptr
+
+#define ASSERT(expr...) assert((expr))
+
+using i8  = int8_t;
+using u8  = uint8_t;
+using i16 = int16_t;
+using u16 = uint16_t;
+using i32 = int32_t;
+using u32 = uint32_t;
+using i64 = int64_t;
+using u64 = uint64_t;
+
+using f32 = float;
+using f64 = double;
+using f80 = __float80;
+// }}}
+
+constexpr i64 INF  = INT64_C(1'010'000'000'000'000'017);
+constexpr f64 FINF = 1e100;
+
+constexpr i64 MOD = INT64_C(1'000'000'007);
+
+constexpr f64 EPS = 1e-12;
+
+constexpr f64 PI = 3.14159265358979323846;
+
+// util {{{
+#define FOR(i, start, end) for(i64 i = (start), CPP_CAT(i,xxxx_end)=(end); i < CPP_CAT(i,xxxx_end); ++i)
+#define REP(i, n) FOR(i, 0, n)
+
+#define ALL(f,c,...) (([&](decltype((c)) cccc) { return (f)(std::begin(cccc), std::end(cccc), ## __VA_ARGS__); })(c))
+
+#define LIFT(f) ([](auto&&... args) -> decltype(auto) { return (f)(std::forward<decltype(args)>(args)...); })
+
+template<typename C>
+constexpr i64 SIZE(const C& c) noexcept { return static_cast<i64>(c.size()); }
+
+template<typename T, size_t N>
+constexpr i64 SIZE(const T (&)[N]) noexcept { return static_cast<i64>(N); }
+
+template<typename T, typename U, typename Comp=less<>>
+constexpr bool chmax(T& xmax, const U& x, Comp comp={}) noexcept {
+    if(comp(xmax, x)) {
+        xmax = x;
+        return true;
+    }
+    return false;
+}
+
+template<typename T, typename U, typename Comp=less<>>
+constexpr bool chmin(T& xmin, const U& x, Comp comp={}) noexcept {
+    if(comp(x, xmin)) {
+        xmin = x;
+        return true;
+    }
+    return false;
+}
+
+template<typename BinaryFunc, typename UnaryFunc>
+auto ON(BinaryFunc&& bf, UnaryFunc&& uf) {
+    return [bf=forward<BinaryFunc>(bf),uf=forward<UnaryFunc>(uf)](const auto& x, const auto& y) {
+        return bf(uf(x), uf(y));
+    };
+}
+
+template<typename F>
+auto LT_ON(F&& f) {
+    return ON(less<>{}, forward<F>(f));
+}
+
+template<typename F>
+auto GT_ON(F&& f) {
+    return ON(greater<>{}, forward<F>(f));
+}
+
+template<typename F>
+auto EQ_ON(F&& f) {
+    return ON(equal_to<>{}, forward<F>(f));
+}
+
+template<typename F>
+auto NE_ON(F&& f) {
+    return ON(not_equal_to<>{}, forward<F>(f));
+}
+
+// tuple {{{
+template<i64 I=0, typename F, typename... TS, SFINAE(sizeof...(TS) == I)>
+void tuple_enumerate(tuple<TS...>&, F&&) {}
+
+template<i64 I=0, typename F, typename... TS, SFINAE(sizeof...(TS) > I)>
+void tuple_enumerate(tuple<TS...>& t, F&& f) {
+    f(I, get<I>(t));
+    tuple_enumerate<I+1>(t, forward<F>(f));
+}
+
+template<i64 I=0, typename F, typename... TS, SFINAE(sizeof...(TS) == I)>
+void tuple_enumerate(const tuple<TS...>&, F&&) {}
+
+template<i64 I=0, typename F, typename... TS, SFINAE(sizeof...(TS) > I)>
+void tuple_enumerate(const tuple<TS...>& t, F&& f) {
+    f(I, get<I>(t));
+    tuple_enumerate<I+1>(t, forward<F>(f));
+}
+// }}}
+
+// container {{{
+template<typename T> struct is_container : false_type {};
+template<typename T, size_t N> struct is_container<array<T,N>> : true_type {};
+template<typename... Args> struct is_container<vector<Args...>> : true_type {};
+template<typename... Args> struct is_container<deque<Args...>> : true_type {};
+template<typename... Args> struct is_container<list<Args...>> : true_type {};
+template<typename... Args> struct is_container<forward_list<Args...>> : true_type {};
+template<typename... Args> struct is_container<set<Args...>> : true_type {};
+template<typename... Args> struct is_container<multiset<Args...>> : true_type {};
+template<typename... Args> struct is_container<unordered_set<Args...>> : true_type {};
+template<typename... Args> struct is_container<unordered_multiset<Args...>> : true_type {};
+template<typename... Args> struct is_container<map<Args...>> : true_type {};
+template<typename... Args> struct is_container<multimap<Args...>> : true_type {};
+template<typename... Args> struct is_container<unordered_map<Args...>> : true_type {};
+template<typename... Args> struct is_container<unordered_multimap<Args...>> : true_type {};
+
+template<typename T, typename Enable=void>
+struct ProconHash {
+    size_t operator()(const T& x) const noexcept {
+        return hash<T>{}(x);
+    }
+};
+
+template<typename T>
+size_t procon_hash_value(const T& x) noexcept {
+    return ProconHash<T>{}(x);
+}
+
+size_t procon_hash_combine(size_t h1, size_t h2) noexcept {
+    constexpr size_t M = UINT64_C(0xc6a4a7935bd1e995);
+    constexpr int    R = 47;
+
+    h2 *= M;
+    h2 ^= h2 >> R;
+    h2 *= M;
+
+    h1 ^= h2;
+    h1 *= M;
+
+    h1 += 0xe6546b64;
+
+    return h1;
+}
+
+template<typename T1, typename T2>
+struct ProconHash<pair<T1,T2>> {
+    size_t operator()(const pair<T1,T2>& p) const noexcept {
+        size_t h1 = procon_hash_value(p.first);
+        size_t h2 = procon_hash_value(p.second);
+        return procon_hash_combine(h1, h2);
+    }
+};
+
+template<typename... TS>
+struct ProconHash<tuple<TS...>> {
+    size_t operator()(const tuple<TS...>& t) const noexcept {
+        size_t h = 0;
+        tuple_enumerate(t, [&h](const auto& e) {
+            h = procon_hash_combine(h, procon_hash_value(e));
+        });
+        return h;
+    }
+};
+
+template<typename C>
+struct ProconHash<C,enable_if_t<is_container<C>::value>> {
+    size_t operator()(const C& c) const noexcept {
+        size_t h = 0;
+        for(const auto& e : c)
+            h = procon_hash_combine(h, procon_hash_value(e));
+        return h;
+    }
+};
+
+template<typename T, typename Hash=ProconHash<T>, typename Eq=equal_to<T>>
+using HashSet = unordered_set<T,Hash,Eq>;
+template<typename K, typename V, typename Hash=ProconHash<K>, typename Eq=equal_to<K>>
+using HashMap = unordered_map<K,V,Hash,Eq>;
+template<typename T, typename Hash=ProconHash<T>, typename Eq=equal_to<T>>
+using HashMultiset = unordered_multiset<T,Hash,Eq>;
+template<typename K, typename V, typename Hash=ProconHash<K>, typename Eq=equal_to<K>>
+using HashMultimap = unordered_multimap<K,V,Hash,Eq>;
+
+template<typename T>
+using MaxHeap = priority_queue<T, vector<T>, less<T>>;
+template<typename T>
+using MinHeap = priority_queue<T, vector<T>, greater<T>>;
+
+template<typename T>
+auto vec_make(i64 n, T x) {
+    return vector<T>(n, x);
+}
+
+template<typename T, typename... Args, SFINAE(sizeof...(Args) >= 2)>
+auto vec_make(i64 n, Args... args) {
+    auto inner = vec_make<T>(args...);
+    return vector<decltype(inner)>(n, inner);
+}
+
+template<typename T, size_t N, size_t... NS>
+struct ArrayType {
+    using type = array<typename ArrayType<T,NS...>::type,N>;
+};
+
+template<typename T, size_t N>
+struct ArrayType<T,N> {
+    using type = array<T,N>;
+};
+
+template<typename T, size_t... NS>
+using Array = typename ArrayType<T,NS...>::type;
+
+template<typename T, size_t N>
+T& array_at(Array<T,N>& ary, i64 i) {
+    return ary[i];
+}
+
+template<typename T, size_t N, size_t... NS, typename... Args>
+T& array_at(Array<T,N,NS...>& ary, i64 i, Args... args) {
+    return array_at<T,NS...>(ary[i], args...);
+}
+
+template<typename T, size_t N>
+const T& array_at(const Array<T,N>& ary, i64 i) {
+    return ary[i];
+}
+
+template<typename T, size_t N, size_t... NS, typename... Args>
+const T& array_at(const Array<T,N,NS...>& ary, i64 i, Args... args) {
+    return array_at<T,NS...>(ary[i], args...);
+}
+
+template<typename T>
+auto reserve_vec(i64 cap) {
+    vector<T> res;
+    res.reserve(cap);
+    return res;
+}
+
+template<typename T, typename Hash=ProconHash<T>, typename Eq=equal_to<T>>
+auto reserve_hash_set(i64 cap, f32 load_max=0.25) {
+    HashSet<T,Hash,Eq> res;
+    res.max_load_factor(load_max);
+    res.reserve(cap);
+    return res;
+}
+
+template<typename K, typename V, typename Hash=ProconHash<K>, typename Eq=equal_to<K>>
+auto reserve_hash_map(i64 cap, f32 load_max=0.25) {
+    HashMap<K,V,Hash,Eq> res;
+    res.max_load_factor(load_max);
+    res.reserve(cap);
+    return res;
+}
+
+template<typename T, typename Hash=ProconHash<T>, typename Eq=equal_to<T>>
+auto reserve_hash_multiset(i64 cap, f32 load_max=0.25) {
+    HashMultiset<T,Hash,Eq> res;
+    res.max_load_factor(load_max);
+    res.reserve(cap);
+    return res;
+}
+
+template<typename K, typename V, typename Hash=ProconHash<K>, typename Eq=equal_to<K>>
+auto reserve_hash_multimap(i64 cap, f32 load_max=0.25) {
+    HashMultimap<K,V,Hash,Eq> res;
+    res.max_load_factor(load_max);
+    res.reserve(cap);
+    return res;
+}
+
+template<typename T, typename C>
+T POP(stack<T,C>& stk) {
+    T x = stk.top(); stk.pop();
+    return x;
+}
+
+template<typename T, typename C>
+T POP(queue<T,C>& que) {
+    T x = que.front(); que.pop();
+    return x;
+}
+
+template<typename T, typename C, typename Comp>
+T POP(priority_queue<T,C,Comp>& que) {
+    T x = que.top(); que.pop();
+    return x;
+}
+// }}}
+
+// fixpoint {{{
+template<typename F>
+class FixPoint {
+public:
+    explicit constexpr FixPoint(F&& f) : f_(forward<F>(f)) {}
+
+    template<typename... Args>
+    constexpr decltype(auto) operator()(Args&&... args) const {
+        return f_(*this, forward<Args>(args)...);
+    }
+
+private:
+    F f_;
+};
+
+template<typename F>
+constexpr decltype(auto) FIX(F&& f) {
+    return FixPoint<F>(forward<F>(f));
+}
+
+template<typename F, size_t... NS>
+class FixPointMemo {
+public:
+    explicit FixPointMemo(F&& f) : f_(forward<F>(f)) {}
+
+    template<typename... Args>
+    decltype(auto) operator()(Args... args) const {
+        using R = decltype(f_(*this,args...));
+        static Array<bool,NS...> done {};
+        static Array<R,NS...>    memo;
+
+        if(!array_at<bool,NS...>(done,args...)) {
+            array_at<R,NS...>(memo,args...) = f_(*this,args...);
+            array_at<bool,NS...>(done,args...) = true;
+        }
+        return array_at<R,NS...>(memo,args...);
+    }
+
+private:
+    F f_;
+};
+
+template<size_t... NS, typename F>
+decltype(auto) FIXMEMO(F&& f) {
+    return FixPointMemo<F,NS...>(forward<F>(f));
+}
+// }}}
+
+// input {{{
+template<typename T, typename Enable=void>
+struct Scan {
+    static T scan(istream& in) {
+        T res;
+        in >> res;
+        return res;
+    }
+};
+
+template<typename T, typename Enable=void>
+struct Scan1;
+
+template<typename T>
+struct Scan1<T,enable_if_t<is_integral<T>::value && !is_same<T,bool>::value>> {
+    static T scan1(istream& in) {
+        return Scan<T>::scan(in) - 1;
+    }
+};
+
+template<typename T=i64>
+T RD() {
+    return Scan<T>::scan(cin);
+}
+
+template<typename T=i64>
+T RD1() {
+    return Scan1<T>::scan1(cin);
+}
+
+template<typename T=i64>
+auto RD_VEC(i64 n) {
+    auto res = reserve_vec<T>(n);
+    REP(_, n) {
+        res.emplace_back(RD<T>());
+    }
+    return res;
+}
+
+template<typename T=i64>
+auto RD1_VEC(i64 n) {
+    auto res = reserve_vec<T>(n);
+    REP(_, n) {
+        res.emplace_back(RD1<T>());
+    }
+    return res;
+}
+// }}}
+
+// output {{{
+template<typename T, typename Enable=void>
+struct Fmt {
+    static void fmt(ostream& out, const T& x) { out << x; }
+};
+
+template<typename T>
+void fmt_write(ostream& out, const T& x) {
+    Fmt<T>::fmt(out, x);
+}
+
+template<typename... TS>
+struct Fmt<tuple<TS...>> {
+    static void fmt(ostream& out, const tuple<TS...>& t) {
+        tuple_enumerate(t, [&out](i64 i, const auto& e) {
+            if(i != 0) out << ' ';
+            fmt_write(out, e);
+        });
+    }
+};
+
+template<typename T1, typename T2>
+struct Fmt<pair<T1,T2>> {
+    static void fmt(ostream& out, const pair<T1,T2>& p) {
+        return fmt_write(out, make_tuple(p.first,p.second));
+    }
+};
+
+template<typename C>
+struct Fmt<C,enable_if_t<is_container<C>::value>> {
+    static void fmt(ostream& out, const C& c) {
+        for(auto it = begin(c); it != end(c); ++it) {
+            if(it != begin(c)) out << ' ';
+            fmt_write(out, *it);
+        }
+    }
+};
+
+void PRINT() {}
+
+template<typename T, typename... TS>
+void PRINT(const T& x, const TS&... args) {
+    fmt_write(cout, x);
+    if(sizeof...(args) > 0) {
+        cout << ' ';
+        PRINT(args...);
+    }
+}
+
+template<typename... TS>
+void PRINTLN(const TS&... args) {
+    PRINT(args...);
+    cout << '\n';
+}
+// }}}
+
+// debug {{{
+template<typename T, typename Enable=void>
+struct Dbg {
+    static void dbg(ostream& out, const T& x) { out << x; }
+};
+
+template<typename T>
+void dbg_write(ostream& out, const T& x) {
+    return Dbg<T>::dbg(out, x);
+}
+
+template<>
+struct Dbg<i64> {
+    static void dbg(ostream& out, i64 x) {
+        if(x == INF)
+            out << "INF";
+        else if(x == -INF)
+            out << "-INF";
+        else
+            out << x;
+    }
+};
+
+template<>
+struct Dbg<f64> {
+    static void dbg(ostream& out, f64 x) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wfloat-equal"
+        if(x == FINF)
+            out << "FINF";
+        else if(x == -FINF)
+            out << "-FINF";
+        else
+            out << x;
+#pragma GCC diagnostic pop
+    }
+};
+
+template<typename T, size_t N>
+struct Dbg<T[N]> {
+    static void dbg(ostream& out, const T (&ary)[N]) {
+        out << "[";
+        REP(i, N) {
+            if(i != 0) out << ",";
+            dbg_write(out, ary[i]);
+        }
+        out << "]";
+    }
+};
+
+template<typename... TS>
+struct Dbg<tuple<TS...>> {
+    static void dbg(ostream& out, const tuple<TS...>& t) {
+        out << "(";
+        tuple_enumerate(t, [&out](i64 i, const auto& e) {
+            if(i != 0) out << ",";
+            dbg_write(out, e);
+        });
+        out << ")";
+    }
+};
+
+template<typename T1, typename T2>
+struct Dbg<pair<T1,T2>> {
+    static void dbg(ostream& out, const pair<T1,T2>& p) {
+        return dbg_write(out, make_tuple(p.first,p.second));
+    }
+};
+
+template<typename C>
+struct Dbg<C,enable_if_t<is_container<C>::value>> {
+    static void dbg(ostream& out, const C& c) {
+        out << "[";
+        for(auto it = begin(c); it != end(c); ++it) {
+            if(it != begin(c)) out << ",";
+            dbg_write(out, *it);
+        }
+        out << "]";
+    }
+};
+
+template<typename T>
+void DBG_IMPL(i64 line, const char* expr, const T& value) {
+    cerr << "[L " << line << "]: ";
+    cerr << expr << " = ";
+    dbg_write(cerr, value);
+    cerr << "\n";
+}
+
+template<typename... TS>
+void DBG_IMPL(i64 line, const char* expr, const TS&... value) {
+    cerr << "[L " << line << "]: ";
+    cerr << "(" << expr << ") = ";
+    dbg_write(cerr, make_tuple(value...));
+    cerr << "\n";
+}
+
+template<size_t N, typename T, SFINAE(rank<T>::value == 0)>
+void DBG_DP_IMPL_HELPER(ostream& out, const T& x, const array<i64,N>&, const array<i64,N>&) {
+    dbg_write(out, x);
+}
+
+template<size_t N, typename T, SFINAE(rank<T>::value > 0)>
+void DBG_DP_IMPL_HELPER(ostream& out, const T& x, const array<i64,N>& sizes, const array<i64,N>& offs) {
+    i64 k   = N - rank<T>::value;
+    i64 off = offs[k];
+    i64 siz = sizes[k];
+    if(siz == 0) siz = extent<T>::value - off;
+
+    out << "[";
+    FOR(i, off, off+siz) {
+        if(i != off) out << ",";
+        DBG_DP_IMPL_HELPER(out, x[i], sizes, offs);
+    }
+    out << "]";
+}
+
+template<typename T, SFINAE(rank<T>::value > 0)>
+void DBG_DP_IMPL(i64 line, const char* expr, const T& dp,
+                 const array<i64,rank<T>::value>& sizes={},
+                 const array<i64,rank<T>::value>& offs={})
+{
+    cerr << "[L " << line << "]: ";
+    cerr << expr << " = ";
+    DBG_DP_IMPL_HELPER<rank<T>::value>(cerr, dp, sizes, offs);
+    cerr << "\n";
+}
+
+#ifdef PROCON_LOCAL
+    #define DBG(args...) DBG_IMPL(__LINE__, CPP_STR_I(args), args)
+    #define DBG_DP(args...) DBG_DP_IMPL(__LINE__, CPP_STR_I(args), args)
+#else
+    #define DBG(args...)
+    #define DBG_DP(args...)
+#endif
+// }}}
+
+// modint {{{
+template<i64 P>
+struct ModPT {
+    static_assert(P >= 2, "P must be a prime");
+    i64 v_;  // [0,P)
+
+    ModPT() : v_(0) {}
+    ModPT(i64 v) {
+        i64 r = v % P;
+        v_ = r >= 0 ? r : r+P;
+    }
+
+    ModPT operator-() const {
+        return ModPT(-v_);
+    }
+    ModPT& operator+=(ModPT rhs) {
+        v_ += rhs.v_;
+        v_ %= P;
+        return *this;
+    }
+    ModPT& operator-=(ModPT rhs) {
+        v_ += P;
+        v_ -= rhs.v_;
+        v_ %= P;
+        return *this;
+    }
+    ModPT& operator*=(ModPT rhs) {
+        v_ *= rhs.v_;
+        v_ %= P;
+        return *this;
+    }
+
+    ModPT& operator++() {
+        return *this += 1;
+    }
+    ModPT& operator--() {
+        return *this -= 1;
+    }
+    ModPT operator++(int) {
+        return exchange(*this, *this+1);
+    }
+    ModPT operator--(int) {
+        return exchange(*this, *this-1);
+    }
+
+    explicit operator i64() const { return v_; }
+};
+
+template<i64 P>
+ModPT<P> operator+(ModPT<P> lhs, ModPT<P> rhs) { return ModPT<P>(lhs) += rhs; }
+template<i64 P>
+ModPT<P> operator+(ModPT<P> lhs, i64 rhs) { return ModPT<P>(lhs) += rhs; }
+template<i64 P>
+ModPT<P> operator+(i64 lhs, ModPT<P> rhs) { return ModPT<P>(rhs) += lhs; }
+template<i64 P>
+ModPT<P> operator-(ModPT<P> lhs, ModPT<P> rhs) { return ModPT<P>(lhs) -= rhs; }
+template<i64 P>
+ModPT<P> operator-(ModPT<P> lhs, i64 rhs) { return ModPT<P>(lhs) -= rhs; }
+template<i64 P>
+ModPT<P> operator-(i64 lhs, ModPT<P> rhs) { return ModPT<P>(rhs) -= lhs; }
+template<i64 P>
+ModPT<P> operator*(ModPT<P> lhs, ModPT<P> rhs) { return ModPT<P>(lhs) *= rhs; }
+template<i64 P>
+ModPT<P> operator*(ModPT<P> lhs, i64 rhs) { return ModPT<P>(lhs) *= rhs; }
+template<i64 P>
+ModPT<P> operator*(i64 lhs, ModPT<P> rhs) { return ModPT<P>(rhs) *= lhs; }
+
+template<i64 P>
+bool operator==(ModPT<P> lhs, ModPT<P> rhs) { return lhs.v_ == rhs.v_; }
+template<i64 P>
+bool operator==(ModPT<P> lhs, i64 rhs) { return lhs == ModPT<P>(rhs); }
+template<i64 P>
+bool operator==(i64 lhs, ModPT<P> rhs) { return ModPT<P>(lhs) == rhs; }
+template<i64 P>
+bool operator!=(ModPT<P> lhs, ModPT<P> rhs) { return !(lhs == rhs); }
+template<i64 P>
+bool operator!=(ModPT<P> lhs, i64 rhs) { return !(lhs == rhs); }
+template<i64 P>
+bool operator!=(i64 lhs, ModPT<P> rhs) { return !(lhs == rhs); }
+
+template<i64 P>
+struct Scan<ModPT<P>> {
+    static ModPT<P> scan(istream& in) {
+        return Scan<i64>::scan(in);
+    }
+};
+
+template<i64 P>
+struct Fmt<ModPT<P>> {
+    static void fmt(ostream& out, ModPT<P> x) {
+        fmt_write(out, x.v_);
+    }
+};
+
+template<i64 P>
+struct Dbg<ModPT<P>> {
+    static void dbg(ostream& out, ModPT<P> x) {
+        dbg_write(out, x.v_);
+    }
+};
+
+using ModP = ModPT<MOD>;
+// }}}
+// }}}
+
+// init {{{
+struct ProconInit {
+    static constexpr int IOS_PREC = 15;
+    static constexpr bool AUTOFLUSH = false;
+
+    ProconInit() {
+        cin.tie(nullptr);
+        ios::sync_with_stdio(false);
+        cout << fixed << setprecision(IOS_PREC);
+#ifdef PROCON_LOCAL
+        cin.exceptions(ios::failbit | ios::badbit);
+        cerr << fixed << setprecision(IOS_PREC);
+#endif
+        if(AUTOFLUSH)
+            cout << unitbuf;
+    }
+} PROCON_INIT;
+// }}}
+
+//--------------------------------------------------------------------
+
+struct Treap {
+    struct Node {
+        i64 val;
+        i64 pri;
+        Node* l{nullptr};
+        Node* r{nullptr};
+        Node(i64 v, i64 p) : val(v), pri(p) {}
+    };
+
+    Node* root_{nullptr};
+
+    Treap() {}
+
+    Node* find(i64 x) const {
+        for(Node* t = root_; t; ) {
+            if(x == t->val) return t;
+            t = x < t->val ? t->l : t->r;
+        }
+        return nullptr;
+    }
+
+    void insert(i64 x, i64 pri) {
+        root_ = insert_impl(root_, x, pri);
+    }
+
+    void erase(i64 x) {
+        root_ = erase_impl(root_, x);
+    }
+
+    void print() const {
+        print_inorder(root_);
+        PRINTLN();
+        print_preorder(root_);
+        PRINTLN();
+    }
+
+private:
+    // 挿入後の部分木(Treap条件を満たす)の根を返す
+    Node* insert_impl(Node* t, i64 x, i64 pri) {
+        if(!t) return new Node(x,pri);  // 単一ノードはTreap条件を満たす
+        if(x == t->val) return t;
+
+        if(x < t->val) {
+            t->l = insert_impl(t->l, x, pri);  // Treap条件を満たした部分木の根
+            if(t->pri < t->l->pri)
+                t = rotate_r(t);
+        }
+        else {
+            t->r = insert_impl(t->r, x, pri);
+            if(t->pri < t->r->pri)
+                t = rotate_l(t);
+        }
+
+        return t;
+    }
+
+    // 消去対象ノードを葉まで移動してから消去
+    // 消去後の部分木(Treap条件を満たす)の根を返す
+    Node* erase_impl(Node* t, i64 x) {
+        if(!t) return nullptr;  // 空の木はTreap条件を満たす
+
+        if(x == t->val) return erase_impl_node(t, x);
+
+        if(x < t->val)
+            t->l = erase_impl(t->l, x);
+        else
+            t->r = erase_impl(t->r, x);
+
+        return t;
+    }
+
+    // t は消去対象ノード
+    // 消去後の部分木(Treap条件を満たす)の根を返す
+    Node* erase_impl_node(Node* t, i64 x) {
+        // 葉まで来たら消去
+        if(!t->l && !t->r) {
+            delete t;
+            return nullptr;
+        }
+
+        if(!t->l)
+            t = rotate_l(t);
+        else if(!t->r)
+            t = rotate_r(t);
+        else
+            t = t->l->pri > t->r->pri ? rotate_r(t) : rotate_l(t);
+
+        return erase_impl(t, x);
+    }
+
+    // 右の子と親子関係を入れ替える
+    Node* rotate_l(Node* t) {
+        Node* s = t->r;
+        t->r = s->l;
+        s->l = t;
+        return s;
+    }
+
+    // 左の子と親子関係を入れ替える
+    Node* rotate_r(Node* t) {
+        Node* s = t->l;
+        t->l = s->r;
+        s->r = t;
+        return s;
+    }
+
+    void print_inorder(Node* t) const {
+        if(!t) return;
+
+        print_inorder(t->l);
+        PRINT(" ");
+        PRINT(t->val);
+        print_inorder(t->r);
+    }
+
+    void print_preorder(Node* t) const {
+        if(!t) return;
+
+        PRINT(" ");
+        PRINT(t->val);
+        print_preorder(t->l);
+        print_preorder(t->r);
+    }
+};
+
+void solve() {
+    Treap treap;
+
+    i64 Q = RD();
+    REP(_, Q) {
+        auto cmd = RD<string>();
+
+        if(cmd == "insert") {
+            i64 x   = RD();
+            i64 pri = RD();
+            treap.insert(x, pri);
+        }
+        else if(cmd == "find") {
+            i64 x = RD();
+            Treap::Node* t = treap.find(x);
+            PRINTLN(t ? "yes" : "no");
+        }
+        else if(cmd == "delete") {
+            i64 x = RD();
+            treap.erase(x);
+        }
+        else if(cmd == "print") {
+            treap.print();
+        }
+        else {
+            ASSERT(false);
+        }
+    }
+}
+
+signed main() {
+    
+
+    solve();
+
+    return 0;
+}
+

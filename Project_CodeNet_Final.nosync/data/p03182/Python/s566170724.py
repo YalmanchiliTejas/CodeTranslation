@@ -1,0 +1,88 @@
+
+class LazySegmentTree():
+    def __init__(self,n,init,merge_func,ide_ele):
+        self.n=(n-1).bit_length()
+        self.merge_func=merge_func
+        self.ide_ele=ide_ele
+        self.data=[0 for i in range(1<<(self.n+1))]
+        self.lazy=[0 for i in range(1<<(self.n+1))]
+        for i in range(n):
+            self.data[2**self.n+i]=init[i]
+        for i in range(2**self.n-1,0,-1):
+            self.data[i]=self.merge_func(self.data[2*i],self.data[2*i+1])
+
+    def propagate_above(self,i):
+        ids=[]
+        while i:
+            i>>=1
+            ids.append(i)
+        for v in ids[::-1]:
+            self.data[v]+=self.lazy[v]
+            self.lazy[2*v]+=self.lazy[v]
+            self.lazy[2*v+1]+=self.lazy[v]
+            self.lazy[v]=0
+
+    def remerge_above(self,i):
+        ids=[]
+        while i:
+            i>>=1
+            self.data[i]=self.merge_func(self.data[2*i]+self.lazy[2*i],self.data[2*i+1]+self.lazy[2*i+1])
+
+    def update(self,l,r,x):
+        l+=1<<self.n
+        r+=1<<self.n
+        l0=l//(l&-l)
+        r0=r//(r&-r)-1
+        self.propagate_above(l0)
+        self.propagate_above(r0)
+        while l<r:
+            if l&1:
+                self.lazy[l]+=x
+                l+=1
+            if r&1:
+                self.lazy[r-1]+=x
+            l>>=1
+            r>>=1
+        self.remerge_above(l0)
+        self.remerge_above(r0)
+
+    def query(self,l,r):
+        l+=1<<self.n
+        r+=1<<self.n
+        l0=l//(l&-l)
+        r0=r//(r&-r)-1
+        self.propagate_above(l0)
+        self.propagate_above(r0)
+        res=self.ide_ele
+        while l<r:
+            if l&1:
+                res=self.merge_func(res,self.data[l]+self.lazy[l])
+                l+=1
+            if r&1:
+                res=self.merge_func(res,self.data[r-1]+self.lazy[r-1])
+            l>>=1
+            r>>=1
+        return res
+
+import sys
+
+input=sys.stdin.readline
+
+N,M=map(int,input().split())
+interval=[[] for i in range(N)]
+for i in range(M):
+    l,r,a=map(int,input().split())
+    interval[l-1].append((r-1,a))
+
+init=[0]*N
+LST=LazySegmentTree(N,init,merge_func=min,ide_ele=10**18)
+
+Max=[0]*N
+for i in range(N-1,-1,-1):
+    for r,a in interval[i]:
+        LST.update(i,r+1,-a)
+    Max[i]=max(-LST.query(0,N),0)
+    if i:
+        LST.update(i-1,i,-Max[i])
+
+print(Max[0])

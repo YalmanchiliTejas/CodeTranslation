@@ -1,0 +1,2 @@
+f=lambda s:zip(*[t for t in s if'#'in t])
+print(*map(''.join,f(f(open(0).readlines()))))

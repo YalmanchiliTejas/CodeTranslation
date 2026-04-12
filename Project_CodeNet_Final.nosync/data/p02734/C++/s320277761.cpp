@@ -1,0 +1,242 @@
+#include <bits/stdc++.h>
+using namespace std;
+// #define int long long
+// #define endl '\n'
+
+//TEMPLATE START---------------8<---------------8<---------------8<---------------8<---------------//
+
+/* TYPE */
+typedef long long ll;       typedef long double ld;
+typedef pair<int, int> pii; typedef pair<ll, ll> pll;
+typedef vector<pii> vpii;   typedef vector<pll> vpll;
+typedef vector<int> vi;     typedef vector<ll> vl;
+typedef vector<string> vst; typedef vector<bool> vb;
+typedef vector<ld> vld;     typedef vector<vector<int>> vvi;
+template<typename T, typename Cmp = less<>> using prique = priority_queue<T, vector<T>, Cmp>;
+template<typename T> using prique_r = prique<T, greater<>>;
+/* CONSTANT */
+#define ln '\n'
+const int INF = 1 << 30;    const ll INFF = 1LL << 60;  const string ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const int MOD = 1e9 + 7;    const int MODD = 998244353; const string alphabet = "abcdefghijklmnopqrstuvwxyz";
+const double EPS = 1e-9;    const ld PI = 3.14159265358979323846264338327950288;
+const int dx[] = { 1, 0, -1,  0,  1, -1, -1, 1, 0 };
+const int dy[] = { 0, 1,  0, -1, -1, -1,  1, 1, 0 };
+/* CONTAINER */
+#define PB              emplace_back
+#define ALL(v)          (v).begin(), (v).end()
+#define RALL(v)         (v).rbegin(), (v).rend()
+#define SORT(v)         sort(ALL(v))
+#define RSORT(v)        sort(RALL(v))
+#define LESS(x, val)    (lower_bound(x.begin(), x.end(), val) - x.begin())
+#define LEQ(x, val)     (upper_bound(x.begin(), x.end(), val) - x.begin())
+#define GREATER(x, val) (int)(x).size() - LEQ((x), (val))
+#define GEQ(x, val)     (int)(x).size() - LESS((x), (val))
+#define UNIQUE(v)       sort(ALL(v)); (v).erase(unique(ALL(v)), (v).end())
+template<typename T> vector<T> make_v(size_t a) { return vector<T>(a); }
+template<typename T, typename... Ts> auto make_v(size_t a, Ts... ts) { return vector<decltype(make_v<T>(ts...))>(a, make_v<T>(ts...)); }
+template<typename T, typename U, typename... V> enable_if_t<is_same<T, U>::value != 0> fill_v(U &u, const V... v) { u = U(v...); }
+template<typename T, typename U, typename... V> enable_if_t<is_same<T, U>::value == 0> fill_v(U &u, const V... v) { for (auto &e : u) fill_v<T>(e, v...); }
+/* LOOP */
+#define _overload3(_1, _2, _3, name, ...) name
+#define _REP(i, n)      REPI(i, 0, n)
+#define REPI(i, a, b)   for (ll i = (ll)a; i < (ll)b; ++i)
+#define REP(...)        _overload3(__VA_ARGS__, REPI, _REP,)(__VA_ARGS__)
+#define _RREP(i, n)     RREPI(i, n, 0)
+#define RREPI(i, a, b)  for (ll i = (ll)a; i >= (ll)b; --i)
+#define RREP(...)       _overload3(__VA_ARGS__, RREPI, _RREP,)(__VA_ARGS__)
+#define EACH(e, v)      for (auto& e : v)
+#define PERM(v)         sort(ALL(v)); for (bool c##p = true; c##p; c##p = next_permutation(ALL(v)))
+/* INPUT */
+template<typename T> void SSS(T& t) { cin >> t; }
+template<typename Head, typename... Tail> void SSS(Head&& head, Tail&&... tail) { cin >> head; SSS(tail...); }
+#define SS(T, ...)      T __VA_ARGS__; SSS(__VA_ARGS__);
+#define SV(T, v, n)     vector<T> v(n); for (auto& i : v) cin >> i;
+#define SVV(T, v, n, m) vector<vector<T>> v(n, vector<T>(m)); for (auto& r : v) for (auto& i : r) cin >> i;
+/* OUTPUT */
+// PROTOTYPE DECLARATION
+template<typename T, typename U> ostream &operator<<(ostream &os, const pair<T, U> &j);
+template<typename... T> ostream &operator<<(ostream &os, const tuple<T...> &t);
+template<class C, enable_if_t<!is_same<C, string>::value, decltype(declval<const C &>().begin(), nullptr)> = nullptr> ostream& operator<<(ostream &os, const C &c);
+template<typename T> ostream &operator<<(ostream &os, const stack<T> &j);
+template<typename T> ostream &operator<<(ostream &os, const queue<T> &j);
+template<typename T, typename C, typename Cmp> ostream &operator<<(ostream &os, const priority_queue<T, C, Cmp> &j);
+// IMPLEMENTATION
+template<typename T, typename U> ostream &operator<<(ostream &os, const pair<T, U> &j) { return os << '{' << j.first << ", " << j.second << '}'; }
+template<size_t num = 0, typename... T> enable_if_t<num == sizeof...(T)> PRINT_TUPLE(ostream &os, const tuple<T...> &t) {}
+template<size_t num = 0, typename... T> enable_if_t<num <  sizeof...(T)> PRINT_TUPLE(ostream &os, const tuple<T...> &t) { os << get<num>(t); if (num + 1 < sizeof...(T)) os << ", "; PRINT_TUPLE<num + 1>(os, t); }
+template<typename... T> ostream &operator<<(ostream &os, const tuple<T...> &t) { PRINT_TUPLE(os << '{', t); return os << '}'; }
+template<class C, enable_if_t<!is_same<C, string>::value, decltype(declval<const C &>().begin(), nullptr)>> ostream& operator<<(ostream &os, const C &c) { os << '{'; for (auto it = begin(c); it != end(c); it++) { if (begin(c) != it) os << ", "; os << *it; } return os << '}'; }
+template<typename T> ostream &operator<<(ostream &os, const stack<T> &j) { deque<T> d; for (auto c = j; !c.empty(); c.pop()) d.push_front(c.top());  return os << d; }
+template<typename T> ostream &operator<<(ostream &os, const queue<T> &j) { deque<T> d; for (auto c = j; !c.empty(); c.pop()) d.push_back(c.front()); return os << d; }
+template<typename T, typename C, typename Cmp> ostream &operator<<(ostream &os, const priority_queue<T, C, Cmp> &j) { deque<T> d; for (auto c = j; !c.empty(); c.pop()) d.push_front(c.top());  return os << d; }
+// OUTPUT FUNCTION
+template<typename T> int PV(T &v) { int sz = v.size(); for (int i = 0; i < sz; ++i) cout << v[i] << " \n"[i == sz - 1]; return 0; }
+inline int print() { cout << endl; return 0; }
+template<typename Head> int print(Head&& head){ cout << head; return print(); }
+template<typename Head, typename... Tail> int print(Head&& head, Tail&&... tail) { cout << head << " "; return print(forward<Tail>(tail)...); }
+#ifdef LOCAL
+inline void dump() { cerr << endl; }
+template<typename Head> void dump(Head&& head) { cerr << head; dump(); }
+template<typename Head, typename... Tail> void dump(Head&& head, Tail&&... tail) { cerr << head << ", "; dump(forward<Tail>(tail)...); }
+#define debug(...) do {cerr << __LINE__ << ":	" << #__VA_ARGS__ << " = "; dump(__VA_ARGS__); } while (false)
+#else
+#define dump(...)
+#define debug(...)
+#endif
+/* OTHER */
+#define MP              make_pair
+#define MT              make_tuple
+#define tmax(x, y, z)   max((x), max((y), (z)))
+#define tmin(x, y, z)   min((x), min((y), (z)))
+template<typename T, typename A, typename B> inline bool between(T x, A a, B b) { return ((a <= x) && (x < b)); }
+template<typename A, typename B> inline bool chmax(A &a, const B &b) { if (a < b) { a = b; return true; } return false; }
+template<typename A, typename B> inline bool chmin(A &a, const B &b) { if (a > b) { a = b; return true; } return false; }
+inline ll gcd(ll a, ll b) { return b ? gcd(b, a % b) : a; }
+inline ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }
+inline ll POW(ll a, ll b)                    { ll r = 1; do { if (b & 1)  r *= a;        a *= a; }       while (b >>= 1); return r; }
+inline ll MOP(ll a, ll b, const ll &m = MOD) { ll r = 1; do { if (b & 1) (r *= a) %= m; (a *= a) %= m; } while (b >>= 1); return r; }
+struct abracadabra {
+    abracadabra() {
+        cin.tie(nullptr); ios::sync_with_stdio(false);
+        cout << fixed << setprecision(20);
+        cerr << fixed << setprecision(5);
+    };
+} ABRACADABRA;
+
+//TEMPLATE END---------------8<---------------8<---------------8<---------------8<---------------//
+
+template< int MODULO > struct ModInt {
+    using int64 = long long;
+    using uint32 = unsigned int;
+    using uint64 = unsigned long long;
+    uint64 x; ModInt() : x(0) {}
+    ModInt(int64 y) : x(set(y % MODULO + MODULO)) {}
+    static uint64 set(const int64 &y) { return (y < MODULO) ? y : y - MODULO; }
+    static ModInt make(const uint64 &y) { ModInt ret = y; return ret; }
+    ModInt operator+(const ModInt &m) const { return make(set(x + m.x)); }
+    ModInt operator-(const ModInt &m) const { return make(set(x + MODULO - m.x)); }
+    ModInt operator*(const ModInt &m) const { return make(x * m.x % MODULO); }
+    ModInt operator/(const ModInt &m) const { return make(x) * ~make(m.x); }
+    ModInt &operator+=(const ModInt &m) { return *this = *this + m; }
+    ModInt &operator-=(const ModInt &m) { return *this = *this - m; }
+    ModInt &operator*=(const ModInt &m) { return *this = *this * m; }
+    ModInt &operator/=(const ModInt &m) { return *this = *this / m; }
+    ModInt &operator^=(const uint64 &y) { return *this = *this ^ y; }
+    ModInt operator~ () const { return *this ^ (MODULO - 2); }
+    ModInt operator- () const { return make(set(MODULO - x)); }
+    ModInt operator! () const { return getFact(uint32(*this)); }
+    ModInt operator& () const { return getFinv(uint32(*this)); }
+    ModInt operator++() { return *this = make(set(x + 1)); }
+    ModInt operator--() { return *this = make(set(x + MODULO - 1)); }
+    bool operator==(const ModInt &m) const { return x == m.x; }
+    bool operator!=(const ModInt &m) const { return x != m.x; }
+    bool operator< (const ModInt &m) const { return x <  m.x; }
+    bool operator<=(const ModInt &m) const { return x <= m.x; }
+    bool operator> (const ModInt &m) const { return x >  m.x; }
+    bool operator>=(const ModInt &m) const { return x >= m.x; }
+    explicit operator   bool() const { return x; }
+    explicit operator uint64() const { return x; }
+    ModInt operator^(uint64 y) const {
+        uint64 t = x, u = 1;
+        while (y) { if (y & 1) (u *= t) %= MODULO; (t *= t) %= MODULO; y >>= 1; }
+        return make(u);
+    }
+    friend ostream &operator<<(ostream &os, const ModInt< MODULO > &m) { return os << m.x; }
+    friend istream &operator>>(istream &is, ModInt< MODULO > &m) { uint64 y; is >> y; m = make(y); return is; }
+    static vector< ModInt > fact, finv, invs;
+    static void init(uint32 n) {
+        uint32 m = fact.size();
+        if (n < m) return;
+        fact.resize(n + 1, 1);
+        finv.resize(n + 1, 1);
+        invs.resize(n + 1, 1);
+        if (m == 0) m = 1;
+        for (uint32 i = m; i <= n; ++i) fact[i] = fact[i - 1] * ModInt(i);
+        finv[n] = ModInt(1) / fact[n];
+        for (uint32 i = n; i >= m; --i) finv[i - 1] = finv[i] * make(i);
+        for (uint32 i = m; i <= n; ++i) invs[i] = finv[i] * fact[i - 1];
+    }
+    static ModInt getFact(uint32 n) { init(n); return fact[n]; }
+    static ModInt getFinv(uint32 n) { init(n); return finv[n]; }
+    static ModInt getInvs(uint32 n) { init(n); return invs[n]; }
+    static ModInt C(int64 n, int64 r) {
+        if (r == 0) return make(1);
+        if (r <  0) return make(0);
+        if (n <  0) return make(r & 1 ? MODULO - 1 : 1) * C(-n + r - 1, r);
+        if (n == 0 || n < r) return make(0);
+        init(n);
+        return fact[n] * finv[n - r] * finv[r];
+    }
+    static ModInt P(int64 n, int64 r) {
+        if (n < r || r < 0) return make(0);
+        init(n);
+        return fact[n] * finv[n - r];
+    }
+    static ModInt H(int64 n, int64 r) {
+        if (n < 0 || r < 0) return make(0);
+        if (!n && !r) return make(1);
+        init(n + r - 1);
+        return C(n + r - 1, r);
+    }
+    static ModInt montmort(uint32 n) {
+        ModInt res;
+        init(n);
+        for (uint32 k = 2; k <= n; ++k) {
+            if (k & 1) res -= finv[k];
+            else res += finv[k];
+        }
+        return res *= fact[n];
+    }
+    static ModInt LagrangePolynomial(vector<ModInt> &y, ModInt t) {
+        uint32 n = y.size() - 1;
+        if (t.x <= n) return y[t.x];
+        init(n + 1);
+        ModInt res, num(1);
+        for (uint32 i = 0; i <= n; ++i) num *= t - make(i);
+        for (uint32 i = 0; i <= n; ++i) {
+            ModInt tmp = y[i] * num / (t - make(i)) * finv[i] * finv[n - i];
+            if ((n - i) & 1) res -= tmp;
+            else res += tmp;
+        }
+        return res;
+    }
+};
+template< int MODULO >
+vector<ModInt< MODULO >> ModInt< MODULO >::fact = vector<ModInt< MODULO >>();
+template< int MODULO >
+vector<ModInt< MODULO >> ModInt< MODULO >::finv = vector<ModInt< MODULO >>();
+template< int MODULO >
+vector<ModInt< MODULO >> ModInt< MODULO >::invs = vector<ModInt< MODULO >>();
+using modint = ModInt< MODD >;
+
+/*
+・ModInt
+[備考] Mod演算のための構造体
+[使用例]
+modint M;           // 剰余系MOD(1e9+7)における演算ができる
+ModInt<mod> N;      // 剰余系modにおける演算ができる
+*/
+
+modint dp[3030][6030];
+
+signed main() {
+
+    SS(int, N, S);
+    SV(int, A, N);
+
+    modint res = 0;
+    dp[0][0] = 1;
+
+    REP(i, N) {
+        REP(j, S) {
+            dp[i + 1][j] += dp[i][j];
+            if (j == 0) dp[i + 1][A[i]] += i + 1;
+            else dp[i + 1][j + A[i]] += dp[i][j];
+        }
+    }
+
+    REP(i, N + 1) res += dp[i][S] * (N + 1 - i);
+
+    print(res);
+
+}

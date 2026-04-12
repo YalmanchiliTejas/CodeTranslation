@@ -1,0 +1,6 @@
+N,M = map(int, input().split())
+# N = int(input())
+# s = int(input())
+# C = int(input())
+# s= input()
+print("Yes" if M == N else "No")

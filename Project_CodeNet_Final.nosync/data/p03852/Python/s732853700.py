@@ -1,0 +1,1 @@
+a=['a','i','u','e','o'];print('cvoonwseoln a n t'[input() in a::2])

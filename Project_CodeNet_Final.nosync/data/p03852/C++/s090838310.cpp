@@ -1,0 +1,23 @@
+#include <iostream>
+#include <string>
+#include <algorithm>
+
+using namespace std;
+
+int main() {
+        char c;
+        cin >> c;
+        switch (c) {
+                case 'a':
+                case 'i':
+                case 'u':
+                case 'e':
+                case 'o':
+                        cout << "vowel" << endl;
+                        break;
+                default:
+                        cout << "consonant" << endl;
+                        break;
+        }
+        return 0;
+}

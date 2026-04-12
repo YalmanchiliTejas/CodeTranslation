@@ -1,0 +1,11 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    int X;
+    cin >> X;
+    cout << ( (X >= 30)? "Yes" : "No" );
+    return 0;
+}

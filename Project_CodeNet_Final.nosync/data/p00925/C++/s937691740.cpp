@@ -1,0 +1,124 @@
+#include<bits/stdc++.h>
+#define range(i,a,b) for(int i = (a); i < (b); i++)
+#define rep(i,b) for(int i = 0; i < (b); i++)
+#define all(a) (a).begin(), (a).end()
+#define debug(x) cout << "debug " << x << endl;
+const int INF = 100000000;
+using namespace std;
+
+typedef string::const_iterator State;
+int number(State&);
+int factor(State&);
+int term(State&);
+int expression(State&);
+
+// ??°??????????????????????????????????????°????????????
+int number(State &begin) {
+    int ret = 0;
+
+    while (isdigit(*begin)) {
+        ret *= 10;
+        ret += *begin - '0';
+        begin++;
+    }
+
+    return ret;
+}
+
+// ??¬??§?????°???????????????????????????????????????????????????
+int factor(State &begin) {
+    if (*begin == '(') {
+        begin++; // '('????£???°??????
+        int ret = expression(begin);
+        begin++; // ')'????£???°??????
+    } else {
+        return number(begin);
+    }
+}
+
+// ?????????????????????????????????????????????????????????????????????
+int term(State &begin) {
+    int ret = factor(begin);
+
+    for (;;) {
+        if (*begin == '*') {
+            begin++;
+            ret *= factor(begin);
+        } else if (*begin == '/') {
+            begin++;
+            ret /= factor(begin);
+        } else {
+            break;
+        }
+    }
+
+    return ret;
+}
+
+// ?????????????????????????????????????????????????????????????????????
+int expression(State &begin) {
+    int ret = term(begin);
+
+    for (;;) {
+        if (*begin == '+') {
+            begin++;
+            ret += term(begin);
+        } else if (*begin == '-') {
+            begin++;
+            ret -= term(begin);
+        } else {
+            break;
+        }
+    }
+
+    return ret;
+}
+
+int expression2(State &begin){
+    int ret = term(begin);
+
+    for (;;) {
+        if (*begin == '+') {
+            begin++;
+            ret += number(begin);
+        } else if (*begin == '-') {
+            begin++;
+            ret -= number(begin);
+        } else if (*begin == '*') {
+            begin++;
+            ret *= factor(begin);
+        } else if (*begin == '/') {
+            begin++;
+            ret /= factor(begin);
+        } else {
+            break;
+        }
+    }
+
+    return ret;
+
+}
+
+
+int main(){
+    int n;
+    string s;
+    getline(cin, s);
+    cin >> n;
+    cin.ignore();
+
+    State begin = s.begin();
+    State begin2 = s.begin();
+    int correct = expression(begin);
+    int mistake = expression2(begin2);
+    if(n == correct && n == mistake){
+        cout << 'U' << endl;
+    }else if(n == correct){
+        cout << 'M' << endl;
+    }else if(n == mistake){
+        cout << 'L' << endl;
+    }else{
+        cout << 'I' << endl;
+    }
+    return 0;
+}

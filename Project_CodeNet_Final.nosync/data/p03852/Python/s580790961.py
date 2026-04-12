@@ -1,0 +1,1 @@
+print('vowel' if input().rstrip() in ['a', 'e', 'i', 'o', 'u'] else 'consonant')

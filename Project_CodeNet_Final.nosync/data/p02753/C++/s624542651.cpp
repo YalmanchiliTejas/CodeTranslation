@@ -1,0 +1,44 @@
+#include <bits/stdc++.h>
+
+//mt19937 rng(chrono::steady_clock::now().time_since_epoch().count());
+//#pragma GCC optimize("Ofast")
+//1.0 * clock() / CLOCKS_PER_SEC
+
+#define fi first
+#define se second
+#define ll long long
+#define dl double long
+
+using namespace std;
+
+const int NN = 1e6 + 7;
+const int N = 3e3 + 7;
+const int M = 20;
+const int mod = 998244353;
+const ll inf = 1e18 + 7;
+const dl rf = 1e-14;
+
+void solve1()
+{
+    string s;
+    cin >> s;
+    vector < int > v(2);
+    for( auto c : s ){
+        v[c - 'A'] += 1;
+    }
+    if( v[0] == 3 || v[1] == 3 )cout << "No";
+    else cout << "Yes";
+}
+
+int main()
+{
+    ios_base::sync_with_stdio(0);
+    cin.tie(0); cout.tie(0); srand(time(0));
+    //freopen( "input.txt" , "r" , stdin );
+    //freopen( "output.txt" , "w" , stdout );
+
+    int cghf = 1;//cin >> cghf;
+    while( cghf-- ){
+        solve1();
+    }
+}

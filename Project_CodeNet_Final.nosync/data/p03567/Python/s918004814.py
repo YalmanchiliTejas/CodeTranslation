@@ -1,0 +1,1 @@
+print "Yes" if raw_input().count("AC") else "No"

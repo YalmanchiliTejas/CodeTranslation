@@ -1,0 +1,5 @@
+_n=int(input())
+_s=input()
+_k=int(input())
+ans="".join(["*" if s!=_s[_k-1] else s for s in _s])
+print(ans)

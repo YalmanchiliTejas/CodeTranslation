@@ -1,0 +1,5 @@
+from numpy import*
+N,*A=open(0)
+N,A,S,a=int(N),loadtxt(A,int),1,0
+while S:B=A//N;S=B.sum();a+=S;A+=S-B*-~N
+print(a)

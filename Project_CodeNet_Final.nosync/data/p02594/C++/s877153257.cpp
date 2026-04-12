@@ -1,0 +1,11 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+signed main() {   
+    int x; 
+    cin >> x;
+
+    cout << (x >= 30 ? "Yes" : "No") << endl;
+    return 0;
+}

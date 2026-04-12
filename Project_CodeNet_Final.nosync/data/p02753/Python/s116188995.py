@@ -1,0 +1,1 @@
+print("Yes")if len(set(list(input())))==2else print("No")

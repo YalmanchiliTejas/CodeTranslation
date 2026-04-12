@@ -1,0 +1,32 @@
+#include<bits/stdc++.h>
+#define vi vector<int>
+#define vvi vector<vector<int> >
+#define vl vector<ll>
+#define vvl vector<vector<ll>>
+#define vb vector<bool>
+#define vc vector<char>
+#define vs vector<string>
+using ll = long long;
+using ld =long double;
+//#define int ll
+#define INF 1e9
+#define EPS 0.0000000001
+#define rep(i,n) for(int i=0;i<n;i++)
+#define loop(i,s,n) for(int i=s;i<n;i++)
+#define all(in) in.begin(), in.end()
+template<class T, class S> void cmin(T &a, const S &b) { if (a > b)a = b; }
+template<class T, class S> void cmax(T &a, const S &b) { if (a < b)a = b; }
+#define MAX 9999999
+using namespace std;
+typedef pair<int, int> pii;
+typedef pair<int,pii> piii;
+#define mp make_pair
+signed main(){
+    ll a,b,c; cin>>a>>b>>c;
+    if(b<=c&&a>b)return puts("-1")*0;
+    ll dif=b-c;
+    a-=b;
+    if(a<=0)return puts("1")*0;
+    cout<<(a/dif+(a%dif?1:0))*2+1<<endl;
+}
+

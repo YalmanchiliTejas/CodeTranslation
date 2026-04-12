@@ -1,0 +1,31 @@
+#include<bits/stdc++.h>
+#define int long long //记得longlong！！
+using namespace std;
+int n,a[200003],fsum[200003],bsum[200003],ans=-2e18,sum,su; //fsum[i]代表的是与i奇偶性相同的数的前缀和，bsum[i]代表的是与i奇偶性相同的数的后缀和
+signed main()
+{
+	scanf("%lld",&n);
+	for(int i=1; i<=n; i++)
+		scanf("%lld",&a[i]);
+	fsum[1]=a[1],fsum[2]=a[2],bsum[n]=a[n],bsum[n-1]=a[n-1];
+	for(int i=3; i<=n; i++)
+		fsum[i]=fsum[i-2]+a[i];
+	for(int i=n-2; i>=1; i--)
+		bsum[i]=bsum[i+2]+a[i];
+	sum=fsum[n];
+	if(n%2==0)
+	{
+		ans=max(fsum[n-1],fsum[n]);
+		for(int i=1; i<=n; i+=2)
+			ans=max(ans,fsum[i]+bsum[i+3]);
+		cout<<ans;
+		return 0;
+	}
+	for(int i=1; i<=n; i++)
+		if(i%2==0)
+			su+=a[i];
+		else
+			su=max(su-a[i],-a[i]),ans=max(ans,sum+su); //最大子段和
+	cout<<ans;
+	return 0;
+}
