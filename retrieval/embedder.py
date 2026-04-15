@@ -1,17 +1,14 @@
 """
-CodeBERT-based embedder for source-code retrieval.
+CodeBERT-based embedder for CodeNet-aware code retrieval.
 
-Usage:
-    from embedder import CodeEmbedder
-
-    embedder = CodeEmbedder()
-    vec = embedder.embed_text("def add(a, b): return a + b")
+This version embeds code together with optional problem context so retrieval
+can leverage both the source program and the underlying programming task.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Sequence
+from typing import Any, Mapping, Sequence, List
 
 import numpy as np
 import torch
@@ -21,9 +18,52 @@ from transformers import AutoModel, AutoTokenizer
 @dataclass
 class EmbedderConfig:
     model_name: str = "microsoft/codebert-base"
-    max_length: int = 256
+    max_length: int = 512
     pooling: str = "cls"   # supported: "cls", "mean"
     normalize: bool = True
+    problem_text_chars: int = 1600
+
+
+def build_retrieval_text(
+    code: str,
+    *,
+    language: str | None = None,
+    problem_id: str | None = None,
+    problem_name: str | None = None,
+    problem_description: str | None = None,
+    extra_tags: Sequence[str] | None = None,
+    max_problem_chars: int = 1600,
+) -> str:
+    """
+    Build a retrieval string that includes CodeNet task context.
+
+    The goal is not to create a prompt, but a stable text representation
+    whose embedding better reflects both program semantics and the
+    underlying problem being solved.
+    """
+    if not isinstance(code, str) or not code.strip():
+        raise ValueError("code must be a non-empty string.")
+
+    parts: List[str] = []
+
+    if language:
+        parts.append(f"[LANG={language}]")
+    if problem_id:
+        parts.append(f"[PROBLEM_ID={problem_id}]")
+    if problem_name:
+        parts.append(f"[PROBLEM_NAME={problem_name}]")
+    if extra_tags:
+        parts.append(f"[TAGS={' | '.join(str(tag) for tag in extra_tags if str(tag).strip())}]")
+    if problem_description:
+        clipped = problem_description.strip()
+        if max_problem_chars > 0:
+            clipped = clipped[:max_problem_chars]
+        parts.append("[PROBLEM_DESCRIPTION]")
+        parts.append(clipped)
+
+    parts.append("[CODE]")
+    parts.append(code.strip())
+    return "\n".join(parts)
 
 
 class CodeEmbedder:
@@ -53,16 +93,6 @@ class CodeEmbedder:
         self.model.eval()
 
     def _pool(self, hidden_state: torch.Tensor, attention_mask: torch.Tensor) -> torch.Tensor:
-        """
-        Pool token embeddings into a single vector.
-
-        Args:
-            hidden_state: [batch, seq_len, hidden_dim]
-            attention_mask: [batch, seq_len]
-
-        Returns:
-            [batch, hidden_dim]
-        """
         if self.config.pooling == "cls":
             return hidden_state[:, 0, :]
 
@@ -76,12 +106,6 @@ class CodeEmbedder:
         raise ValueError(f"Unsupported pooling strategy: {self.config.pooling}")
 
     def embed_batch(self, texts: Sequence[str], batch_size: int = 16) -> np.ndarray:
-        """
-        Embed a batch of code/text snippets.
-
-        Returns:
-            np.ndarray of shape [len(texts), hidden_dim], dtype=float32
-        """
         if not texts:
             raise ValueError("embed_batch received an empty sequence.")
 
@@ -111,13 +135,19 @@ class CodeEmbedder:
         return np.vstack(all_vectors)
 
     def embed_text(self, text: str) -> np.ndarray:
-        """
-        Embed a single code/text snippet.
-
-        Returns:
-            np.ndarray of shape [hidden_dim], dtype=float32
-        """
         if not isinstance(text, str) or not text.strip():
             raise ValueError("embed_text expects a non-empty string.")
-
         return self.embed_batch([text], batch_size=1)[0]
+
+    def embed_record(self, record: Mapping[str, Any]) -> np.ndarray:
+        source_code = record.get("source_code", "")
+        retrieval_text = build_retrieval_text(
+            source_code,
+            language=record.get("source_lang") or record.get("language"),
+            problem_id=record.get("problem_id"),
+            problem_name=record.get("problem_name"),
+            problem_description=record.get("problem_description"),
+            extra_tags=record.get("tags", []),
+            max_problem_chars=self.config.problem_text_chars,
+        )
+        return self.embed_text(retrieval_text)

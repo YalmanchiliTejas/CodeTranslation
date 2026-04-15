@@ -1,5 +1,5 @@
 """
-Builds a FAISS vector index over source-code chunks.
+Build a FAISS vector index over CodeNet-aware weak translation pairs.
 
 Expected input format:
 - JSON array of dicts, or
@@ -7,16 +7,12 @@ Expected input format:
 
 Each record should at least contain:
     {
-        "id": "ex_001",
+        "id": "...",
         "source_code": "...",
-        "target_code": "..."
+        "target_code": "...",
+        "problem_id": "p00001",
+        "problem_name": "..."
     }
-
-Example:
-    python index_builder.py \
-        --input data/paired_examples.json \
-        --index-out retriever/artifacts/code_index.faiss \
-        --meta-out retriever/artifacts/metadata.json
 """
 
 from __future__ import annotations
@@ -29,7 +25,7 @@ from typing import Any, Dict, List
 import faiss
 import numpy as np
 
-from embedder import CodeEmbedder
+from retrieval.embedder import CodeEmbedder, EmbedderConfig, build_retrieval_text
 
 
 def load_examples(input_path: str | Path) -> List[Dict[str, Any]]:
@@ -54,7 +50,7 @@ def validate_examples(examples: List[Dict[str, Any]]) -> None:
     if not examples:
         raise ValueError("No examples found in the input data.")
 
-    required = {"id", "source_code", "target_code"}
+    required = {"id", "source_code", "target_code", "problem_id"}
     for i, ex in enumerate(examples):
         missing = required - set(ex.keys())
         if missing:
@@ -69,17 +65,33 @@ def build_index(
     examples: List[Dict[str, Any]],
     model_name: str = "microsoft/codebert-base",
     batch_size: int = 16,
+    max_problem_chars: int = 1600,
 ) -> tuple[faiss.Index, List[Dict[str, Any]]]:
-    embedder = CodeEmbedder()
-    source_chunks = [ex["source_code"] for ex in examples]
+    embedder = CodeEmbedder(
+        config=EmbedderConfig(
+            model_name=model_name,
+            problem_text_chars=max_problem_chars,
+        )
+    )
+
+    source_chunks = [
+        build_retrieval_text(
+            ex["source_code"],
+            language=ex.get("source_lang") or ex.get("language"),
+            problem_id=ex.get("problem_id"),
+            problem_name=ex.get("problem_name"),
+            problem_description=ex.get("problem_description"),
+            extra_tags=ex.get("tags", []),
+            max_problem_chars=max_problem_chars,
+        )
+        for ex in examples
+    ]
 
     embeddings = embedder.embed_batch(source_chunks, batch_size=batch_size)
     if embeddings.dtype != np.float32:
         embeddings = embeddings.astype(np.float32)
 
     dimension = embeddings.shape[1]
-
-    # Since vectors are L2-normalized in the embedder, inner product ~= cosine similarity.
     index = faiss.IndexFlatIP(dimension)
     index.add(embeddings)
 
@@ -88,11 +100,23 @@ def build_index(
         metadata.append(
             {
                 "id": ex["id"],
+                "problem_id": ex.get("problem_id"),
+                "problem_name": ex.get("problem_name", ""),
+                "problem_description": ex.get("problem_description", ""),
+                "sample_tests": ex.get("sample_tests", []),
                 "source_code": ex["source_code"],
                 "target_code": ex["target_code"],
                 "tags": ex.get("tags", []),
-                "source_lang": ex.get("source_lang", "python"),
-                "target_lang": ex.get("target_lang", "cpp"),
+                "source_lang": ex.get("source_lang", "Python"),
+                "target_lang": ex.get("target_lang", "C++"),
+                "source_submission_id": ex.get("source_submission_id"),
+                "target_submission_id": ex.get("target_submission_id"),
+                "source_path": ex.get("source_path"),
+                "target_path": ex.get("target_path"),
+                "source_cpu_time": ex.get("source_cpu_time"),
+                "target_cpu_time": ex.get("target_cpu_time"),
+                "source_memory": ex.get("source_memory"),
+                "target_memory": ex.get("target_memory"),
             }
         )
 
@@ -113,11 +137,13 @@ def save_index(index: faiss.Index, metadata: List[Dict[str, Any]], index_out: st
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Build a FAISS retrieval index for code chunks.")
-    parser.add_argument("--input", required=True, help="Path to JSON or JSONL paired-example file.")
+    parser = argparse.ArgumentParser(description="Build a FAISS retrieval index for CodeNet weak pairs.")
+    parser.add_argument("--input", required=True, help="Path to JSON or JSONL weak-pair file.")
     parser.add_argument("--index-out", required=True, help="Where to save the FAISS index.")
     parser.add_argument("--meta-out", required=True, help="Where to save metadata JSON.")
+    parser.add_argument("--model-name", default="microsoft/codebert-base", help="Embedding model name.")
     parser.add_argument("--batch-size", type=int, default=16, help="Embedding batch size.")
+    parser.add_argument("--max-problem-chars", type=int, default=1600, help="Maximum problem text characters used during embedding.")
     args = parser.parse_args()
 
     examples = load_examples(args.input)
@@ -125,7 +151,9 @@ def main() -> None:
 
     index, metadata = build_index(
         examples=examples,
+        model_name=args.model_name,
         batch_size=args.batch_size,
+        max_problem_chars=args.max_problem_chars,
     )
     save_index(index, metadata, args.index_out, args.meta_out)
 
