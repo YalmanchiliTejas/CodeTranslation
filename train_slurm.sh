@@ -4,39 +4,45 @@
 #SBATCH --export=ALL
 #SBATCH --ntasks=1
 #SBATCH --nodes=1
-#SBATCH --gres=gpu:1
+#SBATCH --gres=gpu:2
 #SBATCH --cpus-per-gpu=16
-#SBATCH --mem=64G
+
 #SBATCH --time=4:00:00
 #SBATCH -J py2cpp_train
 #SBATCH -o slurm_logs/%j.out
 #SBATCH -e slurm_logs/%j.err
 #SBATCH --account=gpu
 
-# -----------------------------
-# Environment setup
-# -----------------------------
-module load anaconda
-conda activate CS587
+set -e
 
-# Change this to your actual project path
-# cd /home/venkat97/CodeTranslation
+module load anaconda
+conda activate translate
+
 cd /home/tyalaman/CodeTranslation
 
 mkdir -p slurm_logs
 mkdir -p checkpoints/python_to_cpp_lora
 
-# Optional but useful for Hugging Face cache on clusters
-export HF_HOME=$PWD/.hf_cache
+export PYTHONPATH=$PWD:$PYTHONPATH
+
+export HF_HOME=/scratch/scholar/tyalaman/hf_cache
+export HF_HUB_CACHE=$HF_HOME/hub
 export TRANSFORMERS_CACHE=$HF_HOME/transformers
 export HF_DATASETS_CACHE=$HF_HOME/datasets
 
-# Avoid tokenizer parallelism warnings
-export TOKENIZERS_PARALLELISM=false
+mkdir -p "$HF_HOME" "$HF_HUB_CACHE" "$TRANSFORMERS_CACHE" "$HF_DATASETS_CACHE"
 
-# -----------------------------
-# Training command
-# -----------------------------
+export TOKENIZERS_PARALLELISM=false
+export OMP_NUM_THREADS=8
+
+echo "Running from: $(pwd)"
+echo "Python: $(which python)"
+echo "HF_HOME: $HF_HOME"
+ls -lh data/train.jsonl
+ls -lh data/valid.jsonl
+wc -l data/train.jsonl
+wc -l data/valid.jsonl
+
 python -m translation.train \
   --train-data data/train.jsonl \
   --valid-data data/valid.jsonl \
@@ -44,8 +50,14 @@ python -m translation.train \
   --output-dir checkpoints/python_to_cpp_lora \
   --use-lora \
   --bf16 \
-  --epochs 1 \
+  --epochs 3 \
   --batch-size 1 \
-  --grad-accum 8 \
-  --lr 2e-4 \
+  --grad-accum 16 \
+  --lr 1e-4 \
   --max-length 4096
+
+echo "Training finished."
+find checkpoints/python_to_cpp_lora -maxdepth 3 -type f | sort
+find checkpoints/python_to_cpp_lora -name adapter_config.json
+find checkpoints/python_to_cpp_lora -name adapter_model.safetensors
+du -sh /scratch/scholar/tyalaman/hf_cache || true
