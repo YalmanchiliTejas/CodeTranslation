@@ -148,14 +148,14 @@ class CodeTranslator:
             return torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     def generate_from_prompt(
-        self,
-        prompt: str,
-        *,
-        max_new_tokens: int = 1024,
-        temperature: float = 0.0,
-        top_p: float = 1.0,
-        do_sample: bool = False,
-    ) -> str:
+    self,
+    prompt: str,
+    *,
+    max_new_tokens: int = 1024,
+    temperature: float = 0.0,
+    top_p: float = 1.0,
+    do_sample: bool = False,
+) -> str:
         inputs = self.tokenizer(
             prompt,
             return_tensors="pt",
@@ -183,12 +183,16 @@ class CodeTranslator:
                 **generation_kwargs,
             )
 
-        full_text = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+        # IMPORTANT:
+        # outputs[0] contains prompt tokens + newly generated tokens.
+        # Slice by token length, not string matching.
+        input_len = inputs["input_ids"].shape[-1]
+        generated_ids = outputs[0][input_len:]
 
-        if full_text.startswith(prompt):
-            generated_text = full_text[len(prompt):]
-        else:
-            generated_text = full_text
+        generated_text = self.tokenizer.decode(
+            generated_ids,
+            skip_special_tokens=True,
+        )
 
         return clean_generated_code(generated_text)
 
