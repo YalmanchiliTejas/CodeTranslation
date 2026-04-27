@@ -62,22 +62,23 @@ python -m translation.train \
   --gradient-checkpointing \
   --epochs 5 \
   --batch-size 1 \
-  --grad-accum 16 \
+  --grad-accum 8 \
   --lr 5e-5 \
   --warmup-ratio 0.05 \
   --weight-decay 0.01 \
-  --max-length 4096 \
-  --max-prompt-tokens 2048 \
-  --max-target-tokens 1536 \
-  --max-problem-chars 1200 \
-  --max-sample-tests 2 \
-  --save-steps 100 \
+  --max-length 2048 \
+  --max-prompt-tokens 1024 \
+  --max-target-tokens 896 \
+  --max-problem-chars 500 \
+  --max-sample-tests 1 \
+  --save-steps 50 \
   --eval-steps 100 \
-  --logging-steps 25 \
+  --logging-steps 10 \
   --save-total-limit 3 \
   --auto-resume
 
 echo "Training job finished."
+
 echo "Current checkpoint files:"
 find checkpoints/python_to_cpp_lora -maxdepth 3 -type f | sort
 
