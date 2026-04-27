@@ -1,0 +1,17 @@
+{
+  "total_examples": 20,
+  "model": "checkpoints/python_to_cpp_lora_rag",
+  "base_model": "bigcode/starcoder2-3b",
+  "top_k": 3,
+  "repair_rounds": 1,
+  "initial_compile_successes": 17,
+  "initial_compile_rate": 0.85,
+  "final_compile_successes": 17,
+  "final_compile_rate": 0.85,
+  "examples_with_sample_tests": 20,
+  "initial_sample_test_passes": 0,
+  "initial_sample_test_pass_rate": 0.0,
+  "final_sample_test_passes": 0,
+  "final_sample_test_pass_rate": 0.0,
+  "results_path": "results/rag_eval_results.jsonl"
+}

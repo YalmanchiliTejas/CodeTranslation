@@ -16,16 +16,16 @@
 set -e
 
 module load anaconda
-conda activate translate
+conda activate CS587
 
-cd /home/tyalaman/CodeTranslation
+cd /home/$USER/cs592-eai/CodeTranslation
 
 mkdir -p slurm_logs
 mkdir -p results
 
 export PYTHONPATH=$PWD:$PYTHONPATH
 
-export HF_HOME=/scratch/scholar/tyalaman/hf_cache
+export HF_HOME=/scratch/scholar/$USER/hf_cache
 export HF_HUB_CACHE=$HF_HOME/hub
 export TRANSFORMERS_CACHE=$HF_HOME/transformers
 export HF_DATASETS_CACHE=$HF_HOME/datasets
@@ -35,7 +35,7 @@ mkdir -p "$HF_HOME" "$HF_HUB_CACHE" "$TRANSFORMERS_CACHE" "$HF_DATASETS_CACHE"
 export TOKENIZERS_PARALLELISM=false
 
 BASE_MODEL="bigcode/starcoder2-3b"
-CHECKPOINT_ROOT="checkpoints/python_to_cpp_lora"
+CHECKPOINT_ROOT="checkpoints/python_to_cpp_lora_rag"
 
 echo "Running from: $(pwd)"
 echo "Python: $(which python)"
@@ -87,4 +87,4 @@ echo "RAG evaluation finished."
 cat results/rag_eval_summary.json
 
 echo "Scratch HF cache usage:"
-du -sh /scratch/scholar/tyalaman/hf_cache || true
+du -sh /scratch/scholar/$USER/hf_cache || true
