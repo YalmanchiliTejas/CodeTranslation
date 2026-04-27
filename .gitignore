@@ -1,2 +1,4 @@
 # Ignore node modules
 Project_CodeNet_Final.nosync
+Project_CodeNet_Cleaned.nosync
+slurm_logs/
