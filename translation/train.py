@@ -197,30 +197,21 @@ def get_dtype(args) -> torch.dtype | None:
 def load_base_model(args):
     dtype = get_dtype(args)
 
-    local_rank = int(os.environ.get("LOCAL_RANK", "-1"))
-    world_size = int(os.environ.get("WORLD_SIZE", "1"))
-
     model_kwargs = {
         "torch_dtype": dtype,
         "trust_remote_code": True,
+        "low_cpu_mem_usage": False,
     }
 
-    if world_size <= 1:
-        model_kwargs["device_map"] = "auto"
+    model = AutoModelForCausalLM.from_pretrained(
+        args.model,
+        **model_kwargs,
+    )
 
-    model = AutoModelForCausalLM.from_pretrained(args.model, **model_kwargs)
     model.config.use_cache = False
 
     if args.gradient_checkpointing:
         model.gradient_checkpointing_enable()
-
-    if world_size > 1:
-        if not torch.cuda.is_available():
-            raise RuntimeError("Distributed training requested, but CUDA unavailable.")
-        if local_rank < 0:
-            raise RuntimeError("WORLD_SIZE > 1 but LOCAL_RANK is not set.")
-        torch.cuda.set_device(local_rank)
-        model.to(torch.device("cuda", local_rank))
 
     return model
 
