@@ -1,0 +1,14 @@
+{
+  "total_examples": 35,
+  "base_model": "bigcode/starcoder2-3b",
+  "model": "checkpoints/python_to_cpp_lora/checkpoint-48",
+  "codebleu_mode": "full_codebleu",
+  "codebleu": {
+    "codebleu": 0.003135212486825408,
+    "ngram_match_score": 2.3137424758927837e-07,
+    "weighted_ngram_match_score": 0.00010521932405821803,
+    "syntax_match_score": 0.004794520547945206,
+    "dataflow_match_score": 0.007640878701050621
+  },
+  "results_path": "results/codebleu_results.jsonl"
+}
