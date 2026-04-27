@@ -88,9 +88,11 @@ def build_prompt(
         ],
     )
 
+    retrieved_examples = example.get("retrieved_examples", [])
+
     return build_translation_prompt(
         source_code=example["source_code"].strip(),
-        retrieved_examples=[],
+        retrieved_examples=retrieved_examples,
         constraints=constraints,
         problem_context=problem_context,
         max_problem_chars=max_problem_chars,
