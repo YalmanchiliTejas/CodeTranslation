@@ -7,6 +7,10 @@ For each example:
 3. compile generated C++,
 4. run sample tests if available,
 5. optionally repair using compiler/test feedback.
+
+Important:
+- --top-k 0 disables retrieval.
+- sample_tests are passed into retrieval so search is problem-aware.
 """
 
 from __future__ import annotations
@@ -54,6 +58,27 @@ def verification_to_dict(verification) -> Dict[str, Any]:
     }
 
 
+def get_retrieved_examples(
+    *,
+    searcher: CodeSearcher,
+    example: Dict[str, Any],
+    problem_context: ProblemContext,
+    top_k: int,
+) -> List[Dict[str, Any]]:
+    if top_k <= 0:
+        return []
+
+    return searcher.search(
+        query_code=example["source_code"],
+        top_k=top_k,
+        problem_id=problem_context.problem_id,
+        problem_name=problem_context.problem_name,
+        problem_description=problem_context.problem_description,
+        sample_tests=problem_context.sample_tests,
+        same_problem_first=False,
+    )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Evaluate RAG + verification Python -> C++ pipeline."
@@ -74,15 +99,15 @@ def main() -> None:
         help="Base model name if --model is a LoRA adapter, e.g. bigcode/starcoder2-3b.",
     )
 
-    parser.add_argument("--top-k", type=int, default=3)
-    parser.add_argument("--repair-rounds", type=int, default=1)
+    parser.add_argument("--top-k", type=int, default=1)
+    parser.add_argument("--repair-rounds", type=int, default=0)
     parser.add_argument("--max-examples", type=int, default=None)
 
     parser.add_argument("--results-out", required=True)
     parser.add_argument("--summary-out", required=True)
 
     parser.add_argument("--compiler", default="g++")
-    parser.add_argument("--max-new-tokens", type=int, default=1024)
+    parser.add_argument("--max-new-tokens", type=int, default=512)
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--do-sample", action="store_true")
@@ -148,12 +173,11 @@ def main() -> None:
                 sample_tests=example.get("sample_tests", []),
             )
 
-            retrieved_examples = searcher.search(
-                query_code=example["source_code"],
+            retrieved_examples = get_retrieved_examples(
+                searcher=searcher,
+                example=example,
+                problem_context=problem_context,
                 top_k=args.top_k,
-                problem_id=problem_context.problem_id,
-                problem_name=problem_context.problem_name,
-                problem_description=problem_context.problem_description,
             )
 
             generation = translator.generate(
@@ -168,6 +192,7 @@ def main() -> None:
             )
 
             current_code = generation["generated_code"]
+
             verification = verifier.verify(
                 current_code,
                 problem_context.sample_tests,
@@ -203,6 +228,7 @@ def main() -> None:
                 )
 
                 current_code = generation["generated_code"]
+
                 verification = verifier.verify(
                     current_code,
                     problem_context.sample_tests,
@@ -237,6 +263,18 @@ def main() -> None:
                 "source_submission_id": example.get("source_submission_id"),
                 "target_submission_id": example.get("target_submission_id"),
                 "retrieved_ids": [item.get("id") for item in retrieved_examples],
+                "retrieved_problem_ids": [item.get("problem_id") for item in retrieved_examples],
+                "retrieved_scores": [
+                    {
+                        "id": item.get("id"),
+                        "problem_id": item.get("problem_id"),
+                        "score": item.get("score"),
+                        "rerank_score": item.get("rerank_score"),
+                        "desc_overlap_score": item.get("desc_overlap_score"),
+                        "sample_overlap_score": item.get("sample_overlap_score"),
+                    }
+                    for item in retrieved_examples
+                ],
                 "source_code": example["source_code"],
                 "reference_code": example.get("target_code", ""),
                 "generated_code": current_code,
@@ -252,6 +290,8 @@ def main() -> None:
 
             print(
                 f"[{total}] id={example.get('id')} "
+                f"problem={example.get('problem_id')} "
+                f"retrieved_pids={[item.get('problem_id') for item in retrieved_examples]} "
                 f"initial_compile={initial_compile_success} "
                 f"final_compile={verification.compile_success} "
                 f"final_tests={verification.all_tests_passed}"

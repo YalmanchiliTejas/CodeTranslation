@@ -53,20 +53,31 @@ def add_retrieval_to_records(
     for idx, record in enumerate(records, start=1):
         record_id = record.get("id")
 
-        # Retrieve extra candidates because we may remove self-matches.
+        # Retrieve extra candidates because we remove self-matches.
+        # The searcher now uses problem description + sample tests + source code.
         retrieved = searcher.search(
             query_code=record["source_code"],
-            top_k=top_k + 5,
+            top_k=top_k + 10,
             problem_id=record.get("problem_id", ""),
             problem_name=record.get("problem_name", ""),
             problem_description=record.get("problem_description", ""),
+            sample_tests=record.get("sample_tests", []),
+            same_problem_first=False,
         )
 
-        filtered = []
+        filtered: List[Dict[str, Any]] = []
 
         for item in retrieved:
-            # Avoid giving the exact target pair to itself during training.
+            # Avoid giving the exact same pair to itself during training.
             if item.get("id") == record_id:
+                continue
+
+            # Avoid retrieving the same target submission if possible.
+            if (
+                item.get("target_submission_id")
+                and record.get("target_submission_id")
+                and item.get("target_submission_id") == record.get("target_submission_id")
+            ):
                 continue
 
             filtered.append(item)
@@ -78,9 +89,15 @@ def add_retrieval_to_records(
         new_record["retrieved_examples"] = filtered
         augmented.append(new_record)
 
+        retrieved_ids = [item.get("id") for item in filtered]
+        retrieved_pids = [item.get("problem_id") for item in filtered]
+
         print(
             f"[{idx}/{len(records)}] id={record_id} "
-            f"retrieved={len(filtered)}"
+            f"problem={record.get('problem_id')} "
+            f"retrieved={len(filtered)} "
+            f"retrieved_pids={retrieved_pids} "
+            f"retrieved_ids={retrieved_ids}"
         )
 
     return augmented
@@ -88,16 +105,19 @@ def add_retrieval_to_records(
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Add CodeBERT-retrieved examples to train/valid JSONL records."
+        description="Add problem-aware CodeBERT-retrieved examples to train/valid JSONL records."
     )
 
     parser.add_argument("--input", required=True, help="Input JSONL, e.g. data/train.jsonl")
-    parser.add_argument("--output", required=True, help="Output JSONL, e.g. data/train_rag.jsonl")
+    parser.add_argument("--output", required=True, help="Output JSONL, e.g. data/train_rag_k1.jsonl")
     parser.add_argument("--index", required=True, help="FAISS index path.")
     parser.add_argument("--meta", required=True, help="Retrieval metadata JSON.")
-    parser.add_argument("--top-k", type=int, default=3)
+    parser.add_argument("--top-k", type=int, default=1)
 
     args = parser.parse_args()
+
+    if args.top_k < 0:
+        raise ValueError("--top-k must be >= 0.")
 
     records = load_jsonl(args.input)
 
