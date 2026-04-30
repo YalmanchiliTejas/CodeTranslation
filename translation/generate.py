@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -51,6 +52,48 @@ def clean_generated_code(text: str) -> str:
     for marker in stop_markers:
         if marker in text:
             text = text.split(marker, 1)[0]
+
+    lines = text.splitlines()
+    diagnostic_line = re.compile(r"^.*:\d+:\d+: (error|warning|note):")
+    compiler_path_line = re.compile(r"^/tmp/.*main\.cpp:")
+    code_start = re.compile(
+        r"^\s*(#include|using\s+namespace\s+std\b|int\s+main\s*\(|auto\s+main\s*\(|"
+        r"(?:long\s+long|int|bool|void|double|string|vector|map|set|deque|queue)\b|"
+        r"typedef\b|template\b|struct\b|class\b|const\b|#define\b)"
+    )
+
+    # Drop leading narrative or compiler diagnostics until the first code-like line.
+    start_idx = None
+    for idx, line in enumerate(lines):
+        if code_start.match(line):
+            start_idx = idx
+            break
+    if start_idx is not None:
+        lines = lines[start_idx:]
+
+    cleaned_lines: List[str] = []
+    for line in lines:
+        stripped = line.strip()
+        if compiler_path_line.match(line) or diagnostic_line.match(line):
+            break
+        if stripped.startswith("Compiler output:") or stripped.startswith("Verification feedback:"):
+            break
+        cleaned_lines.append(line)
+
+    text = "\n".join(cleaned_lines).strip()
+
+    # If what remains still looks like diagnostics rather than code, discard it.
+    if text and start_idx is None:
+        diagnostic_tokens = [
+            " error:",
+            " warning:",
+            " note:",
+            "In function",
+            "expected primary-expression",
+            "expected ',' or ';'",
+        ]
+        if any(token in text for token in diagnostic_tokens):
+            return ""
 
     return text.strip()
 

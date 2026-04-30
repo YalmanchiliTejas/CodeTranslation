@@ -35,11 +35,17 @@ mkdir -p "$HF_HOME" "$HF_HUB_CACHE" "$TRANSFORMERS_CACHE" "$HF_DATASETS_CACHE"
 export TOKENIZERS_PARALLELISM=false
 
 BASE_MODEL="bigcode/starcoder2-3b"
-CHECKPOINT_ROOT="checkpoints/python_to_cpp_lora_rag"
+
+if [ -d "checkpoints/python_to_cpp_lora_rag_k1" ]; then
+  CHECKPOINT_ROOT="checkpoints/python_to_cpp_lora_rag_k1"
+else
+  CHECKPOINT_ROOT="checkpoints/python_to_cpp_lora_rag"
+fi
 
 echo "Running from: $(pwd)"
 echo "Python: $(which python)"
 echo "HF_HOME: $HF_HOME"
+echo "Checkpoint root: $CHECKPOINT_ROOT"
 
 echo "Checking test data..."
 ls -lh data/test.jsonl
